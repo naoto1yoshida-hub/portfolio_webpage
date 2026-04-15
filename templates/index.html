@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEGG Engineering | テクノロジーを孵化し、共に育てる</title>
+  <meta name="description" content="TEGG Engineering — 生成AI × 製造業の知見で、中小企業のDX・業務効率化を伴走支援。RAGチャットボット、業務自動化、ドキュメント検索など高速PoCから本開発まで一貫対応。">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><ellipse cx='50' cy='55' rx='32' ry='40' fill='%23c9a84c'/><path d='M50 25 L46 40 L54 55 L44 70' stroke='%23080d1a' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>">
+</head>
+<body>
+
+  <!-- ========== ナビゲーション ========== -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">TEGG</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#philosophy">理念</a></li>
+      <li><a href="#works">実績</a></li>
+      <li><a href="#tech-stack">技術</a></li>
+      <li><a href="#profile">プロフィール</a></li>
+      <li><a href="#contact" class="nav-cta">お問い合わせ</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="メニュー">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- ========== Hero ========== -->
+  <section class="hero" id="hero">
+
+    <!-- Floating Egg SVG -->
+    <div class="egg-container">
+      <svg class="egg-svg" viewBox="0 0 180 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="eggGrad" cx="40%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#2a2010"/>
+            <stop offset="100%" stop-color="#0d1527"/>
+          </radialGradient>
+          <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <linearGradient id="strokeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#c9a84c" stop-opacity="0.15"/>
+          </linearGradient>
+        </defs>
+
+        <!-- inner glow -->
+        <ellipse class="inner-glow" cx="90" cy="108" rx="52" ry="62"
+          fill="url(#glowGrad)" filter="url(#glow)"/>
+
+        <!-- egg body -->
+        <path d="M90 12 C130 12, 162 55, 162 108 C162 161, 130 198, 90 198 C50 198, 18 161, 18 108 C18 55, 50 12, 90 12 Z"
+          fill="url(#eggGrad)"
+          stroke="url(#strokeGrad)" stroke-width="1.5"/>
+
+        <!-- highlight -->
+        <path d="M65 38 C72 28, 95 26, 108 36"
+          stroke="rgba(245,240,232,0.12)" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+        <!-- crack lines -->
+        <g filter="url(#glow)">
+          <path class="crack-line"
+            d="M90 80 L82 95 L94 108 L78 126 L88 148"
+            stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path class="crack-line"
+            d="M94 108 L108 116 L102 130"
+            stroke="#c9a84c" stroke-width="1" stroke-linecap="round" fill="none"
+            style="animation-delay: 1.6s;"/>
+        </g>
+      </svg>
+    </div>
+
+    <p class="hero-eyebrow">Where Technology Hatches</p>
+
+    <h1 class="hero-title">
+      <span class="tegg">TEGG</span>
+      <span class="engineering">Engineering</span>
+    </h1>
+
+    <div class="hero-divider"></div>
+
+    <p class="hero-tagline">
+      新しいテクノロジーが、今ここで孵化する。
+    </p>
+
+    <p class="hero-sub">
+      卵がひびを割り、命が生まれるように——<br>
+      生成AIと製造業の知見を融合し、<br>
+      お客様のビジネスを共に育て続けます。
+    </p>
+
+    <div class="cta-group">
+      <a href="#works" class="btn-primary"><span>実績を見る</span></a>
+      <a href="#contact" class="btn-secondary">お問い合わせ</a>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ========== Marquee ========== -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <span>Technology</span><span class="dot">×</span>
+      <span>Innovation</span><span class="dot">×</span>
+      <span>生成AI</span><span class="dot">×</span>
+      <span>製造業</span><span class="dot">×</span>
+      <span>Engineering</span><span class="dot">×</span>
+      <span>伴走支援</span><span class="dot">×</span>
+      <span>孵化</span><span class="dot">×</span>
+      <span>共に育てる</span><span class="dot">×</span>
+      <!-- duplicate for seamless loop -->
+      <span>Technology</span><span class="dot">×</span>
+      <span>Innovation</span><span class="dot">×</span>
+      <span>生成AI</span><span class="dot">×</span>
+      <span>製造業</span><span class="dot">×</span>
+      <span>Engineering</span><span class="dot">×</span>
+      <span>伴走支援</span><span class="dot">×</span>
+      <span>孵化</span><span class="dot">×</span>
+      <span>共に育てる</span><span class="dot">×</span>
+    </div>
+  </div>
+
+  <!-- ========== Philosophy ========== -->
+  <section class="philosophy" id="philosophy">
+    <p class="section-label fade-in">Philosophy</p>
+    <h2 class="philosophy-heading fade-in">
+      生まれる瞬間から、<br>
+      <em>共に歩み続ける。</em>
+    </h2>
+
+    <div class="philosophy-grid fade-in">
+      <div class="philosophy-card">
+        <div class="card-number">01</div>
+        <div class="card-title">Hatch — 孵化する技術</div>
+        <p class="card-text">
+          卵の殻を破るように、既存の常識を超えた技術とアイデアを生み出します。
+          小さなひびから始まる変革が、やがて大きな可能性へと広がる。
+          その瞬間を、私たちはともに迎えます。
+        </p>
+      </div>
+      <div class="philosophy-card">
+        <div class="card-number">02</div>
+        <div class="card-title">Nurture — 共に育てる</div>
+        <p class="card-text">
+          生まれたものを大切に育てること。プロジェクトの完成がゴールではなく、
+          その後の成長こそが本質です。長期的なパートナーとして、
+          あなたのビジョンを継続的に育み続けます。
+        </p>
+      </div>
+      <div class="philosophy-card">
+        <div class="card-number">03</div>
+        <div class="card-title">Evolve — 進化し続ける</div>
+        <p class="card-text">
+          テクノロジーは常に動き続けています。変化を恐れず、
+          新しい知識と技術を取り入れながら、あなたのプロジェクトも
+          時代とともに進化できるよう伴走します。
+        </p>
+      </div>
+      <div class="philosophy-card">
+        <div class="card-number">04</div>
+        <div class="card-title">Connect — つながりを創る</div>
+        <p class="card-text">
+          技術は人と人をつなぐ手段です。エンジニアリングの力で、
+          ビジネスと顧客、アイデアと実装、現在と未来を
+          より深くつなぎ合わせます。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Strengths ========== -->
+  <section class="strengths" id="strengths">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-label">Strengths</span>
+        <h2 class="section-title">選ばれる3つの理由</h2>
+        <p class="section-subtitle">
+          「技術はわかるけど、現場が見えないエンジニア」にはなりません。<br>
+          製造業の最前線で磨いた対話力で、AIを現場にフィットさせます。
+        </p>
+      </div>
+      <div class="strengths-grid">
+        <div class="strength-card fade-in fade-in-delay-1">
+          <div class="strength-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20V8l4-4v16"/><path d="M6 12l4-4v12"/><path d="M10 8h12v12H10"/><line x1="14" y1="12" x2="14" y2="12.01"/><line x1="18" y1="12" x2="18" y2="12.01"/><line x1="14" y1="16" x2="14" y2="16.01"/><line x1="18" y1="16" x2="18" y2="16.01"/></svg></div>
+          <div class="strength-number">STRENGTH 01</div>
+          <h3 class="strength-title">製造業の知見</h3>
+          <p class="strength-text">
+            製造業での営業経験を持ち、現場の業務フロー・課題を深く理解しています。
+            「専門用語が通じる」安心感で、要件定義の精度が変わります。
+          </p>
+        </div>
+        <div class="strength-card fade-in fade-in-delay-2">
+          <div class="strength-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="strength-number">STRENGTH 02</div>
+          <h3 class="strength-title">伴走型支援</h3>
+          <p class="strength-text">
+            「作って終わり」ではありません。ヒアリングからプロト、フィードバック、
+            本開発まで、お客様と一緒に走り続けます。
+          </p>
+        </div>
+        <div class="strength-card fade-in fade-in-delay-3">
+          <div class="strength-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <div class="strength-number">STRENGTH 03</div>
+          <h3 class="strength-title">高速PoC開発</h3>
+          <p class="strength-text">
+            最小構成のAIツールを数日で構築し、動くもので認識をすり合わせます。
+            「まず試す」ことで、投資リスクを最小化します。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Process ========== -->
+  <section class="process" id="process">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-label">Process</span>
+        <h2 class="section-title">伴走支援の4ステップ</h2>
+        <p class="section-subtitle">
+          アジャイルに、確実に。お客様のペースに合わせて進めます。
+        </p>
+      </div>
+      <div class="process-timeline">
+        <div class="process-step fade-in fade-in-delay-1">
+          <div class="process-step-number">01</div>
+          <h3 class="process-step-title">ヒアリング</h3>
+          <p class="process-step-text">
+            現場の悩み、現在の業務フローを徹底的に深掘りします。課題の本質を一緒に見つけます。
+          </p>
+        </div>
+        <div class="process-step fade-in fade-in-delay-2">
+          <div class="process-step-number">02</div>
+          <h3 class="process-step-title">簡易プロト作成</h3>
+          <p class="process-step-text">
+            最小構成のAIツールを数日で構築し、「動くイメージ」を共有します。
+          </p>
+        </div>
+        <div class="process-step fade-in fade-in-delay-3">
+          <div class="process-step-number">03</div>
+          <h3 class="process-step-title">ブラッシュアップ</h3>
+          <p class="process-step-text">
+            プロトタイプへのフィードバックを元に、要件を再定義。精度を上げていきます。
+          </p>
+        </div>
+        <div class="process-step fade-in fade-in-delay-4">
+          <div class="process-step-number">04</div>
+          <h3 class="process-step-title">本開発・導入</h3>
+          <p class="process-step-text">
+            実業務に耐えうる精度まで磨き上げ、運用開始まで伴走します。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Works ========== -->
+  <section class="works" id="works">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-label">Works</span>
+        <h2 class="section-title">開発実績</h2>
+        <p class="section-subtitle">
+          機密情報に配慮し、ダミーデータを使用したスクリーンショットで紹介しています。
+        </p>
+      </div>
+
+      <div class="works-featured-grid">
+        <div class="work-card fade-in fade-in-delay-1" data-work="rag-chatbot">
+          <div class="work-card-image-wrapper">
+            <img src="{{ url_for('static', filename='images/works/rag_chatbot.png') }}" alt="RAGチャットボット" class="work-card-image" loading="lazy">
+          </div>
+          <div class="work-card-body">
+            <div class="work-card-tags">
+              <span class="work-card-tag">RAG</span>
+              <span class="work-card-tag">OpenAI API</span>
+              <span class="work-card-tag">Python</span>
+            </div>
+            <h3 class="work-card-title">社内文書Q&A チャットボット</h3>
+            <p class="work-card-desc">社内マニュアルや技術資料をAIが検索・回答。問い合わせ対応時間を60%削減。</p>
+          </div>
+        </div>
+
+        <div class="work-card fade-in fade-in-delay-2" data-work="automation">
+          <div class="work-card-image-wrapper">
+            <img src="{{ url_for('static', filename='images/works/automation_dashboard.png') }}" alt="業務自動化ダッシュボード" class="work-card-image" loading="lazy">
+          </div>
+          <div class="work-card-body">
+            <div class="work-card-tags">
+              <span class="work-card-tag">自動化</span>
+              <span class="work-card-tag">ダッシュボード</span>
+              <span class="work-card-tag">Flask</span>
+            </div>
+            <h3 class="work-card-title">業務自動化ダッシュボード</h3>
+            <p class="work-card-desc">定型業務の自動化状況を可視化。処理時間を65%短縮、自動化率87%を達成。</p>
+          </div>
+        </div>
+
+        <div class="work-card fade-in fade-in-delay-3" data-work="doc-search">
+          <div class="work-card-image-wrapper">
+            <img src="{{ url_for('static', filename='images/works/document_search.png') }}" alt="図面検索ツール" class="work-card-image" loading="lazy">
+          </div>
+          <div class="work-card-body">
+            <div class="work-card-tags">
+              <span class="work-card-tag">画像検索</span>
+              <span class="work-card-tag">OCR</span>
+              <span class="work-card-tag">類似検索</span>
+            </div>
+            <h3 class="work-card-title">技術図面検索ツール</h3>
+            <p class="work-card-desc">材質・板厚などの条件で過去図面を類似検索。設計者の図面探索時間を大幅短縮。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- その他の実績 -->
+      <div class="works-more fade-in">
+        <h3 class="works-more-title">その他の実績</h3>
+        <div class="works-more-grid">
+          <div class="work-mini-card" data-work="meeting-minutes">
+            <div class="work-mini-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+            <div class="work-mini-card-info">
+              <div class="work-mini-card-title">議事録自動生成ツール</div>
+              <div class="work-mini-card-desc">音声→テキスト→要約を自動化</div>
+            </div>
+          </div>
+          <div class="work-mini-card" data-work="data-extraction">
+            <div class="work-mini-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+            <div class="work-mini-card-info">
+              <div class="work-mini-card-title">データ抽出・整形ツール</div>
+              <div class="work-mini-card-desc">PDFから構造化データを自動抽出</div>
+            </div>
+          </div>
+          <div class="work-mini-card" data-work="price-research">
+            <div class="work-mini-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+            <div class="work-mini-card-info">
+              <div class="work-mini-card-title">市場価格リサーチツール</div>
+              <div class="work-mini-card-desc">Web上の価格情報を自動収集・比較</div>
+            </div>
+          </div>
+          <div class="work-mini-card" data-work="email-assistant">
+            <div class="work-mini-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <div class="work-mini-card-info">
+              <div class="work-mini-card-title">メール文面生成アシスタント</div>
+              <div class="work-mini-card-desc">文脈に合わせたビジネスメールを自動生成</div>
+            </div>
+          </div>
+          <div class="work-mini-card" data-work="sales-list">
+            <div class="work-mini-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+            <div class="work-mini-card-info">
+              <div class="work-mini-card-title">営業リスト自動作成ツール</div>
+              <div class="work-mini-card-desc">GAS×スプレッドシートで企業情報を自動取得</div>
+            </div>
+          </div>
+          <div class="work-mini-card" data-work="seo-article">
+            <div class="work-mini-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+            <div class="work-mini-card-info">
+              <div class="work-mini-card-title">SEO対策記事生成ツール</div>
+              <div class="work-mini-card-desc">キーワードからSEO最適化された記事を自動生成</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Tech Stack ========== -->
+  <section class="tech-stack" id="tech-stack">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-label">Tech Stack</span>
+        <h2 class="section-title">使用技術</h2>
+        <p class="section-subtitle">
+          Pythonを軸に、複数の生成AIとGoogle Workspace連携を組み合わせた開発を行っています。
+        </p>
+      </div>
+      <div class="tech-marquee fade-in">
+        <div class="tech-marquee-track" id="techMarqueeTrack">
+          <div class="tech-item"><div class="tech-icon"><svg viewBox="0 0 128 128"><path fill="#FFD845" d="M49.33 62h29.159C86.606 62 93 55.132 93 46.981V19.183c0-7.912-6.632-13.856-14.555-15.176-5.014-.835-10.195-1.215-15.187-1.191-4.99.023-9.612.448-13.805 1.191C37.098 6.188 35 10.758 35 19.183V30h29v4H23.776c-8.484 0-15.914 5.108-18.237 14.811-2.681 11.12-2.8 18.062 0 29.674C7.473 86.746 12.321 93 20.776 93H31V79.952c0-9.659 8.362-18.152 18.33-17.952z"/><path fill="#3776AB" d="M91.682 28H63V24H35.145c-8.636 0-14.852 5.726-18.514 14.811C13.276 47.819 13.276 55.422 16.631 66.685 18.89 73.948 23.776 80 31.354 80H42v12.247c0 8.452 7.504 14.999 15.724 15.769 9.806 0.918 19.763 1.085 29.451-.005C94.941 107.106 99 102.128 99 100.017V89H70v-4h39.107c8.576 0 11.761-5.986 14.856-14.981 3.198-9.282 3.056-18.202 0-29.674C121.018 31.393 116.684 28 108.107 28H91.682z"/></svg></div><span class="tech-name">Python</span></div>
+          <div class="tech-item"><div class="tech-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.998 5.998 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073z" fill="#10A37F"/></svg></div><span class="tech-name">OpenAI API</span></div>
+          <div class="tech-item"><div class="tech-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="url(#gm1)"/><path d="M12 6l2.12 4.3L18.4 12l-4.28 1.7L12 18l-2.12-4.3L5.6 12l4.28-1.7L12 6z" fill="white"/><defs><linearGradient id="gm1" x1="2" y1="2" x2="22" y2="22"><stop stop-color="#4285F4"/><stop offset=".33" stop-color="#9B72CB"/><stop offset=".66" stop-color="#D96570"/><stop offset="1" stop-color="#D96570"/></linearGradient></defs></svg></div><span class="tech-name">Gemini</span></div>
+          <div class="tech-item"><div class="tech-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none"><circle cx="12" cy="12" r="10" fill="#D4A574"/><path d="M8 10.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5M13 10.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5M8.5 15c.83 1.16 2.08 2 3.5 2s2.67-.84 3.5-2" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div><span class="tech-name">Claude</span></div>
+          <div class="tech-item"><div class="tech-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" fill="#4285F4"/><path d="M7 8h4v3H7zM13 8h4v3h-4zM7 13h4v3H7zM13 13h4v3h-4z" fill="white" opacity=".9"/></svg></div><span class="tech-name">GAS</span></div>
+          <div class="tech-item"><div class="tech-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg></div><span class="tech-name">Google Workspace</span></div>
+          <div class="tech-item"><div class="tech-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div><span class="tech-name">RAG構成</span></div>
+          <div class="tech-item"><div class="tech-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div><span class="tech-name">LangChain</span></div>
+          <div class="tech-item"><div class="tech-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8l4 4-4 4"/><path d="M3 12h18"/><path d="M7 8l-4 4 4 4"/></svg></div><span class="tech-name">Flask</span></div>
+          <div class="tech-item"><div class="tech-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg></div><span class="tech-name">HTML / CSS / JS</span></div>
+        </div>
+      </div>
+      <p class="tech-note fade-in">※ 本ポートフォリオサイトも上記技術で構築しています。</p>
+    </div>
+  </section>
+
+  <!-- ========== Profile ========== -->
+  <section class="profile" id="profile">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-label">Profile</span>
+        <h2 class="section-title">プロフィール</h2>
+      </div>
+      <div class="profile-content">
+        <div class="profile-visual fade-in">
+          <div class="profile-card">
+            <div class="profile-avatar">
+              <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="TEGG Engineer">
+            </div>
+            <h3 class="profile-name">TEGG Engineer</h3>
+            <p class="profile-role">生成AI伴走型エンジニア</p>
+            <div class="profile-badges">
+              <span class="profile-badge">製造業出身</span>
+              <span class="profile-badge">AI開発</span>
+              <span class="profile-badge">フルリモート</span>
+            </div>
+          </div>
+        </div>
+        <div class="profile-info fade-in">
+          <h3>製造業の営業から、AIエンジニアへ。</h3>
+          <p class="profile-story">
+            製造業の法人営業として、お客様の課題解決に向き合う日々を過ごしてきました。
+            その中で「もっと効率化できるのに」と感じた現場の課題を、
+            自らの手で解決したいという想いからプログラミングを学び始め、
+            生成AI技術と出会い、AIエンジニアとしてのキャリアをスタートしました。<br><br>
+            営業経験で培った「聞く力」と「伝える力」を武器に、
+            技術がわからないお客様にも寄り添い、
+            現場が本当に必要としているAIソリューションを一緒に創り上げます。
+          </p>
+          <ul class="profile-details">
+            <li class="profile-detail">
+              <span class="profile-detail-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+              <div>
+                <span class="profile-detail-label">稼働時間</span>
+                週20〜30時間（柔軟に対応可能）
+              </div>
+            </li>
+            <li class="profile-detail">
+              <span class="profile-detail-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+              <div>
+                <span class="profile-detail-label">対応形式</span>
+                フルリモート対応（オンラインMTG可）
+              </div>
+            </li>
+            <li class="profile-detail">
+              <span class="profile-detail-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.663 17h4.674M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 12 18.469c-.47 0-.93.166-1.288.482l-.548-.547z"/></svg></span>
+              <div>
+                <span class="profile-detail-label">得意領域</span>
+                RAG構築、業務自動化、社内ナレッジ検索、データ分析
+              </div>
+            </li>
+          </ul>
+          <div class="profile-links">
+            <a href="https://crowdworks.jp/public/employees/6719291?ref=share_url_wkprofile" target="_blank" rel="noopener noreferrer" class="profile-link">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              CrowdWorks プロフィール
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Contact ========== -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-label">Contact</span>
+        <h2 class="section-title">お問い合わせ</h2>
+        <p class="section-subtitle">
+          まずはお気軽にご相談ください。初回のヒアリングは無料です。
+        </p>
+      </div>
+      <div class="contact-wrapper fade-in">
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <label class="form-label" for="contactName">
+              お名前<span class="required">*</span>
+            </label>
+            <input type="text" class="form-input" id="contactName" name="name" required placeholder="例: 山田 太郎">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contactEmail">
+              メールアドレス<span class="required">*</span>
+            </label>
+            <input type="email" class="form-input" id="contactEmail" name="email" required placeholder="例: yamada@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">お問い合わせ種別</label>
+            <div class="form-radio-group">
+              <label class="form-radio-label">
+                <input type="radio" name="inquiry_type" value="開発依頼" checked>
+                開発依頼
+              </label>
+              <label class="form-radio-label">
+                <input type="radio" name="inquiry_type" value="無料相談">
+                無料相談
+              </label>
+              <label class="form-radio-label">
+                <input type="radio" name="inquiry_type" value="その他">
+                その他
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contactMessage">
+              お問い合わせ内容<span class="required">*</span>
+            </label>
+            <textarea class="form-textarea" id="contactMessage" name="message" required placeholder="ご相談内容をお聞かせください。例: 社内文書の検索を効率化したい、AIチャットボットを導入したい等"></textarea>
+          </div>
+          <button type="submit" class="form-submit" id="contactSubmit">
+            送信する
+          </button>
+          <div class="form-message" id="formMessage"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Footer ========== -->
+  <footer>
+    <div class="footer-logo">TEGG Engineering</div>
+    <ul class="footer-links">
+      <li><a href="#hero">トップ</a></li>
+      <li><a href="#contact">お問い合わせ</a></li>
+      <li><a href="https://crowdworks.jp/public/employees/6719291?ref=share_url_wkprofile" target="_blank" rel="noopener noreferrer">CrowdWorks</a></li>
+    </ul>
+    <p class="footer-copy">&copy; 2025 TEGG Engineering. テクノロジーと共に、新しい未来を孵化させる。</p>
+  </footer>
+
+  <!-- ========== モーダル ========== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modalClose" aria-label="閉じる">✕</button>
+      <img class="modal-image" id="modalImage" src="" alt="">
+      <div class="modal-body">
+        <h3 class="modal-title" id="modalTitle"></h3>
+        <div class="modal-section">
+          <h4 class="modal-section-title">概要</h4>
+          <p class="modal-section-text" id="modalOverview"></p>
+        </div>
+        <div class="modal-section">
+          <h4 class="modal-section-title">Before → After</h4>
+          <p class="modal-section-text" id="modalBeforeAfter"></p>
+        </div>
+        <div class="modal-section">
+          <h4 class="modal-section-title">技術構成</h4>
+          <ul class="modal-tech-list" id="modalTechList"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
