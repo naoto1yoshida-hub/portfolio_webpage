@@ -15,6 +15,7 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
+# サーバーレス環境では以下の設定は通常不要ですが、ローカル開発用に残しています
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
@@ -22,12 +23,12 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 GMAIL_ADDRESS = os.getenv('GMAIL_ADDRESS')
 GMAIL_APP_PASSWORD = os.getenv('GMAIL_APP_PASSWORD')
 
-# ログ設定
+# ログ設定: FileHandlerを削除し、標準出力のみに変更
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('contact_log.txt', encoding='utf-8'),
+        # logging.FileHandler('contact_log.txt', encoding='utf-8'), # Vercelでは書き込み不可のため削除
         logging.StreamHandler()
     ]
 )
@@ -37,8 +38,6 @@ logger = logging.getLogger(__name__)
 def send_email(name, email, inquiry_type, message):
     """
     お問い合わせ内容をGmailに送信する。
-    - 自分宛に通知メール（お問い合わせ内容の全文）
-    - 送信者宛に自動返信メール（受付確認）
     """
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -100,17 +99,21 @@ Email: {GMAIL_ADDRESS}
     reply_msg.attach(MIMEText(reply_body, 'plain', 'utf-8'))
 
     # --- SMTP送信 ---
-    with smtplib.SMTP('smtp.gmail.com', 587) as server:
-        server.starttls()
-        server.login(GMAIL_ADDRESS, GMAIL_APP_PASSWORD)
+    try:
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+            server.starttls()
+            server.login(GMAIL_ADDRESS, GMAIL_APP_PASSWORD)
 
-        # 自分宛通知
-        server.sendmail(GMAIL_ADDRESS, GMAIL_ADDRESS, notify_msg.as_string())
-        logger.info(f"通知メール送信完了 → {GMAIL_ADDRESS}")
+            # 自分宛通知
+            server.sendmail(GMAIL_ADDRESS, GMAIL_ADDRESS, notify_msg.as_string())
+            logger.info(f"通知メール送信完了 → {GMAIL_ADDRESS}")
 
-        # 差出人への自動返信
-        server.sendmail(GMAIL_ADDRESS, email, reply_msg.as_string())
-        logger.info(f"自動返信メール送信完了 → {email}")
+            # 差出人への自動返信
+            server.sendmail(GMAIL_ADDRESS, email, reply_msg.as_string())
+            logger.info(f"自動返信メール送信完了 → {email}")
+    except Exception as e:
+        logger.error(f"SMTP送信エラー: {str(e)}")
+        raise e
 
 
 @app.route('/')
@@ -123,10 +126,11 @@ def index():
 def contact():
     """
     お問い合わせフォーム送信処理
-    Gmailへの通知 + 差出人への自動返信
     """
     try:
         data = request.get_json()
+        if not data:
+            return jsonify({'success': False, 'message': 'データが送信されていません。'}), 400
 
         name = data.get('name', '').strip()
         email = data.get('email', '').strip()
@@ -140,23 +144,15 @@ def contact():
                 'message': '必須項目を入力してください。'
             }), 400
 
-        # ログに記録
-        logger.info(
-            f"\n{'='*50}\n"
-            f"【新しいお問い合わせ】\n"
-            f"受信日時: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
-            f"お名前: {name}\n"
-            f"メール: {email}\n"
-            f"種別: {inquiry_type}\n"
-            f"内容: {message}\n"
-            f"{'='*50}"
-        )
+        # ログに記録（標準出力なのでVercel Dashboardで確認可能）
+        logger.info(f"Contact received from: {name} ({email})")
 
         # Gmail送信
         if GMAIL_ADDRESS and GMAIL_APP_PASSWORD:
             send_email(name, email, inquiry_type, message)
         else:
-            logger.warning("Gmail設定が見つかりません。.envファイルを確認してください。")
+            logger.warning("Gmail設定が見つかりません。.envを確認してください。")
+            return jsonify({'success': False, 'message': 'サーバー設定エラーが発生しています。'}), 500
 
         return jsonify({
             'success': True,
@@ -178,5 +174,6 @@ def contact():
         }), 500
 
 
+# Vercelデプロイ用: __name__ == '__main__': の外でも app が参照できるように
 if __name__ == '__main__':
-    app.run(debug=False, port=5001)
+    app.run(debug=True, port=5001)
