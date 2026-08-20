@@ -1,0 +1,40 @@
+{#
+  実績カード。トップページの主要実績で使う。
+  引数: case（data/works.py の CASES の1件）
+#}
+<article class="card rise">
+  <div class="card__figure">
+    <img src="{{ url_for('static', filename='images/diagrams/' ~ case.diagram) }}"
+         alt="{{ case.diagram_alt }}" loading="lazy" width="640" height="360">
+  </div>
+  <div class="card__body">
+    <div class="card__meta">
+      {% set badge = case.badge or case.status %}
+      {% if '稼働' in badge or '納品' in badge %}
+        <span class="chip chip--live">{{ badge }}</span>
+      {% else %}
+        <span class="chip chip--dev">{{ badge }}</span>
+      {% endif %}
+      <span>{{ case.client }}</span>
+    </div>
+
+    <h3 class="card__title">{{ case.title }}</h3>
+    <p class="card__lead">{{ case.lead }}</p>
+
+    <div class="card__figures">
+      {% for stat in case.stats[:2] %}
+        <span class="card__fig"><b>{{ stat.value }}{{ stat.unit }}</b> {{ stat.label }}</span>
+      {% endfor %}
+    </div>
+
+    <div class="card__tags">
+      {% for tag in case.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+    </div>
+
+    <div class="card__foot">
+      <a class="tlink" href="{{ url_for('work_detail', slug=case.slug) }}">
+        この案件の詳細を読む <span class="tlink__arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</article>

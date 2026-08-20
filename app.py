@@ -2,7 +2,7 @@
 生成AI伴走型エンジニアリング開発 - ポートフォリオサイト
 Flask アプリケーション
 """
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, abort
 import logging
 import smtplib
 from email.mime.text import MIMEText
@@ -10,6 +10,8 @@ from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 from dotenv import load_dotenv
 import os
+
+from data import works, services, profile
 
 # .env ファイルの読み込み
 load_dotenv()
@@ -35,11 +37,12 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def send_email(name, email, inquiry_type, message):
+def send_email(name, email, inquiry_type, message, budget=''):
     """
     お問い合わせ内容をGmailに送信する。
     """
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    budget_line = budget or '未回答'
 
     # --- 1. 自分宛の通知メール ---
     notify_msg = MIMEMultipart('alternative')
@@ -56,6 +59,7 @@ def send_email(name, email, inquiry_type, message):
 お名前   : {name}
 メール   : {email}
 お問い合わせ種別 : {inquiry_type or '未選択'}
+ご予算の目安 : {budget_line}
 
 ━━━ お問い合わせ内容 ━━━
 
@@ -116,10 +120,59 @@ Email: {GMAIL_ADDRESS}
         raise e
 
 
+@app.context_processor
+def inject_globals():
+    """全テンプレートで参照する共通データ"""
+    return {
+        'site': profile.SITE,
+        'works_total': works.total_count(),
+    }
+
+
 @app.route('/')
 def index():
-    """メインページ"""
-    return render_template('index.html')
+    """トップページ"""
+    return render_template(
+        'index.html',
+        featured=works.featured_cases(4),
+        continuous=profile.CONTINUOUS,
+        highlights=profile.HIGHLIGHTS,
+        services=services.SERVICES,
+        support=services.SUPPORT,
+        free_consult=services.FREE_CONSULT,
+        price_note=services.PRICE_NOTE,
+        process=services.PROCESS,
+        strengths=services.STRENGTHS,
+        faq=services.FAQ,
+        tech_stack=profile.TECH_STACK,
+        profile_data=profile.PROFILE,
+    )
+
+
+@app.route('/works')
+def works_index():
+    """実績一覧"""
+    return render_template(
+        'works.html',
+        cases=works.all_cases(),
+        grouped=works.works_by_category(),
+    )
+
+
+@app.route('/works/<slug>')
+def work_detail(slug):
+    """ケーススタディ詳細"""
+    case = works.get_case(slug)
+    if case is None:
+        abort(404)
+    others = [c for c in works.all_cases() if c['slug'] != slug][:3]
+    return render_template('case.html', case=case, others=others)
+
+
+@app.errorhandler(404)
+def not_found(error):
+    """404ページ"""
+    return render_template('404.html'), 404
 
 
 @app.route('/contact', methods=['POST'])
@@ -135,6 +188,7 @@ def contact():
         name = data.get('name', '').strip()
         email = data.get('email', '').strip()
         inquiry_type = data.get('inquiry_type', '').strip()
+        budget = data.get('budget', '').strip()
         message = data.get('message', '').strip()
 
         # バリデーション
@@ -149,7 +203,7 @@ def contact():
 
         # Gmail送信
         if GMAIL_ADDRESS and GMAIL_APP_PASSWORD:
-            send_email(name, email, inquiry_type, message)
+            send_email(name, email, inquiry_type, message, budget)
         else:
             logger.warning("Gmail設定が見つかりません。.envを確認してください。")
             return jsonify({'success': False, 'message': 'サーバー設定エラーが発生しています。'}), 500

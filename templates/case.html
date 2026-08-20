@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ case.title }}｜実績｜{{ site.name }}{% endblock %}
+{% block description %}{{ case.lead }}。{{ case.summary }}{% endblock %}
+{% block canonical %}/works/{{ case.slug }}{% endblock %}
+
+{% block content %}
+
+<!-- ========== 案件ヘッダー（表題欄） ========== -->
+<section class="page-head">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="パンくず">
+      <a href="{{ url_for('index') }}">TOP</a><span>/</span>
+      <a href="{{ url_for('works_index') }}">WORKS</a><span>/</span>
+      <span aria-current="page">{{ case.slug|upper }}</span>
+    </nav>
+
+    <h1 class="case__title">{{ case.title }}</h1>
+    <p class="case__lead">{{ case.lead }}</p>
+
+    <div class="tblock tblock--4 case__tblock">
+      <div class="tblock__cell">
+        <span class="tblock__label">Client</span>
+        <span class="tblock__value">{{ case.client }}</span>
+      </div>
+      <div class="tblock__cell">
+        <span class="tblock__label">Period</span>
+        <span class="tblock__value">{{ case.period }}</span>
+      </div>
+      <div class="tblock__cell">
+        <span class="tblock__label">Role</span>
+        <span class="tblock__value">{{ case.role }}</span>
+      </div>
+      <div class="tblock__cell">
+        <span class="tblock__label">Status</span>
+        <span class="tblock__value">{{ case.status }}</span>
+      </div>
+    </div>
+
+    <div class="case__figures">
+      <div class="tblock tblock--3">
+        {% for stat in case.stats %}
+        <div class="tblock__cell">
+          <span class="figure__num">{{ stat.value }}{% if stat.unit %}<span class="figure__unit">{{ stat.unit }}</span>{% endif %}</span>
+          <span class="figure__label">{{ stat.label }}</span>
+          <span class="figure__note">{{ stat.note }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== 構成図 ========== -->
+<section class="band band--tight">
+  <div class="wrap">
+    <figure class="figure-frame rise" style="margin: 0;">
+      <div class="figure-frame__scroll">
+        <img src="{{ url_for('static', filename='images/diagrams/' ~ case.diagram) }}"
+             alt="{{ case.diagram_alt }}" width="1200" height="675">
+      </div>
+      <p class="figure-frame__hint">横にスワイプすると図の続きが見られます</p>
+      <figcaption>{{ case.title }} — システム構成。実データを含む画面は掲載していません。</figcaption>
+    </figure>
+  </div>
+</section>
+
+
+<!-- ========== 課題 ========== -->
+<section class="band band--tight">
+  <div class="wrap">
+    <div class="prose rise">
+      <p class="block__label">Challenge <span>何が起きていたか</span></p>
+      {% for para in case.challenge %}<p>{{ para }}</p>{% endfor %}
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== やったこと ========== -->
+<section class="band band--sheet">
+  <div class="wrap">
+    <div class="prose rise">
+      <p class="block__label">Approach <span>やったことと、その理由</span></p>
+      <div class="approach">
+        {% for step in case.approach %}
+        <div class="approach__item">
+          <div class="approach__head">
+            <span class="approach__no" aria-hidden="true"></span>
+            <h3 class="approach__title">{{ step.heading }}</h3>
+          </div>
+          <p class="approach__body">{{ step.body }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== 成果 ========== -->
+<section class="band band--tight">
+  <div class="wrap">
+    <div class="prose rise">
+      <p class="block__label">Results <span>実測値のみ</span></p>
+      <div class="table-scroll">
+        <table class="results">
+          <caption class="visually-hidden">{{ case.title }}の成果</caption>
+          <tbody>
+            {% for r in case.results %}
+            <tr>
+              <th scope="row">{{ r.metric }}</th>
+              <td>
+                <span class="results__value">{{ r.value }}</span>
+                <span class="results__note">{{ r.note }}</span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== 技術構成 ========== -->
+<section class="band band--tight">
+  <div class="wrap">
+    <div class="prose rise">
+      <p class="block__label">Stack <span>技術構成</span></p>
+      <div class="stackgrid">
+        {% for s in case.stack %}
+        <div class="stackgrid__row">
+          <p class="stackgrid__label">{{ s.label }}</p>
+          <p class="stackgrid__items">{{ s['items'] }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== 難所 ========== -->
+<section class="band band--tight">
+  <div class="wrap">
+    <div class="prose rise">
+      <p class="block__label">Judgement <span>いちばん難しかった判断</span></p>
+      <div class="note-card">
+        <h3 class="note-card__title">{{ case.hardest.heading }}</h3>
+        <p class="note-card__body">{{ case.hardest.body }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== 他のケース ========== -->
+<section class="band band--sheet band--tight">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Other cases</p>
+      <h2 class="sec-head__title">ほかの実績</h2>
+    </div>
+    <div class="nextcases">
+      {% for other in others %}
+      <a class="nextcase" href="{{ url_for('work_detail', slug=other.slug) }}">
+        {% set badge = other.badge or other.status %}
+        {% if '稼働' in badge or '納品' in badge %}
+          <span class="chip chip--live">{{ badge }}</span>
+        {% else %}
+          <span class="chip chip--dev">{{ badge }}</span>
+        {% endif %}
+        <h3 class="nextcase__title">{{ other.title }}</h3>
+        <p class="nextcase__lead">{{ other.lead }}</p>
+      </a>
+      {% endfor %}
+    </div>
+    <p style="margin-top: var(--s6);">
+      <a class="tlink" href="{{ url_for('works_index') }}">
+        全{{ works_total }}件を見る <span class="tlink__arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </p>
+  </div>
+</section>
+
+{% endblock %}

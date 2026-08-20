@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="品質管理チャットボットの構成図">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#78859a"/>
+    </marker>
+    <style>
+      .jp { font-family: 'Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif; }
+      .mn { font-family: 'SFMono-Regular',Consolas,'Courier New',monospace; }
+      .box { fill:#fff; stroke:#0d1b2e; stroke-width:1.6; }
+      .box-a { fill:#fff; stroke:#bc3b1e; stroke-width:2.2; }
+      .box-q { fill:#fff; stroke:#a9b3c0; stroke-width:1.4; }
+      .lbl { font-size:20px; letter-spacing:.14em; fill:#78859a; }
+      .ttl { font-size:27px; font-weight:700; fill:#0d1b2e; }
+      .sub { font-size:20px; fill:#465468; }
+      .arw { stroke:#78859a; stroke-width:1.6; fill:none; marker-end:url(#ar); }
+    </style>
+  </defs>
+
+  <text class="mn lbl" x="50"  y="80">SOURCE</text>
+  <text class="mn lbl" x="400" y="80">SEARCH — 完全一致ファースト</text>
+  <text class="mn lbl" x="900" y="80">ANSWER</text>
+  <line x1="50" y1="98" x2="320" y2="98" stroke="#d7dde4"/>
+  <line x1="400" y1="98" x2="820" y2="98" stroke="#d7dde4"/>
+  <line x1="900" y1="98" x2="1150" y2="98" stroke="#d7dde4"/>
+
+  <!-- ソース -->
+  <rect class="box" x="50" y="150" width="270" height="150" rx="3"/>
+  <text class="jp ttl" x="74" y="200">不適合委員会資料</text>
+  <text class="jp sub" x="74" y="234" style="font-size:17px">対策書 / クレーム / 不良報告</text>
+  <text class="mn sub" x="74" y="270" style="fill:#bc3b1e; font-size:24px">明細 809件</text>
+
+  <path class="arw" d="M185 302 L185 348"/>
+
+  <rect class="box" x="50" y="352" width="270" height="150" rx="3"/>
+  <text class="mn lbl" x="74" y="388">INGEST</text>
+  <text class="jp ttl" x="74" y="428" style="font-size:25px">セル直抽出</text>
+  <text class="jp sub" x="74" y="460">OCRを介さない</text>
+  <text class="jp sub" x="74" y="486">原本画像 809枚を保持</text>
+
+  <path d="M322 300 L356 300" stroke="#78859a" stroke-width="1.6" fill="none"/>
+  <path d="M356 200 L356 442" stroke="#78859a" stroke-width="1.6" fill="none"/>
+  <path class="arw" d="M356 200 L396 200"/>
+  <path class="arw" d="M356 320 L396 320"/>
+  <path class="arw" d="M356 442 L396 442"/>
+
+  <!-- 3ランク -->
+  <rect class="box-a" x="400" y="150" width="420" height="106" rx="3"/>
+  <text class="mn lbl" x="424" y="184" style="fill:#bc3b1e">RANK 1 — 根拠として回答に使う</text>
+  <text class="jp ttl" x="424" y="224" style="font-size:25px">図番・品名の完全一致</text>
+
+  <rect class="box-q" x="400" y="272" width="420" height="94" rx="3"/>
+  <text class="mn lbl" x="424" y="304" style="font-size:18px">RANK 2 — 参考（存在提示のみ）</text>
+  <text class="jp sub" x="424" y="340" style="font-size:18px">図番の前方一致 / 顧客名・品名の部分一致</text>
+
+  <rect class="box-q" x="400" y="382" width="420" height="120" rx="3"/>
+  <text class="mn lbl" x="424" y="414" style="font-size:18px">RANK 3 — 参考（存在提示のみ）</text>
+  <text class="jp sub" x="424" y="450">内容検索</text>
+  <text class="jp sub" x="424" y="478">ベクトル + 字句バイグラムを RRF で統合</text>
+
+  <path class="arw" d="M822 200 L892 200"/>
+
+  <!-- 回答 -->
+  <rect class="box" x="900" y="150" width="250" height="150" rx="3"/>
+  <text class="jp ttl" x="924" y="196" style="font-size:25px">出典つき回答</text>
+  <text class="jp sub" x="924" y="230">クリックすると</text>
+  <text class="jp sub" x="924" y="256" style="font-size:18px">原本Excelの該当箇所を</text>
+  <text class="jp sub" x="924" y="282">画像で表示</text>
+
+  <rect class="box" x="900" y="330" width="250" height="172" rx="3"/>
+  <text class="mn lbl" x="924" y="366">FALLBACK</text>
+  <text class="jp ttl" x="924" y="406" style="font-size:25px">LLM停止時も</text>
+  <text class="jp ttl" x="924" y="438" style="font-size:25px">全機能が動く</text>
+  <text class="jp sub" x="924" y="466">回答生成のみ</text>
+  <text class="jp sub" x="924" y="490" style="font-size:18px">テンプレート表示に切替</text>
+
+  <line x1="50" y1="560" x2="1150" y2="560" stroke="#d7dde4"/>
+  <line x1="50" y1="556" x2="50" y2="565" stroke="#d7dde4"/>
+  <line x1="1150" y1="556" x2="1150" y2="565" stroke="#d7dde4"/>
+  <text class="mn lbl" x="50" y="596" style="font-size:19px">FastAPI / SQLAlchemy / ローカル埋め込みモデル / Claude API / openpyxl</text>
+  <text class="jp sub" x="50" y="628" style="font-size:19px; fill:#78859a">集計質問は明細を数えず、資料表紙の公式集計から回答する</text>
+</svg>

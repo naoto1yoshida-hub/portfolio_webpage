@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="図面検索システムの構成図">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#78859a"/>
+    </marker>
+    <style>
+      .jp { font-family: 'Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif; }
+      .mn { font-family: 'SFMono-Regular',Consolas,'Courier New',monospace; }
+      .box { fill:#fff; stroke:#0d1b2e; stroke-width:1.6; }
+      .box-a { fill:#fff; stroke:#bc3b1e; stroke-width:2.2; }
+      .lbl { font-size:20px; letter-spacing:.14em; fill:#78859a; }
+      .ttl { font-size:29px; font-weight:700; fill:#0d1b2e; }
+      .sub { font-size:21px; fill:#465468; }
+      .fig { font-size:22px; fill:#bc3b1e; font-weight:600; }
+      .arw { stroke:#78859a; stroke-width:1.6; fill:none; marker-end:url(#ar); }
+    </style>
+  </defs>
+
+  <!-- 列ラベル -->
+  <text class="mn lbl" x="50"  y="80">INPUT</text>
+  <text class="mn lbl" x="400" y="80">INGEST / STORE</text>
+  <text class="mn lbl" x="790" y="80">WEB</text>
+  <line x1="50" y1="98" x2="310" y2="98" stroke="#d7dde4"/>
+  <line x1="400" y1="98" x2="700" y2="98" stroke="#d7dde4"/>
+  <line x1="790" y1="98" x2="1150" y2="98" stroke="#d7dde4"/>
+
+  <!-- 入力 -->
+  <rect class="box" x="50" y="150" width="260" height="140" rx="3"/>
+  <text class="jp ttl" x="76" y="205">図面PDF</text>
+  <text class="mn fig" x="76" y="243">17,588</text>
+  <text class="jp sub" x="76" y="271">件 / 29,506ページ</text>
+
+  <rect class="box" x="50" y="345" width="260" height="140" rx="3"/>
+  <text class="jp ttl" x="76" y="400" style="font-size:26px">受注台帳 Excel</text>
+  <text class="mn fig" x="76" y="438">145,699</text>
+  <text class="jp sub" x="76" y="466">行</text>
+
+  <path class="arw" d="M312 220 L396 220"/>
+  <path class="arw" d="M312 415 L396 415"/>
+
+  <!-- 取込・保存 -->
+  <rect class="box" x="400" y="150" width="300" height="130" rx="3"/>
+  <text class="jp ttl" x="426" y="204">取込パイプライン</text>
+  <text class="jp sub" x="426" y="240" style="font-size:18px">PDF展開 / 正規化 / 差分取込</text>
+
+  <path class="arw" d="M550 282 L550 336"/>
+
+  <rect class="box-a" x="400" y="340" width="300" height="150" rx="3"/>
+  <text class="mn lbl" x="426" y="376" style="fill:#bc3b1e">DATA STORE</text>
+  <text class="jp ttl" x="426" y="418">PostgreSQL</text>
+  <text class="jp sub" x="426" y="452">+ pgvector（ivfflat）</text>
+  <text class="jp sub" x="426" y="478" style="font-size:19px">DINOv2 384次元ベクトル</text>
+
+  <path class="arw" d="M702 220 L786 220"/>
+  <path class="arw" d="M702 415 L786 346"/>
+
+  <!-- Web -->
+  <rect class="box" x="790" y="150" width="172" height="112" rx="3"/>
+  <text class="jp ttl" x="812" y="194" style="font-size:21px">4欄検索</text>
+  <text class="jp sub" x="812" y="224" style="font-size:16px">会社・品名</text>
+  <text class="jp sub" x="812" y="246" style="font-size:16px">図番・受注番号</text>
+
+  <rect class="box" x="978" y="150" width="172" height="112" rx="3"/>
+  <text class="jp ttl" x="1000" y="194" style="font-size:21px">類似図面検索</text>
+  <text class="mn fig" x="1000" y="224" style="font-size:16px">Recall@10</text>
+  <text class="mn fig" x="1000" y="246" style="font-size:16px">0.427 → 0.548</text>
+
+  <rect class="box" x="790" y="290" width="172" height="112" rx="3"/>
+  <text class="jp ttl" x="812" y="334" style="font-size:20px">注釈エディター</text>
+  <text class="jp sub" x="812" y="364" style="font-size:16px">文字・矢印・回転</text>
+  <text class="jp sub" x="812" y="386" style="font-size:16px">全員で共有</text>
+
+  <rect class="box" x="978" y="290" width="172" height="112" rx="3"/>
+  <text class="jp ttl" x="1000" y="334" style="font-size:21px">差分比較</text>
+  <text class="jp sub" x="1000" y="364" style="font-size:16px">新旧図面を</text>
+  <text class="jp sub" x="1000" y="386" style="font-size:16px">左右で重ねて表示</text>
+
+  <rect class="box" x="790" y="430" width="360" height="105" rx="3"/>
+  <text class="jp ttl" x="812" y="470" style="font-size:21px">週次更新バッチ</text>
+  <text class="jp sub" x="812" y="498" style="font-size:16px">プリフライト検査に通らなければ</text>
+  <text class="jp sub" x="812" y="520" style="font-size:16px">1件も処理しない</text>
+
+  <!-- 注記 -->
+  <line x1="50" y1="580" x2="1150" y2="580" stroke="#d7dde4"/>
+  <line x1="50" y1="576" x2="50" y2="585" stroke="#d7dde4"/>
+  <line x1="1150" y1="576" x2="1150" y2="585" stroke="#d7dde4"/>
+  <text class="mn lbl" x="50" y="614" style="font-size:19px">FastAPI / SQLAlchemy / Jinja2 / PyMuPDF / onnxruntime / Vercel + Blob</text>
+</svg>

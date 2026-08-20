@@ -1,0 +1,19 @@
+<header class="hdr">
+  <div class="wrap hdr__inner">
+    <a class="hdr__logo" href="{{ url_for('index') }}">
+      TEGG <small>Engineering</small>
+    </a>
+
+    <nav class="hdr__nav" id="navMenu" aria-label="メインメニュー">
+      <a href="{{ url_for('works_index') }}">実績</a>
+      <a href="{{ url_for('index') }}#services">サービス・料金</a>
+      <a href="{{ url_for('index') }}#process">進め方</a>
+      <a href="{{ url_for('index') }}#profile">プロフィール</a>
+      <a class="hdr__cta" href="{{ url_for('index') }}#contact">無料で相談する</a>
+    </nav>
+
+    <button class="hdr__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="メニューを開く">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>

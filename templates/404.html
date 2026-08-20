@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}ページが見つかりません｜{{ site.name }}{% endblock %}
+{% block description %}お探しのページは見つかりませんでした。{% endblock %}
+{% block canonical %}/{% endblock %}
+
+{% block content %}
+<section class="nf">
+  <div class="wrap">
+    <p class="nf__code">404</p>
+    <h1 class="nf__title">ページが見つかりません</h1>
+    <p class="nf__lead">
+      URLが変わったか、削除された可能性があります。<br>
+      実績一覧からお探しください。
+    </p>
+    <div class="nf__actions">
+      <a class="btn btn--primary" href="{{ url_for('works_index') }}">実績一覧へ</a>
+      <a class="btn btn--ghost" href="{{ url_for('index') }}">トップへ戻る</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block cta %}{% endblock %}
