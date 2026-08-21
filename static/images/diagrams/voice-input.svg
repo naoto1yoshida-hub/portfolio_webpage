@@ -51,9 +51,9 @@
   <!-- 自動蓄積 -->
   <path class="arw" d="M720 332 L720 380"/>
   <rect class="box" x="330" y="384" width="496" height="102" rx="3"/>
-  <text class="mn lbl" x="352" y="418" style="font-size:18px">AUTO ENRICH — 辞書を人が育てなくていいようにする</text>
+  <text class="mn lbl" x="352" y="418" style="font-size:18px">AUTO ENRICH — 辞書を自動で育てる</text>
   <text class="jp sub" x="352" y="452">網1: カタカナの未知語（外来語）</text>
-  <text class="jp sub" x="352" y="476" style="font-size:17px">網2: 敬称・組織接尾辞の直前語（「〜さん」「〜産業」の隣）</text>
+  <text class="jp sub" x="352" y="476" style="font-size:17px">網2: 敬称・組織接尾辞の直前語（「〜さん」の隣）</text>
   <path class="arw" d="M330 435 L262 435 L262 300 L326 300" stroke-dasharray="5 4"/>
 
   <!-- 実測 -->

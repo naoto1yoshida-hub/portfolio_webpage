@@ -88,6 +88,10 @@ html {
 
 body {
   margin: 0;
+  /* 本文が短いページでもフッターを最下部に置く（404 など） */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   background: var(--paper);
   color: var(--ink-soft);
   font-family: var(--font-body);
@@ -135,6 +139,8 @@ button { font: inherit; color: inherit; }
 /* --------------------------------------------------------------------------
    骨格
    -------------------------------------------------------------------------- */
+
+main { flex: 1 0 auto; }
 
 .wrap {
   width: 100%;
@@ -848,9 +854,10 @@ button { font: inherit; color: inherit; }
   font-weight: 500;
   color: var(--ink-mid);
 }
-.tech__item + .tech__item::before {
-  content: "/";
-  margin-right: var(--s3);
+/* 区切りは直前の語にぶら下げる。前置きにすると折返し時に行頭へ落ちる */
+.tech__item:not(:last-child)::after {
+  content: " /";
+  margin-left: var(--s3);
   color: var(--rule);
 }
 
