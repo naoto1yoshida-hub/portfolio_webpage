@@ -61,10 +61,35 @@
              alt="{{ case.diagram_alt }}" width="1200" height="675">
       </div>
       <p class="figure-frame__hint">横にスワイプすると図の続きが見られます</p>
-      <figcaption>{{ case.title }} — システム構成。実データを含む画面は掲載していません。</figcaption>
+      <figcaption>{{ case.title }} — システム構成</figcaption>
     </figure>
   </div>
 </section>
+
+
+<!-- ========== 実画面（あるケースのみ） ========== -->
+{% if case.screens %}
+<section class="band band--tight">
+  <div class="wrap">
+    <div class="prose rise" style="max-width: none;">
+      <p class="block__label">Screens <span>実際の画面</span></p>
+    </div>
+    <div class="screens rise">
+      {% for shot in case.screens %}
+      <figure class="figure-frame" style="margin: 0;">
+        <div class="figure-frame__scroll">
+          <img src="{{ url_for('static', filename='images/screens/' ~ shot.file) }}"
+               alt="{{ shot.alt }}" loading="lazy">
+        </div>
+        <p class="figure-frame__hint">横にスワイプすると画面の続きが見られます</p>
+        <figcaption>{{ shot.caption }}</figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+    <p class="screens__note rise">{{ case.screens_note }}</p>
+  </div>
+</section>
+{% endif %}
 
 
 <!-- ========== 課題 ========== -->

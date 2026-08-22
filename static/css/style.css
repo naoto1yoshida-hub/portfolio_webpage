@@ -1335,6 +1335,39 @@ main { flex: 1 0 auto; }
   letter-spacing: 0.02em;
 }
 
+/* 実画面のギャラリー。ダミーデータで撮影したものだけを載せる */
+/* minmax(0,1fr) を明示しないと、中の画像の最低幅ぶんグリッド列が広がって
+   ページごと横スクロールする（既定の min-width:auto のため） */
+.screens { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s5); }
+.screens__note {
+  margin-top: var(--s5);
+  max-width: 68ch;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.85;
+  color: var(--ink-faint);
+  letter-spacing: 0.01em;
+}
+
+/* 継続導入ブロックの画面（濃紺の上に置く） */
+.cont__shot {
+  margin: var(--s8) 0 0;
+  border: 1px solid var(--rule-dark);
+  border-radius: var(--r);
+  padding: var(--s4);
+  background: rgba(255, 255, 255, 0.04);
+}
+.cont__shot figcaption {
+  margin-top: var(--s4);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--rule-dark-soft);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  line-height: 1.7;
+  color: var(--on-dark-faint);
+  letter-spacing: 0.02em;
+}
+
 .nextcases { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s5); }
 .nextcase {
   display: block;
@@ -1446,9 +1479,10 @@ main { flex: 1 0 auto; }
 }
 
 @media (max-width: 860px) {
-  /* 構成図は縮めると読めなくなるので、最低幅を保って横スクロールさせる */
+  /* 構成図・実画面は縮めると読めなくなるので、最低幅を保って横スクロールさせる */
   .figure-frame { padding: var(--s4); }
   .figure-frame__scroll img { min-width: 760px; }
+  .cont__shot .figure-frame__scroll img { min-width: 760px; }
   .figure-frame__hint {
     display: block;
     margin-top: var(--s3);

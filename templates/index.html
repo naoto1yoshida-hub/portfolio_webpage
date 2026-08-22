@@ -86,6 +86,16 @@
         {% endfor %}
       </ul>
     </div>
+
+    {% if continuous.screen %}
+    <figure class="cont__shot rise">
+      <div class="figure-frame__scroll">
+        <img src="{{ url_for('static', filename='images/screens/' ~ continuous.screen.file) }}"
+             alt="{{ continuous.screen.alt }}" loading="lazy">
+      </div>
+      <figcaption>{{ continuous.screen.caption }}</figcaption>
+    </figure>
+    {% endif %}
   </div>
 </section>
 
