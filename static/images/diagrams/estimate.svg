@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="見積もり作成ツールの業務フロー図">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#78859a"/>
+    </marker>
+    <style>
+      .jp { font-family: 'Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif; }
+      .mn { font-family: 'SFMono-Regular',Consolas,'Courier New',monospace; }
+      .box { fill:#fff; stroke:#0d1b2e; stroke-width:1.6; }
+      .box-a { fill:#fff; stroke:#bc3b1e; stroke-width:2.2; }
+      .lbl { font-size:20px; letter-spacing:.14em; fill:#78859a; }
+      .ttl { font-size:27px; font-weight:700; fill:#0d1b2e; }
+      .sub { font-size:20px; fill:#465468; }
+      .arw { stroke:#78859a; stroke-width:1.6; fill:none; marker-end:url(#ar); }
+    </style>
+  </defs>
+
+  <text class="mn lbl" x="50" y="80">WORKFLOW — 1レコードで管理する 5 工程</text>
+  <line x1="50" y1="98" x2="1150" y2="98" stroke="#d7dde4"/>
+
+  <!-- 5工程 -->
+  <rect class="box" x="50"  y="150" width="200" height="130" rx="3"/>
+  <text class="mn lbl" x="72" y="184" style="font-size:18px">01</text>
+  <text class="jp ttl" x="72" y="222">起票</text>
+  <text class="jp sub" x="72" y="253" style="font-size:18px">営業 / 製作仕様書</text>
+
+  <rect class="box" x="282" y="150" width="200" height="130" rx="3"/>
+  <text class="mn lbl" x="304" y="184" style="font-size:18px">02</text>
+  <text class="jp ttl" x="304" y="222" style="font-size:22px">工程・時間入力</text>
+  <text class="jp sub" x="304" y="253" style="font-size:18px">現場の見積担当</text>
+
+  <rect class="box-a" x="514" y="150" width="200" height="130" rx="3"/>
+  <text class="mn lbl" x="536" y="184" style="font-size:18px; fill:#bc3b1e">03</text>
+  <text class="jp ttl" x="536" y="222">現場確定</text>
+  <text class="jp sub" x="536" y="253" style="font-size:18px">確定版を保存</text>
+
+  <rect class="box" x="746" y="150" width="200" height="130" rx="3"/>
+  <text class="mn lbl" x="768" y="184" style="font-size:18px">04</text>
+  <text class="jp ttl" x="768" y="222">営業調整</text>
+  <text class="jp sub" x="768" y="253" style="font-size:18px">確定版との差分</text>
+
+  <rect class="box" x="978" y="150" width="172" height="130" rx="3"/>
+  <text class="mn lbl" x="1000" y="184" style="font-size:18px">05</text>
+  <text class="jp ttl" x="1000" y="222" style="font-size:24px">見積書発行</text>
+  <text class="jp sub" x="1000" y="253" style="font-size:17px">番号を自動採番</text>
+
+  <path class="arw" d="M252 215 L278 215"/>
+  <path class="arw" d="M484 215 L510 215"/>
+  <path class="arw" d="M716 215 L742 215"/>
+  <path class="arw" d="M948 215 L974 215"/>
+
+  <!-- 計算エンジン -->
+  <path class="arw" d="M400 282 L400 338"/>
+  <rect class="box-a" x="50" y="342" width="664" height="150" rx="3"/>
+  <text class="mn lbl" x="76" y="378" style="fill:#bc3b1e">CALCULATION — サーバー一元化</text>
+  <text class="jp ttl" x="76" y="420">単価・金型費の自動計算</text>
+  <text class="jp sub" x="76" y="454">テンプレートExcelの数式を正本として実装</text>
+  <text class="jp sub" x="76" y="480">実在の見積1件で全項目一致を自動テストに固定</text>
+
+  <!-- 出力 -->
+  <path class="arw" d="M716 415 L770 415"/>
+  <rect class="box" x="774" y="342" width="376" height="150" rx="3"/>
+  <text class="mn lbl" x="800" y="378">EXCEL OUTPUT</text>
+  <text class="jp ttl" x="800" y="418" style="font-size:22px">社内見積依頼書（マクロ保持）</text>
+  <text class="jp ttl" x="800" y="456" style="font-size:25px">客先提出用 見積書</text>
+  <text class="jp sub" x="800" y="482">紙の運用を残したまま移行できる</text>
+
+  <line x1="50" y1="560" x2="1150" y2="560" stroke="#d7dde4"/>
+  <line x1="50" y1="556" x2="50" y2="565" stroke="#d7dde4"/>
+  <line x1="1150" y1="556" x2="1150" y2="565" stroke="#d7dde4"/>
+  <text class="mn lbl" x="50" y="596" style="font-size:19px">FastAPI / SQLAlchemy / openpyxl / PostgreSQL（Neon）/ Vercel + Blob</text>
+  <text class="jp sub" x="50" y="628" style="font-size:19px; fill:#78859a">板取り計算機・数量シミュレーション・リピート複製・マスター管理を同一画面に内包</text>
+</svg>

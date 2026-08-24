@@ -25,3 +25,8 @@ flask_out.txt
 # OS
 .DS_Store
 Thumbs.db
+
+# 作業用
+.claude/
+.playwright-mcp/
+*.png.tmp

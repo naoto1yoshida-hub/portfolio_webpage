@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="EC在庫アラートダッシュボードの構成図">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#78859a"/>
+    </marker>
+    <style>
+      .jp { font-family: 'Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif; }
+      .mn { font-family: 'SFMono-Regular',Consolas,'Courier New',monospace; }
+      .box { fill:#fff; stroke:#0d1b2e; stroke-width:1.6; }
+      .box-a { fill:#fff; stroke:#bc3b1e; stroke-width:2.2; }
+      .lbl { font-size:20px; letter-spacing:.14em; fill:#78859a; }
+      .ttl { font-size:27px; font-weight:700; fill:#0d1b2e; }
+      .sub { font-size:20px; fill:#465468; }
+      .arw { stroke:#78859a; stroke-width:1.6; fill:none; marker-end:url(#ar); }
+    </style>
+  </defs>
+
+  <text class="mn lbl" x="50"  y="80">DATA SOURCES</text>
+  <text class="mn lbl" x="440" y="80">AGGREGATE</text>
+  <text class="mn lbl" x="790" y="80">DASHBOARD</text>
+  <line x1="50" y1="98" x2="360" y2="98" stroke="#d7dde4"/>
+  <line x1="440" y1="98" x2="710" y2="98" stroke="#d7dde4"/>
+  <line x1="790" y1="98" x2="1150" y2="98" stroke="#d7dde4"/>
+
+  <!-- ソース -->
+  <rect class="box" x="50" y="140" width="310" height="96" rx="3"/>
+  <text class="jp ttl" x="74" y="184">Amazon 在庫・販売</text>
+  <text class="jp sub" x="74" y="214">スプレッドシート</text>
+
+  <rect class="box" x="50" y="256" width="310" height="96" rx="3"/>
+  <text class="jp ttl" x="74" y="300">楽天 STOCKCREW</text>
+  <text class="jp sub" x="74" y="330">スプレッドシート</text>
+
+  <rect class="box" x="50" y="372" width="310" height="96" rx="3"/>
+  <text class="jp ttl" x="74" y="416">楽天 RMS 集計</text>
+  <text class="jp sub" x="74" y="446">スプレッドシート</text>
+
+  <path class="arw" d="M362 188 L432 250"/>
+  <path class="arw" d="M362 304 L432 304"/>
+  <path class="arw" d="M362 420 L432 358"/>
+
+  <!-- 集約 -->
+  <rect class="box" x="440" y="180" width="270" height="120" rx="3"/>
+  <text class="mn lbl" x="464" y="216" style="font-size:16px">Google Sheets API v4</text>
+  <text class="jp ttl" x="464" y="256">サーバー側で集約</text>
+  <text class="jp sub" x="464" y="284">起動時 + 手動更新</text>
+
+  <path class="arw" d="M575 302 L575 344"/>
+
+  <rect class="box-a" x="440" y="348" width="270" height="146" rx="3"/>
+  <text class="mn lbl" x="464" y="384" style="fill:#bc3b1e">CALC</text>
+  <text class="jp ttl" x="464" y="424">在庫日数を算出</text>
+  <text class="jp sub" x="464" y="454">直近7日平均日販ベース</text>
+  <text class="jp sub" x="464" y="480">＋ 月次の季節補正係数</text>
+
+  <path class="arw" d="M712 240 L782 240"/>
+  <path class="arw" d="M712 420 L782 420"/>
+
+  <!-- ダッシュボード -->
+  <rect class="box" x="790" y="140" width="360" height="212" rx="3"/>
+  <text class="jp ttl" x="814" y="184">発注アラート一覧</text>
+
+  <rect x="814" y="206" width="14" height="14" fill="#bc3b1e"/>
+  <text class="jp sub" x="842" y="219">在庫日数 30日未満 — 要発注</text>
+
+  <rect x="814" y="248" width="14" height="14" fill="#c9a227"/>
+  <text class="jp sub" x="842" y="261">80日未満 — 注意</text>
+
+  <rect x="814" y="290" width="14" height="14" fill="#1a7f52"/>
+  <text class="jp sub" x="842" y="303">それ以上 — 正常</text>
+
+  <rect class="box" x="790" y="372" width="360" height="122" rx="3"/>
+  <text class="mn lbl" x="814" y="408">BACKTEST</text>
+  <text class="jp ttl" x="814" y="448" style="font-size:25px">WAPE 34.8% → 33.5%</text>
+  <text class="jp sub" x="814" y="478" style="font-size:16px">124SKU × 11遷移 = 1,364予測で検証</text>
+
+  <line x1="50" y1="560" x2="1150" y2="560" stroke="#d7dde4"/>
+  <line x1="50" y1="556" x2="50" y2="565" stroke="#d7dde4"/>
+  <line x1="1150" y1="556" x2="1150" y2="565" stroke="#d7dde4"/>
+  <text class="mn lbl" x="50" y="596" style="font-size:19px">Next.js 16 / TypeScript / Tailwind CSS 4 / googleapis / Vercel</text>
+</svg>

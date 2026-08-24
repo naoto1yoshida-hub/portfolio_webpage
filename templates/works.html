@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}実績一覧｜{{ site.name }}{% endblock %}
+{% block description %}TEGG Engineering のこれまでの開発実績{{ works_total }}件。製造業向けの図面検索・見積・品質管理システムから、EC在庫ダッシュボード、業務自動化ツール、Web制作まで。{% endblock %}
+{% block canonical %}/works{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="パンくず">
+      <a href="{{ url_for('index') }}">TOP</a><span>/</span><span aria-current="page">WORKS</span>
+    </nav>
+    <h1 class="page-head__title">実績一覧</h1>
+    <p class="page-head__lead">
+      これまでに作った{{ works_total }}件です。クライアント名は伏せ、業種と規模で表記しています。
+      詳しく書けるものは案件ごとの詳細ページにまとめました。
+    </p>
+  </div>
+</section>
+
+
+<!-- 主要ケース -->
+<section class="band band--tight">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Case studies</p>
+      <h2 class="sec-head__title">詳細を書いた{{ cases|length }}件</h2>
+      <p class="sec-head__lead">課題・やったこと・成果・技術構成まで書いています。</p>
+    </div>
+
+    <div class="cards">
+      {% for case in cases %}
+        {% include '_partials/work_card.html' %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+<!-- カテゴリ別の全件 -->
+<section class="band band--sheet">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">All works</p>
+      <h2 class="sec-head__title">全{{ works_total }}件</h2>
+    </div>
+
+    {% for category, items in grouped %}
+    <div class="cat rise">
+      <div class="cat__head">
+        <h3 class="cat__title">{{ category.label }}<span class="cat__note" style="margin-left: 12px;">{{ items|length }}件</span></h3>
+        <p class="cat__note">{{ category.note }}</p>
+      </div>
+
+      <div class="rows">
+        {% for w in items %}
+        <div class="row">
+          <div class="row__head">
+            <h4 class="row__title">
+              {% if w.detail_slug %}<a href="{{ url_for('work_detail', slug=w.detail_slug) }}">{{ w.title }}</a>
+              {% else %}{{ w.title }}{% endif %}
+            </h4>
+            <div class="row__meta">
+              {% if '本番稼働' in w.status or '納品' in w.status or '公開中' in w.status %}
+                <span class="chip chip--live">{{ w.status }}</span>
+              {% else %}
+                <span class="chip">{{ w.status }}</span>
+              {% endif %}
+            </div>
+            <p class="row__client">{{ w.client }}</p>
+          </div>
+          <div>
+            <p class="row__body">{{ w.summary }}</p>
+            <p class="row__stack">{{ w.stack }}</p>
+            {% if w.detail_slug or w.url %}
+            <div class="row__links">
+              {% if w.detail_slug %}
+              <a class="tlink" href="{{ url_for('work_detail', slug=w.detail_slug) }}">
+                詳細を読む <span class="tlink__arrow" aria-hidden="true">&rarr;</span>
+              </a>
+              {% endif %}
+              {% if w.url %}
+              <a class="tlink" href="{{ w.url }}" target="_blank" rel="noopener noreferrer">
+                公開ページを見る <span class="tlink__arrow" aria-hidden="true">&#8599;</span>
+              </a>
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+
+    <p class="price-note" style="margin-top: var(--s7);">
+      受託案件の本番URLは社内システムのため掲載していません。
+      掲載可能なものだけリンクを付けています。画面はすべてダミーデータまたは構成図で、
+      クライアントの実データは使用していません。
+    </p>
+  </div>
+</section>
+
+{% endblock %}

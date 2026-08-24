@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="ローカル音声入力アプリの処理構成図">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#78859a"/>
+    </marker>
+    <style>
+      .jp { font-family: 'Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif; }
+      .mn { font-family: 'SFMono-Regular',Consolas,'Courier New',monospace; }
+      .box { fill:#fff; stroke:#0d1b2e; stroke-width:1.6; }
+      .box-a { fill:#fff; stroke:#bc3b1e; stroke-width:2.2; }
+      .lbl { font-size:20px; letter-spacing:.14em; fill:#78859a; }
+      .ttl { font-size:27px; font-weight:700; fill:#0d1b2e; }
+      .sub { font-size:20px; fill:#465468; }
+      .arw { stroke:#78859a; stroke-width:1.6; fill:none; marker-end:url(#ar); }
+    </style>
+  </defs>
+
+  <!-- PC 境界 -->
+  <rect x="34" y="112" width="998" height="392" rx="4" fill="none" stroke="#0d1b2e" stroke-width="1.4" stroke-dasharray="7 5"/>
+  <rect x="60" y="96" width="216" height="32" fill="#fff"/>
+  <text class="mn lbl" x="66" y="120" style="fill:#0d1b2e">PC 内で完結する範囲</text>
+
+  <text class="mn lbl" x="50" y="80">LOCAL PIPELINE — 音声はネットワークへ出さない</text>
+
+  <!-- 流れ -->
+  <rect class="box" x="66" y="200" width="192" height="130" rx="3"/>
+  <text class="jp ttl" x="88" y="252">マイク音声</text>
+  <text class="jp sub" x="88" y="284">評価セット</text>
+  <text class="mn sub" x="88" y="310" style="fill:#bc3b1e">69発話 / 9.5分</text>
+
+  <path class="arw" d="M260 265 L326 265"/>
+
+  <rect class="box" x="330" y="200" width="212" height="130" rx="3"/>
+  <text class="mn lbl" x="352" y="236">LOCAL ASR</text>
+  <text class="jp ttl" x="352" y="276">Qwen3-ASR</text>
+  <text class="jp sub" x="352" y="308">オフライン実行</text>
+
+  <path class="arw" d="M544 265 L610 265"/>
+
+  <rect class="box-a" x="614" y="200" width="212" height="130" rx="3"/>
+  <text class="mn lbl" x="636" y="236" style="fill:#bc3b1e">DICTIONARY</text>
+  <text class="jp ttl" x="636" y="276" style="font-size:23px">固有名詞 辞書</text>
+  <text class="jp sub" x="636" y="308" style="font-size:17px">ルールベース / 34語</text>
+
+  <path class="arw" d="M828 265 L894 265"/>
+
+  <rect class="box" x="898" y="200" width="118" height="130" rx="3"/>
+  <text class="jp ttl" x="916" y="252" style="font-size:24px">確定</text>
+  <text class="jp sub" x="916" y="284" style="font-size:18px">テキスト</text>
+
+  <!-- 自動蓄積 -->
+  <path class="arw" d="M720 332 L720 380"/>
+  <rect class="box" x="330" y="384" width="496" height="102" rx="3"/>
+  <text class="mn lbl" x="352" y="418" style="font-size:18px">AUTO ENRICH — 辞書を自動で育てる</text>
+  <text class="jp sub" x="352" y="452">網1: カタカナの未知語（外来語）</text>
+  <text class="jp sub" x="352" y="476" style="font-size:17px">網2: 敬称・組織接尾辞の直前語（「〜さん」の隣）</text>
+  <path class="arw" d="M330 435 L262 435 L262 300 L326 300" stroke-dasharray="5 4"/>
+
+  <!-- 実測 -->
+  <text class="mn lbl" x="1034" y="80">MEASURED</text>
+  <line x1="1034" y1="98" x2="1150" y2="98" stroke="#d7dde4"/>
+
+  <rect class="box-a" x="1034" y="140" width="116" height="140" rx="3"/>
+  <text class="mn ttl" x="1050" y="196" style="font-size:32px; fill:#bc3b1e">95.0</text>
+  <text class="mn sub" x="1050" y="222" style="font-size:20px; fill:#bc3b1e">%</text>
+  <text class="jp sub" x="1050" y="252" style="font-size:17px">固有名詞</text>
+  <text class="jp sub" x="1050" y="272" style="font-size:17px">F1</text>
+
+  <rect class="box" x="1034" y="300" width="116" height="140" rx="3"/>
+  <text class="mn ttl" x="1050" y="356" style="font-size:32px">53.3</text>
+  <text class="mn sub" x="1050" y="382" style="font-size:20px">%</text>
+  <text class="jp sub" x="1050" y="412" style="font-size:17px">辞書なし</text>
+  <text class="jp sub" x="1050" y="432" style="font-size:17px">最良値</text>
+
+  <line x1="50" y1="560" x2="1150" y2="560" stroke="#d7dde4"/>
+  <line x1="50" y1="556" x2="50" y2="565" stroke="#d7dde4"/>
+  <line x1="1150" y1="556" x2="1150" y2="565" stroke="#d7dde4"/>
+  <text class="mn lbl" x="50" y="596" style="font-size:19px">Tauri / Rust / TypeScript — Windows デスクトップアプリ</text>
+  <text class="jp sub" x="50" y="628" style="font-size:19px; fill:#78859a">自声69発話での実測（2026-07-28）。固有名詞の回収にLLMは使っていない</text>
+</svg>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>{% block title %}{{ site.name }}｜{{ site.tagline }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ site.description }}{% endblock %}">
+  <link rel="canonical" href="{{ site.url }}{% block canonical %}/{% endblock %}">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ site.name }}">
+  <meta property="og:title" content="{{ self.title() }}">
+  <meta property="og:description" content="{{ self.description() }}">
+  <meta property="og:url" content="{{ site.url }}{{ self.canonical() }}">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230d1b2e'/><rect x='6.5' y='6.5' width='19' height='19' fill='none' stroke='%23bc3b1e' stroke-width='1.5'/><path d='M11 21V11h4.5a3 3 0 0 1 0 6H11' stroke='white' stroke-width='1.6' fill='none'/></svg>">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "{{ site.name }}",
+    "url": "{{ site.url }}",
+    "description": "{{ site.description }}",
+    "areaServed": "JP",
+    "founder": { "@type": "Person", "name": "{{ site.owner }}", "jobTitle": "{{ site.role }}" },
+    "knowsAbout": ["生成AI", "RAG", "業務システム開発", "業務自動化", "製造業DX"]
+  }
+  </script>
+</head>
+<body>
+
+{% include '_partials/header.html' %}
+
+<main id="main">
+  {% block content %}{% endblock %}
+</main>
+
+{% block cta %}{% include '_partials/cta.html' %}{% endblock %}
+{% include '_partials/footer.html' %}
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
