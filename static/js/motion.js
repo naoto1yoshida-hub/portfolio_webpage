@@ -234,5 +234,21 @@
     playHero();
   }
 
-  window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+  // 固定表示（pin）の開始位置は作成時のページの高さで決まる。
+  // 後から画像（遅延読み込み含む）やWebフォントが届いてページが伸びると開始位置がずれ、
+  // 固定された「進め方」の裏を上の節の文字が流れて重なる。高さが変わるたびに計算し直す
+  var refreshTimer = null;
+  function scheduleRefresh() {
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(function () { ScrollTrigger.refresh(); }, 120);
+  }
+  if ('ResizeObserver' in window) {
+    var lastHeight = 0;
+    new ResizeObserver(function () {
+      var h = document.body.scrollHeight;
+      if (Math.abs(h - lastHeight) > 1) { lastHeight = h; scheduleRefresh(); }
+    }).observe(document.body);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleRefresh);
+  window.addEventListener('load', scheduleRefresh);
 })();

@@ -1654,7 +1654,8 @@ main { flex: 1 0 auto; }
 
 /* 進め方：広い画面では縦スクロールで横に流れる */
 @media (min-width: 1001px) {
-  .js-motion.gsap-ready #process { overflow: hidden; }
+  /* 固定表示中に上の節の文字が透けないよう、背景を不透明にする */
+  .js-motion.gsap-ready #process { overflow: hidden; background: var(--paper); position: relative; z-index: 2; }
   .js-motion.gsap-ready #process .steps {
     display: flex;
     gap: var(--s9);
