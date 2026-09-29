@@ -19,6 +19,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script>
+    /* 動きの可否を描画前に決める。動きを減らす設定の人には何もしない。
+       初回演出はトップページで1セッションに1回だけ */
+    (function () {
+      var d = document.documentElement;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      d.classList.add('js-motion');
+      try {
+        if (location.pathname === '/' && !sessionStorage.getItem('tegg-intro')) {
+          d.classList.add('js-intro');
+          sessionStorage.setItem('tegg-intro', '1');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230d1b2e'/><rect x='6.5' y='6.5' width='19' height='19' fill='none' stroke='%23bc3b1e' stroke-width='1.5'/><path d='M11 21V11h4.5a3 3 0 0 1 0 6H11' stroke='white' stroke-width='1.6' fill='none'/></svg>">
 
   <script type="application/ld+json">
@@ -36,6 +51,12 @@
 </head>
 <body>
 
+<div class="intro" aria-hidden="true">
+  <div class="intro__lines"><i></i><i></i><i></i><i></i></div>
+  <p class="intro__name">TEGG <small>Engineering</small></p>
+  <p class="intro__count">0</p>
+</div>
+
 {% include '_partials/header.html' %}
 
 <main id="main">
@@ -46,5 +67,12 @@
 {% include '_partials/footer.html' %}
 
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js"
+        integrity="sha512-oJ8QbaQThQoJZ7oEv+29jfPM6CcP+zUxh3PKJs1vyOhx0UraUrE7PQgeItu3dOuCJyrzWpoYMsVjkkPEBzbUqw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/ScrollTrigger.min.js"
+        integrity="sha512-OaIE7ud4P04EhnBuhEcm0wQSceIxbi2pV03oBLS/+F6ampfxsnxcIxOp7H2eF9G7N0kEht0VAzOLG+dTLSo17Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{{ url_for('static', filename='js/motion.js') }}"></script>
 </body>
 </html>

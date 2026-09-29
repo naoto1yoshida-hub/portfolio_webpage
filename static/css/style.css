@@ -73,6 +73,7 @@
 
   --r: 3px;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* --------------------------------------------------------------------------
@@ -1406,8 +1407,8 @@ main { flex: 1 0 auto; }
 
 .rise {
   opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.9s var(--ease-out);
 }
 .rise.is-in { opacity: 1; transform: none; }
 .rise-1 { transition-delay: 0.06s; }
@@ -1518,4 +1519,179 @@ main { flex: 1 0 auto; }
   .band--ink, .hero, .page-head { background: #fff; color: #000; }
   .band--ink h1, .band--ink h2, .hero__title, .page-head__title { color: #000; }
   body { font-size: 12px; }
+}
+
+/* --------------------------------------------------------------------------
+   動き（GSAP + ScrollTrigger）
+   html.js-motion は head のスクリプトが付ける。動きを減らす設定の人には付かない。
+   GSAP が読み込めなかったときは motion.js が js-motion を外し、すべて静的に戻す
+   -------------------------------------------------------------------------- */
+
+/* 初回演出（トップページで1セッションに1回） */
+.intro { display: none; }
+.js-intro .intro {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--ink);
+  color: var(--on-dark);
+  /* motion.js が動かなかった場合でも3秒で必ず消す */
+  animation: intro-failsafe 0.01s linear 3s forwards;
+}
+.intro.is-done { transform: translateY(-100%); transition: transform 0.9s var(--ease-out); }
+.intro__lines { position: absolute; left: 0; right: 0; top: 40%; }
+.intro__lines i {
+  display: block;
+  height: 1px;
+  margin-bottom: 44px;
+  background: var(--rule-dark);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: intro-draw 1.1s var(--ease-out) forwards;
+}
+.intro__lines i:nth-child(even) { margin-left: 3%; transform-origin: right; }
+.intro__lines i:nth-child(2) { animation-delay: 0.08s; }
+.intro__lines i:nth-child(3) { animation-delay: 0.16s; }
+.intro__lines i:nth-child(4) { animation-delay: 0.24s; }
+.intro__name {
+  position: absolute;
+  left: var(--gut);
+  top: 26px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.intro__name small {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--on-dark-faint);
+  margin-left: var(--s2);
+  text-transform: uppercase;
+}
+.intro__count {
+  position: absolute;
+  left: 0; right: 0; bottom: 28px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: var(--on-dark-soft);
+  font-variant-numeric: tabular-nums;
+}
+@keyframes intro-draw { to { transform: scaleX(1); } }
+@keyframes intro-failsafe { to { visibility: hidden; } }
+
+/* 読了バー（ヘッダーの下端） */
+.progress-bar {
+  position: absolute;
+  left: 0; bottom: -1px;
+  width: 100%;
+  height: 2px;
+  background: var(--mark);
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+}
+
+/* 見出しの1文字ずつのせり上げ */
+.mch { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.mci { display: inline-block; will-change: transform; }
+/* JS が文字を分割するまでの一瞬に、分割前の見出しが見えないようにする。
+   motion.js が動かなかった場合も3秒で必ず表示する */
+.js-motion .hero__title:not(.is-split),
+.js-motion .sec-head__title:not(.is-split),
+.js-motion .page-head__title:not(.is-split),
+.js-motion .case__title:not(.is-split) {
+  opacity: 0;
+  animation: split-failsafe 0.01s linear 3s forwards;
+}
+@keyframes split-failsafe { to { opacity: 1; } }
+
+/* ヒーローの下線は文字が出たあとに引く */
+.js-motion .hero__title em { border-bottom-color: transparent; position: relative; }
+.js-motion .hero__title em::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -3px;
+  height: 3px;
+  background: var(--mark);
+  transform: scaleX(var(--line, 0));
+  transform-origin: left;
+}
+
+/* 技術スタックの流れる帯 */
+.mq {
+  overflow: hidden;
+  background: var(--ink);
+  border-top: 1px solid var(--rule-dark-soft);
+  padding: var(--s5) 0;
+  white-space: nowrap;
+}
+.mq__track { display: inline-flex; animation: mq-scroll 60s linear infinite; }
+.mq__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s6);
+  padding-right: var(--s6);
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.4vw, 30px);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--on-dark-soft);
+}
+.mq__item::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: var(--mark);
+}
+.mq:hover .mq__track { animation-play-state: paused; }
+@keyframes mq-scroll { to { transform: translateX(-50%); } }
+
+/* 進め方：広い画面では縦スクロールで横に流れる */
+@media (min-width: 1001px) {
+  .js-motion.gsap-ready #process { overflow: hidden; }
+  .js-motion.gsap-ready #process .steps {
+    display: flex;
+    gap: var(--s9);
+    width: max-content;
+    padding-right: var(--gut);
+    will-change: transform;
+  }
+  .js-motion.gsap-ready #process .step { flex: 0 0 520px; padding-top: var(--s6); }
+  .js-motion.gsap-ready #process .step__num {
+    display: block;
+    font-size: 88px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .js-motion.gsap-ready #process .step__title { margin-top: var(--s5); font-size: 26px; }
+  .js-motion.gsap-ready #process .step__body { font-size: 15.5px; max-width: 30em; }
+  .steps-rail {
+    position: relative;
+    height: 2px;
+    margin-top: var(--s7);
+    background: var(--rule);
+  }
+  .steps-rail span {
+    position: absolute;
+    inset: 0;
+    background: var(--mark);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+}
+.steps-rail { display: none; }
+.js-motion.gsap-ready .steps-rail { display: block; }
+@media (max-width: 1000px) {
+  .js-motion.gsap-ready .steps-rail { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mq__track { animation: none; }
+  .intro { display: none !important; }
 }

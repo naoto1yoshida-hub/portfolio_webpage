@@ -38,6 +38,15 @@
   </div>
 </section>
 
+<!-- ========== 技術スタックの流れる帯（装飾。内容は「使っている技術」と同じ） ========== -->
+<div class="mq" aria-hidden="true">
+  <div class="mq__track">
+    {% for _ in range(2) %}
+      {% for group in tech_stack %}{% for item in group['items'] %}<span class="mq__item">{{ item }}</span>{% endfor %}{% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
 
 <!-- ========== 実績（最上位） ========== -->
 <section class="band" id="works">
