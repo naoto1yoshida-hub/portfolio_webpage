@@ -159,6 +159,33 @@ check('ケースデータの必須項目', ng)
 
 
 # ---------------------------------------------------------------------------
+# 5-2. トップの太陽型の実績図（ORBIT）
+# ---------------------------------------------------------------------------
+# 丸の下に常に出す名前がないとアイコンだけになり、何のアプリか伝わらない。
+
+ICON_TEMPLATE = (ROOT / 'templates' / '_partials' / 'app_icon.html').read_text(encoding='utf-8')
+CSS_TEXT = (ROOT / 'static' / 'css' / 'style.css').read_text(encoding='utf-8')
+
+ng = []
+for case in works.CASES:
+    entry = works.ORBIT.get(case['slug'])
+    if not entry:
+        ng.append(f'{case["slug"]}: ORBIT に名前とアイコンがない')
+        continue
+    if not entry.get('name') or len(entry['name']) > 8:
+        ng.append(f'{case["slug"]}: 丸の名前 "{entry.get("name")}" が空か8文字超')
+    icon = entry.get('icon', '')
+    if f"kind == '{icon}'" not in ICON_TEMPLATE:
+        ng.append(f'{case["slug"]}: アイコン "{icon}" の絵が app_icon.html にない')
+    if f'.planet--{icon}' not in CSS_TEXT:
+        ng.append(f'{case["slug"]}: アイコン "{icon}" の色 .planet--{icon} が style.css にない')
+for slug in works.ORBIT:
+    if slug not in {c['slug'] for c in works.CASES}:
+        ng.append(f'ORBIT の {slug} に対応する案件がない')
+check('太陽型の実績図（名前・アイコン・色）', ng, 'data/works.py の ORBIT を CASES と揃える')
+
+
+# ---------------------------------------------------------------------------
 # 6. 全ページのメタ情報・画像alt・見出し
 # ---------------------------------------------------------------------------
 

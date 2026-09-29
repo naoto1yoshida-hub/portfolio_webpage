@@ -134,7 +134,8 @@ def index():
     """トップページ"""
     return render_template(
         'index.html',
-        featured=works.featured_cases(4),
+        featured=works.featured_cases(len(works.ORBIT)),
+        orbit=works.ORBIT,
         continuous=profile.CONTINUOUS,
         highlights=profile.HIGHLIGHTS,
         services=services.SERVICES,

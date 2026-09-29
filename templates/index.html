@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% from '_partials/app_icon.html' import app_icon %}
 
 {% block content %}
 
@@ -65,13 +66,92 @@
       </a>
     </div>
 
-    <div class="cards">
-      {% for case in featured %}
-        {% include '_partials/work_card.html' %}
-      {% endfor %}
+    {#
+      太陽型の実績図。中央が Works、周りを各アプリの丸が囲む。
+      丸は事例ページへの普通のリンクで、JS があるときだけ右のパネルで詳細を開く
+    #}
+    <div class="orbit" style="--n: {{ featured|length }};">
+      <div class="orbit__ring" aria-hidden="true"></div>
+      <div class="orbit__sun" aria-hidden="true">
+        <span class="orbit__sun-en">Works</span>
+        <span class="orbit__sun-ja">主な実績 {{ featured|length }}件</span>
+      </div>
+      <ul class="orbit__list">
+        {% for case in featured %}
+        {% set o = orbit[case.slug] %}
+        <li class="orbit__item" style="--i: {{ loop.index0 }};">
+          <a class="planet planet--{{ o.icon }}" href="{{ url_for('work_detail', slug=case.slug) }}"
+             data-app="{{ case.slug }}" aria-haspopup="dialog" aria-describedby="tip-{{ case.slug }}">
+            <span class="planet__disc">{{ app_icon(o.icon) }}</span>
+            <span class="planet__name">{{ o.name }}</span>
+          </a>
+          <span class="planet__tip" id="tip-{{ case.slug }}" role="tooltip">{{ case.lead }}</span>
+        </li>
+        {% endfor %}
+      </ul>
     </div>
+    <p class="orbit__hint">丸を押すと、仕組みと数値の詳細が開きます</p>
   </div>
 </section>
+
+<!-- ========== 実績の詳細パネル（右から開く） ========== -->
+<div class="drawer" id="appDrawer" hidden>
+  <div class="drawer__overlay" data-drawer-close></div>
+  <div class="drawer__panel" role="dialog" aria-modal="true" tabindex="-1">
+    <button class="drawer__close" type="button" data-drawer-close aria-label="詳細を閉じる">
+      <span aria-hidden="true"></span>
+    </button>
+
+    {% for case in featured %}
+    {% set o = orbit[case.slug] %}
+    <article class="app-detail" data-app="{{ case.slug }}" hidden>
+      <div class="app-detail__head">
+        <span class="app-detail__icon planet--{{ o.icon }}">{{ app_icon(o.icon) }}</span>
+        <div>
+          <div class="card__meta">
+            {% set badge = case.badge or case.status %}
+            <span class="chip {% if '稼働' in badge or '納品' in badge %}chip--live{% else %}chip--dev{% endif %}">{{ badge }}</span>
+            <span>{{ case.client }}</span>
+          </div>
+          <h3 class="app-detail__title" id="app-title-{{ case.slug }}">{{ case.title }}</h3>
+        </div>
+      </div>
+
+      <p class="app-detail__lead">{{ case.lead }}</p>
+      <p class="app-detail__summary">{{ case.summary }}</p>
+
+      <h4 class="app-detail__label">仕組み（構成図）</h4>
+      <figure class="app-detail__figure">
+        <img src="{{ url_for('static', filename='images/diagrams/' ~ case.diagram) }}"
+             alt="{{ case.diagram_alt }}" loading="lazy" width="640" height="360">
+      </figure>
+
+      <h4 class="app-detail__label">数値</h4>
+      <ul class="app-detail__stats">
+        {% for stat in case.stats %}
+        <li>
+          <b>{{ stat.value }}<small>{{ stat.unit }}</small></b>
+          <span>{{ stat.label }}</span>
+          <em>{{ stat.note }}</em>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <h4 class="app-detail__label">つくり方の要点</h4>
+      <ol class="app-detail__steps">
+        {% for a in case.approach %}<li>{{ a.heading }}</li>{% endfor %}
+      </ol>
+
+      <h4 class="app-detail__label">使った技術</h4>
+      <dl class="app-detail__stack">
+        {% for s in case.stack %}<dt>{{ s.label }}</dt><dd>{{ s['items'] }}</dd>{% endfor %}
+      </dl>
+
+      <a class="btn btn--primary btn--block app-detail__more" href="{{ url_for('work_detail', slug=case.slug) }}">この案件の詳細を読む</a>
+    </article>
+    {% endfor %}
+  </div>
+</div>
 
 
 <!-- ========== 継続導入 ========== -->

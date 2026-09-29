@@ -173,6 +173,80 @@
     });
   }
 
+  /* ------------------------------------------ 太陽型の実績図（ポワポワ動く） */
+
+  var orbit = document.querySelector('.orbit');
+  if (orbit) {
+    var sun = orbit.querySelector('.orbit__sun');
+    var planets = orbit.querySelectorAll('.planet');
+    var floats = [];
+
+    gsap.set(sun, { scale: 0.6, opacity: 0 });
+    gsap.set(planets, { scale: 0, opacity: 0 });
+
+    // 画面に入ったら、中央の Works → 周りの丸の順に弾んで出る
+    ScrollTrigger.create({
+      trigger: orbit,
+      start: 'top 75%',
+      once: true,
+      onEnter: function () {
+        gsap.to(sun, { scale: 1, opacity: 1, duration: 1, ease: 'elastic.out(1, 0.6)' });
+        gsap.to(planets, {
+          scale: 1, opacity: 1, duration: 1.1, ease: 'elastic.out(1, 0.55)', stagger: 0.09, delay: 0.25,
+          onComplete: startFloat
+        });
+      }
+    });
+
+    // 丸ごとに違うリズムでゆっくり漂う
+    function startFloat() {
+      Array.prototype.forEach.call(planets, function (p) {
+        floats.push(p._float = gsap.to(p, {
+          x: 'random(-7, 7)',
+          y: 'random(-11, 11)',
+          duration: 'random(2.2, 3.4)',
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+          repeatRefresh: true
+        }));
+      });
+    }
+
+    // 画面の外では漂いを止める
+    ScrollTrigger.create({
+      trigger: orbit,
+      start: 'top bottom',
+      end: 'bottom top',
+      onToggle: function (st) {
+        floats.forEach(function (t) { st.isActive ? t.resume() : t.pause(); });
+      }
+    });
+
+    // 触ると弾む
+    Array.prototype.forEach.call(planets, function (p) {
+      var disc = p.querySelector('.planet__disc');
+      var icon = p.querySelector('.app-icon');
+      // 触っている間はその丸の漂いを止める（押す直前に的が逃げないように）
+      var enter = function () {
+        if (p._float) p._float.pause();
+        gsap.to(disc, { scale: 1.14, duration: 0.8, ease: 'elastic.out(1, 0.4)', overwrite: 'auto' });
+        gsap.fromTo(icon, { rotation: 0 }, {
+          keyframes: [{ rotation: -12 }, { rotation: 9 }, { rotation: -4 }, { rotation: 0 }],
+          duration: 0.6, ease: 'sine.inOut', overwrite: 'auto'
+        });
+      };
+      var leave = function () {
+        if (p._float) p._float.resume();
+        gsap.to(disc, { scale: 1, duration: 0.5, ease: 'power3.out', overwrite: 'auto' });
+      };
+      p.addEventListener('mouseenter', enter);
+      p.addEventListener('focus', enter);
+      p.addEventListener('mouseleave', leave);
+      p.addEventListener('blur', leave);
+    });
+  }
+
   /* ---------------------------------------- 進め方：縦スクロールで横に流れる */
 
   var process = document.getElementById('process');

@@ -1,8 +1,10 @@
 /* ==========================================================================
    TEGG Engineering — ポートフォリオ
 
-   担当は3つだけ。ナビの開閉 / スクロール表示 / FAQ開閉 / 問い合わせ送信。
-   実績はサーバー側でページを持つため、モーダルは持たない。
+   担当: ナビの開閉 / スクロール表示 / 実績の詳細パネル / FAQ開閉 / 問い合わせ送信。
+   実績の詳細はサーバー側でページを持つ。トップの太陽型の図だけ、同じ内容の要約を
+   右のパネルで開く（JS が無いときは丸がそのまま事例ページへのリンクとして動く）。
+   動き（GSAP）は motion.js が持つ。
    ========================================================================== */
 
 (function () {
@@ -55,6 +57,84 @@
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
     Array.prototype.forEach.call(risers, function (el) { observer.observe(el); });
+  }
+
+  /* ------------------------------------------------- 実績の詳細パネル */
+
+  // トップの太陽型の実績図。丸は事例ページへのリンクで、ここで右のパネルに差し替える
+  var drawer = document.getElementById('appDrawer');
+
+  if (drawer) {
+    var panel = drawer.querySelector('.drawer__panel');
+    var details = drawer.querySelectorAll('.app-detail');
+    var lastTrigger = null;
+    var closeTimer = null;
+
+    var openDrawer = function (slug, trigger) {
+      var target = null;
+      Array.prototype.forEach.call(details, function (el) {
+        var hit = el.getAttribute('data-app') === slug;
+        el.hidden = !hit;
+        if (hit) target = el;
+      });
+      if (!target) return false;
+
+      clearTimeout(closeTimer);
+      panel.setAttribute('aria-labelledby', 'app-title-' + slug);
+      panel.scrollTop = 0;
+      lastTrigger = trigger;
+      drawer.hidden = false;
+      document.documentElement.classList.add('is-locked');
+      void drawer.offsetWidth; // 表示直後に is-open を付けてスライドさせるための再計算
+      drawer.classList.add('is-open');
+      panel.focus();
+      return true;
+    };
+
+    var closeDrawer = function () {
+      if (drawer.hidden) return;
+      drawer.classList.remove('is-open');
+      document.documentElement.classList.remove('is-locked');
+      closeTimer = setTimeout(function () { drawer.hidden = true; }, reduce ? 0 : 450);
+      if (lastTrigger) lastTrigger.focus();
+    };
+
+    Array.prototype.forEach.call(document.querySelectorAll('.planet[data-app]'), function (link) {
+      link.addEventListener('click', function (e) {
+        // 新しいタブで開く操作は邪魔しない
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        if (openDrawer(link.getAttribute('data-app'), link)) e.preventDefault();
+      });
+    });
+
+    drawer.addEventListener('click', function (e) {
+      if (e.target.closest('[data-drawer-close]')) closeDrawer();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (drawer.hidden) return;
+      if (e.key === 'Escape') {
+        closeDrawer();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+
+      // フォーカスをパネルの中に留める
+      var focusables = Array.prototype.filter.call(
+        panel.querySelectorAll('a[href], button'),
+        function (el) { return el.offsetParent !== null; }
+      );
+      if (!focusables.length) return;
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === panel)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
   }
 
   /* ---------------------------------------------------------------- FAQ */
