@@ -613,12 +613,12 @@ html:not(.js-motion) .strip { overflow-x: auto; }
 /* 実績の画面を1枚ずつ見せる区画。
    既定はカードが縦に並ぶ一覧。motion.js が .is-pinned を付けると、画面に固定して
    カードを同じ位置に重ね、スクロールに合わせて1枚ずつ競り上げる */
-.panel { position: relative; margin-top: 9vw; }
+.panel { position: relative; margin-top: 9vw; --card-w: clamp(520px, 52.8vw, 1000px); }
 
-.panel__bg { display: none; }
+.panel__bg, .panel__captions { display: none; }
 .panel__cards { display: grid; gap: 9vw; justify-items: center; padding: 0 var(--gut); }
 
-.pcard { width: 100%; max-width: var(--card-w); --card-w: clamp(520px, 52.8vw, 1000px); }
+.pcard { width: 100%; max-width: var(--card-w); }
 
 /* カードの中の寸法は、カード幅 760px を 76em として持つ（幅に比例して全体が伸縮する） */
 .pcard__link { position: relative; display: block; font-size: calc(var(--card-w) / 76); color: var(--white); }
@@ -701,14 +701,41 @@ html:not(.js-motion) .strip { overflow-x: auto; }
 }
 .is-pinned .pcard__link { width: var(--card-w); }
 
-.is-pinned .panel__button { position: absolute; z-index: 3; left: 50%; top: calc(50% + 8.1vw); margin-top: 9vw; transform: translateX(-50%); }
+/* 説明書きはカードの外に1か所だけ置く（カードごとに持たせると、重なったとき前の文字が下に残る）。
+   位置はカードの画像のすぐ下。画像は幅の半分の高さで、区画の中心から 4.5vh 上に寄せてある */
+.is-pinned .pcard__caption { display: none; }
+.is-pinned .panel__captions {
+  display: block;
+  position: absolute;
+  z-index: 1;                 /* カード（2）より奥。競り上がる大きなカードには隠れる */
+  left: calc(50% - var(--card-w) / 2);
+  top: calc(50% - 4.5vh + var(--card-w) / 4 + 14px);
+  width: var(--card-w);
+}
+.panel__caption {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--g1);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.6s var(--ease-expo);
+}
+.panel__caption b { display: block; font-size: 15px; color: var(--white); }
+.panel__caption span { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.panel__caption.is-current { opacity: 1; transform: none; transition-delay: 0.25s; }
+
+.is-pinned .panel__button { position: absolute; z-index: 3; left: 50%; top: calc(50% + 8.1vw); margin-top: 10.5vw; transform: translateX(-50%); }
 .is-pinned .panel__button::before {
   content: "";
   position: absolute;
   left: 50%;
   bottom: calc(100% + 10px);
   width: 1px;
-  height: 6.25vw;
+  height: 2vw;
   background: var(--g1);
   animation: scrolldown 1.8s var(--ease-inout) infinite;
 }
@@ -1156,7 +1183,11 @@ html:not(.js-motion) .strip { overflow-x: auto; }
 
   .panel { margin-top: 18vw; }
   .panel__cards { gap: 16vw; }
-  .pcard { --card-w: 82vw; }
+  .panel { --card-w: 82vw; }
+  .is-pinned .panel__captions { top: calc(50% - 7vh + var(--card-w) / 4 + 10px); }
+  .panel__caption { font-size: 12px; }
+  .panel__caption b { font-size: 13px; }
+  .panel__caption span { white-space: normal; }
   .pcard__kind { font-size: 10px; padding: 3px 8px; }
   .pcard__caption { font-size: 12px; }
   .pcard__caption b { display: block; }

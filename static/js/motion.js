@@ -351,6 +351,22 @@
       }
     });
 
+    // 説明書きは区画に1か所だけ。着いたカードのものだけを見せる（-1 = どれも見せない）
+    var captions = Array.prototype.slice.call(panel.querySelectorAll('[data-panel-caption]'));
+    var shown = -2;
+    var showCaption = function (index) {
+      if (index === shown) return;
+      shown = index;
+      captions.forEach(function (caption, i) { caption.classList.toggle('is-current', i === index); });
+    };
+
+    // 1枚ぶんの動きは時間軸で 1（競り上がり 0.5 + 縮み 0.5）。競り上がりが6割進んだ時点で
+    // 説明を切り替える。大きなカードが説明の位置を覆っている間なので、切り替わる瞬間は見えない。
+    // 進む向きでも戻る向きでも同じ式で決まるので、説明と手前のカードがずれない
+    stack.eventCallback('onUpdate', function () {
+      showCaption(Math.min(cards.length - 1, Math.floor(stack.time() + 0.7) - 1));
+    });
+
     cards.forEach(function (card) {
       stack
         .fromTo(card,

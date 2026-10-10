@@ -177,6 +177,17 @@
       {% endfor %}
     </ol>
 
+    {#
+      固定して重ねるときの説明書き。カードは同じ位置に重なるので、説明をカードごとに持たせると
+      前のカードの文字が下に残って重なる。ここに1か所だけ置き、着いたカードのものに差し替える。
+      読み上げにはカード側のリンク名を使うので、ここは対象から外す
+    #}
+    <div class="panel__captions" aria-hidden="true">
+      {% for case in featured %}
+      <p class="panel__caption" data-panel-caption><b>{{ case.title }}</b><span>{{ case.lead }}</span></p>
+      {% endfor %}
+    </div>
+
     <div class="panel__button">
       <a class="more" href="{{ url_for('works_index') }}">
         <span class="more__label">VIEW<br>MORE</span>{% include '_partials/play_icon.html' %}
