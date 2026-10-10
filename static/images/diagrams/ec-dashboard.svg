@@ -61,13 +61,13 @@
   <text class="jp ttl" x="814" y="184">発注アラート一覧</text>
 
   <rect x="814" y="206" width="14" height="14" fill="#bc3b1e"/>
-  <text class="jp sub" x="842" y="219">在庫日数 30日未満 — 要発注</text>
+  <text class="jp sub" x="842" y="219">在庫日数 80日未満 — 要発注</text>
 
-  <rect x="814" y="248" width="14" height="14" fill="#c9a227"/>
-  <text class="jp sub" x="842" y="261">80日未満 — 注意</text>
+  <rect x="814" y="248" width="14" height="14" fill="#1a7f52"/>
+  <text class="jp sub" x="842" y="261">それ以上 — 正常</text>
 
-  <rect x="814" y="290" width="14" height="14" fill="#1a7f52"/>
-  <text class="jp sub" x="842" y="303">それ以上 — 正常</text>
+  <rect x="814" y="290" width="14" height="14" fill="#9aa3ad"/>
+  <text class="jp sub" x="842" y="303">販売実績なし — データ不足</text>
 
   <rect class="box" x="790" y="372" width="360" height="122" rx="3"/>
   <text class="mn lbl" x="814" y="408">BACKTEST</text>

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="社内タスク管理の流れ図">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#78859a"/>
+    </marker>
+    <style>
+      .jp { font-family: 'Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif; }
+      .mn { font-family: 'SFMono-Regular',Consolas,'Courier New',monospace; }
+      .box { fill:#fff; stroke:#0d1b2e; stroke-width:1.6; }
+      .box-a { fill:#fff; stroke:#bc3b1e; stroke-width:2.2; }
+      .lbl { font-size:20px; letter-spacing:.14em; fill:#78859a; }
+      .ttl { font-size:27px; font-weight:700; fill:#0d1b2e; }
+      .sub { font-size:20px; fill:#465468; }
+      .arw { stroke:#78859a; stroke-width:1.6; fill:none; marker-end:url(#ar); }
+    </style>
+  </defs>
+
+  <text class="mn lbl" x="50" y="80">THREAD — 問い合わせ1件が、そのままタスクになる</text>
+  <line x1="50" y1="98" x2="1150" y2="98" stroke="#d7dde4"/>
+
+  <!-- 4つの段階 -->
+  <rect class="box" x="50" y="150" width="250" height="130" rx="3"/>
+  <text class="mn lbl" x="72" y="184" style="font-size:18px">01</text>
+  <text class="jp ttl" x="72" y="222">起票</text>
+  <text class="jp sub" x="72" y="253" style="font-size:18px">宛先・件名・カテゴリ</text>
+
+  <rect class="box" x="332" y="150" width="250" height="130" rx="3"/>
+  <text class="mn lbl" x="354" y="184" style="font-size:18px">02</text>
+  <text class="jp ttl" x="354" y="222">やり取り</text>
+  <text class="jp sub" x="354" y="253" style="font-size:18px">宛先以外も返信できる</text>
+
+  <rect class="box" x="614" y="150" width="250" height="130" rx="3"/>
+  <text class="mn lbl" x="636" y="184" style="font-size:18px">03</text>
+  <text class="jp ttl" x="636" y="222" style="font-size:24px">担当の受け渡し</text>
+  <text class="jp sub" x="636" y="253" style="font-size:18px">申し送りと履歴が残る</text>
+
+  <rect class="box" x="896" y="150" width="254" height="130" rx="3"/>
+  <text class="mn lbl" x="918" y="184" style="font-size:18px">04</text>
+  <text class="jp ttl" x="918" y="222">完了</text>
+  <text class="jp sub" x="918" y="253" style="font-size:18px">会話は全件残る</text>
+
+  <path class="arw" d="M302 215 L328 215"/>
+  <path class="arw" d="M584 215 L610 215"/>
+  <path class="arw" d="M866 215 L892 215"/>
+
+  <!-- 滞留の見える化 -->
+  <path class="arw" d="M457 282 L457 338"/>
+  <rect class="box-a" x="50" y="342" width="664" height="150" rx="3"/>
+  <text class="mn lbl" x="76" y="378" style="fill:#bc3b1e">STAGNATION — 止まっている場所を常に表示</text>
+  <text class="jp ttl" x="76" y="420">現在の担当と、滞留日数</text>
+  <text class="jp sub" x="76" y="454">3日で警告色 / 7日で危険色</text>
+  <text class="jp sub" x="76" y="480">担当が替わると数え直す。自分宛は滞留の長い順</text>
+
+  <!-- 通知 -->
+  <path class="arw" d="M716 415 L770 415"/>
+  <rect class="box" x="774" y="342" width="376" height="150" rx="3"/>
+  <text class="mn lbl" x="800" y="378">NOTIFY</text>
+  <text class="jp ttl" x="800" y="420">関係者へツール内通知</text>
+  <text class="jp sub" x="800" y="454">担当の変更・返信・ステータスの変更</text>
+  <text class="jp sub" x="800" y="480">10秒間隔で確認</text>
+
+  <line x1="50" y1="560" x2="1150" y2="560" stroke="#d7dde4"/>
+  <line x1="50" y1="556" x2="50" y2="565" stroke="#d7dde4"/>
+  <line x1="1150" y1="556" x2="1150" y2="565" stroke="#d7dde4"/>
+  <text class="mn lbl" x="50" y="596" style="font-size:19px">FastAPI / Jinja2 / SQLAlchemy / PostgreSQL（Neon）/ Vercel</text>
+  <text class="jp sub" x="50" y="628" style="font-size:19px; fill:#78859a">共有PCで開いたまま使う前提。ログインではなく、名前の選択で本人を識別する</text>
+</svg>

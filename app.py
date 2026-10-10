@@ -17,6 +17,7 @@ from data import works, services, profile
 load_dotenv()
 
 app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # サーバーレス環境では以下の設定は通常不要ですが、ローカル開発用に残しています
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -126,7 +127,22 @@ def inject_globals():
     return {
         'site': profile.SITE,
         'works_total': works.total_count(),
+        'profile_links': profile.PROFILE['links'],
     }
+
+
+def static_exists(filename):
+    """static 配下にファイルが置かれているか。動画・写真は後から足すので、無ければ出さない。"""
+    return os.path.isfile(os.path.join(BASE_DIR, 'static', *filename.split('/')))
+
+
+def gallery_images():
+    """static/images/gallery に置かれた写真を名前順で返す（無ければ空）。"""
+    folder = os.path.join(BASE_DIR, 'static', 'images', 'gallery')
+    if not os.path.isdir(folder):
+        return []
+    names = sorted(n for n in os.listdir(folder) if n.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')))
+    return ['images/gallery/' + n for n in names]
 
 
 @app.route('/')
@@ -134,8 +150,12 @@ def index():
     """トップページ"""
     return render_template(
         'index.html',
-        featured=works.featured_cases(len(works.ORBIT)),
-        orbit=works.ORBIT,
+        hero=profile.HERO,
+        hero_video=static_exists(profile.HERO['video']),
+        hero_poster=static_exists(profile.HERO['poster']),
+        gallery=gallery_images(),
+        featured=works.all_cases(),
+        strip=works.strip_images(),
         continuous=profile.CONTINUOUS,
         highlights=profile.HIGHLIGHTS,
         services=services.SERVICES,

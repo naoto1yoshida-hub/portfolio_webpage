@@ -18,6 +18,35 @@ SITE = {
     "url": "https://portfolio-webpage-zz11.vercel.app",
 }
 
+# トップの冒頭演出とヒーローの文言。
+# mark は極太の上段、name は細い明朝の下段で、2行の幅を揃えて組む（幅は motion.js が合わせる）。
+# 文言を変えるときはここだけ直せば、演出の文字割りも追従する。
+HERO = {
+    "opening_copy": "Not to ship, ...but to be used.",
+    "mark": "TEGG",
+    "name": "NAOTO YOSHIDA",
+    "roles": ["AI ENGINEER/", "FOR MANUFACTURING"],
+    # 動画が無いときは同じ色調の静止背景を出す。
+    # 候補は2本: video/hero-roof.mp4（工場の屋根の鉄骨）/ video/hero-cnc.mp4（切削の接写）。
+    # 切り替えるときは poster も同じ動画の1コマ目から作り直す（docs/media_prompts.md）
+    "video": "video/hero-roof.mp4",
+    "poster": "images/hero-poster.jpg",
+    # ヒーロー直下の宣言文。1行ずつ字下げをずらして組む（indent は左からの vw）
+    "statement": [
+        {"text": "I build", "indent": 0},
+        {"text": "AI tools", "indent": 7},
+        {"text": "for", "indent": 3.8, "rule": True},
+        {"text": "the factory", "indent": 34},
+        {"text": "floor.", "indent": 22},
+    ],
+    "lead_heading": "製造業の現場に、AIを実装してきました。",
+    "lead": (
+        "図面17,588件の検索基盤、紙で回していた見積フローの置き換え、出典を原本まで辿れる社内チャットボット。"
+        "要件を聞くところから運用まで、ひとりで作って動かしています。"
+        "作ることより、現場で使われ続けることを設計します。"
+    ),
+}
+
 # ヒーローに出すハイライト（すべて一次資料で裏付けのある事実）
 HIGHLIGHTS = [
     {
@@ -105,14 +134,15 @@ CONTINUOUS = {
             "段階的にシステムを入れてきました。1つ作って終わりではなく、"
             "現場で使われた結果を見て次を決める進め方をしています。",
     "screen": {
-        "file": "tasks-timeline.png",
-        "alt": "社内タスク管理のタイムライン画面。問い合わせが一覧表示され、滞留日数が2日・4日・9日・16日と色分けされている",
-        "caption": "社内タスク管理 — 滞留日数を色で出し、止まっている案件が一目で分かるようにした",
+        # タイムラインは実績の欄で見せているので、ここでは同じツールの別の画面を出す
+        "file": "tasks-thread.png",
+        "alt": "社内タスク管理のスレッド詳細画面。件名の下にカテゴリ・ステータス・現担当の滞留日数が並び、ステータスと担当を変更する欄の下に、起票者と担当者のやり取りが時系列で表示されている",
+        "caption": "社内タスク管理 — 口頭で済ませていた相談が、担当の受け渡しごと1か所に残る",
     },
     "systems": [
         {"name": "図面検索システム", "status": "本番稼働中", "slug": "drawing-search"},
         {"name": "見積もり作成ツール", "status": "本番稼働中", "slug": "estimate"},
-        {"name": "社内タスク管理", "status": "本番稼働中", "slug": None},
+        {"name": "社内タスク管理", "status": "本番稼働中", "slug": "task-board"},
         {"name": "社内規程チャットボット", "status": "完成・運用中", "slug": None},
         {"name": "品質管理チャットボット", "status": "開発中", "slug": "quality-bot"},
     ],

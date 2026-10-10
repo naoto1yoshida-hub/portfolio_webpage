@@ -1,20 +1,23 @@
-<footer class="ftr">
-  <div class="wrap">
-    <div class="ftr__inner">
-      <div>
-        <div class="ftr__logo">TEGG Engineering</div>
-        <p class="ftr__tag">生成AI × 製造業。中小企業の業務改善を、実装まで。</p>
-      </div>
-      <nav class="ftr__nav" aria-label="フッターメニュー">
-        <a href="{{ url_for('index') }}">トップ</a>
-        <a href="{{ url_for('works_index') }}">実績一覧</a>
-        <a href="{{ url_for('index') }}#services">サービス・料金</a>
-        <a href="{{ url_for('index') }}#contact">お問い合わせ</a>
-        <a href="https://crowdworks.jp/public/employees/6719291" target="_blank" rel="noopener noreferrer">クラウドワークス</a>
-        <a href="https://note.com/nysyyysyhy" target="_blank" rel="noopener noreferrer">note</a>
-        <a href="https://x.com/061426" target="_blank" rel="noopener noreferrer">X</a>
-      </nav>
+<footer class="ftr" data-zone="black">
+  <div class="ftr__inner">
+    <nav class="ftr__nav" aria-label="フッターメニュー">
+      <ul class="ftr__big">
+        <li><a class="roll" href="{{ url_for('works_index') }}"><span>WORKS</span><span aria-hidden="true">WORKS</span></a></li>
+        <li><a class="roll" href="{{ url_for('index') }}#services"><span>SERVICES</span><span aria-hidden="true">SERVICES</span></a></li>
+        <li><a class="roll" href="{{ url_for('index') }}#profile"><span>PROFILE</span><span aria-hidden="true">PROFILE</span></a></li>
+        <li><a class="roll" href="{{ url_for('index') }}#contact"><span>CONTACT</span><span aria-hidden="true">CONTACT</span></a></li>
+      </ul>
+      <ul class="ftr__small">
+        {% for link in profile_links %}
+        <li><a class="roll" href="{{ link.url }}" target="_blank" rel="noopener noreferrer"><span>{{ link.label }}</span><span aria-hidden="true">{{ link.label }}</span></a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <div class="ftr__foot">
+      <p class="ftr__tag">生成AI × 製造業。中小企業の業務改善を、実装まで。</p>
+      <a class="ftr__top" href="#main">Back to top</a>
+      <p class="ftr__copy">{{ site.name|upper }} &copy; 2026</p>
     </div>
-    <p class="ftr__copy">&copy; 2026 TEGG Engineering</p>
   </div>
 </footer>

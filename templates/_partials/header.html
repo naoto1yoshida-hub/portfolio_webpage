@@ -1,19 +1,22 @@
+{#
+  右上に固定する文字だけのナビ。文字は2段重ねで、ホバーで上へ送る。
+  mix-blend-mode: difference で、明るい面の上でも読めるようにしている。
+#}
 <header class="hdr">
-  <div class="wrap hdr__inner">
-    <a class="hdr__logo" href="{{ url_for('index') }}">
-      TEGG <small>Engineering</small>
-    </a>
+  <a class="hdr__logo" href="{{ url_for('index') }}" aria-label="{{ site.name }} トップへ">
+    <span>TEGG</span>
+  </a>
 
-    <nav class="hdr__nav" id="navMenu" aria-label="メインメニュー">
-      <a href="{{ url_for('works_index') }}">実績</a>
-      <a href="{{ url_for('index') }}#services">サービス・料金</a>
-      <a href="{{ url_for('index') }}#process">進め方</a>
-      <a href="{{ url_for('index') }}#profile">プロフィール</a>
-      <a class="hdr__cta" href="{{ url_for('index') }}#contact">無料で相談する</a>
-    </nav>
+  <nav class="hdr__nav" id="navMenu" aria-label="メインメニュー">
+    <ul>
+      <li><a class="roll" href="{{ url_for('works_index') }}"><span>WORKS</span><span aria-hidden="true">WORKS</span></a></li>
+      <li><a class="roll" href="{{ url_for('index') }}#services"><span>SERVICES</span><span aria-hidden="true">SERVICES</span></a></li>
+      <li><a class="roll" href="{{ url_for('index') }}#profile"><span>PROFILE</span><span aria-hidden="true">PROFILE</span></a></li>
+      <li><a class="roll" href="{{ url_for('index') }}#contact"><span>CONTACT</span><span aria-hidden="true">CONTACT</span></a></li>
+    </ul>
+  </nav>
 
-    <button class="hdr__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="メニューを開く">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
+  <button class="hdr__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="メニューを開く">
+    <span></span><span></span>
+  </button>
 </header>

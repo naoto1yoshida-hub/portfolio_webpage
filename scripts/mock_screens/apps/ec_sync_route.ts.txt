@@ -1,0 +1,32 @@
+// EC在庫アラートダッシュボードの再現画面用。
+// 実物を一時フォルダへ複製したあと、app/api/sync/route.ts をこのファイルの中身で置き換える
+// （手順は docs/screenshots.md）。スプレッドシートにはつながず、架空の商品だけを返す。
+// 商品名・JAN・ASIN・在庫数・販売数はすべて架空。
+import { NextResponse } from "next/server";
+
+type Row = [string, string, string | null, "A" | "B" | "C", "A" | "B" | "C", number, number, number, number, number, number, number, number | null, string | null];
+
+// [JAN, 商品名, ASIN, Amazonランク, 楽天ランク, Amazon日販, 楽天日販, Amazon在庫, 楽天在庫, 国内在庫, 輸送中, 発注済, 在庫日数, 発注月]
+const ROWS: Row[] = [
+  ["4900000100011", "ステンレスボトル 500ml マットブラック", "B0MOCK0001", "A", "A", 9.2, 6.8, 210, 160, 40, 0, 300, 25.6, "10月"],
+  ["4900000100028", "ステンレスボトル 350ml アイボリー", "B0MOCK0002", "A", "B", 6.1, 3.4, 420, 250, 120, 200, 0, 104.2, null],
+  ["4900000100035", "折りたたみ収納ボックス L 2個組", "B0MOCK0003", "A", "A", 5.5, 7.0, 180, 240, 0, 0, 0, 33.6, "10月"],
+  ["4900000100042", "折りたたみ収納ボックス M 3個組", "B0MOCK0004", "B", "A", 3.2, 5.1, 300, 410, 60, 0, 0, 92.8, null],
+  ["4900000100059", "珪藻土バスマット 60x39", "B0MOCK0005", "A", "B", 4.8, 2.2, 150, 90, 30, 100, 0, 52.9, "11月"],
+  ["4900000100066", "シリコン調理スプーン 耐熱 グレー", "B0MOCK0006", "B", "B", 2.6, 2.1, 380, 300, 100, 0, 0, 166.0, null],
+  ["4900000100073", "LEDデスクライト 調光3段階", "B0MOCK0007", "A", "C", 3.9, 0.8, 95, 60, 0, 0, 150, 33.0, "10月"],
+  ["4900000100080", "防水ポーチ A5 クリア", null, "C", "A", 0, 4.4, 0, 320, 80, 0, 0, 90.9, null],
+  ["4900000100097", "ケーブルオーガナイザー 5本入り", "B0MOCK0009", "B", "B", 2.9, 1.7, 260, 140, 0, 0, 0, 87.0, null],
+  ["4900000100103", "吸水速乾タオル フェイス 4枚組", "B0MOCK0010", "A", "A", 7.4, 6.3, 310, 280, 0, 0, 0, 43.1, "11月"],
+  ["4900000100110", "キッチンスケール 0.1g 単位", "B0MOCK0011", "B", "C", 1.8, 0.6, 240, 110, 50, 0, 0, 166.7, null],
+  ["4900000100127", "ワイヤーシェルフ 3段 幅60", "B0MOCK0012", "C", "C", 0, 0, 45, 30, 0, 0, 0, null, null],
+  ["4900000100134", "ドアストッパー マグネット式 2個入り", "B0MOCK0013", "C", "B", 0.9, 1.6, 130, 190, 0, 0, 0, 128.0, null],
+  ["4900000100141", "保温ランチジャー 600ml", "B0MOCK0014", "B", "A", 2.4, 4.9, 120, 170, 0, 0, 200, 39.7, "10月"],
+];
+
+export async function GET() {
+  const products = ROWS.map(([jan, name, asin, rankA, rankR, amazonDailySales, rakutenDailySales, amazonStock, rakutenStock, domesticStock, inTransitStock, onOrderStock, days, orderMonth]) => ({
+    jan, name, asin, rankA, rankR, amazonDailySales, rakutenDailySales, amazonStock, rakutenStock, domesticStock, inTransitStock, onOrderStock, days, orderMonth,
+  }));
+  return NextResponse.json({ products, totalRows: products.length, updatedAt: new Date().toISOString(), cached: false });
+}

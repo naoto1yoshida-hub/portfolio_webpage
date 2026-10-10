@@ -15,26 +15,35 @@
   <meta property="og:url" content="{{ site.url }}{{ self.canonical() }}">
   <meta property="og:locale" content="ja_JP">
   <meta name="twitter:card" content="summary">
+  <meta name="theme-color" content="#313131">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,800&family=Barlow:wght@500;600&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <script>
-    /* 動きの可否を描画前に決める。動きを減らす設定の人には何もしない。
-       初回演出はトップページで1セッションに1回だけ */
+    /* 動きの可否と冒頭演出の段階を描画前に決める。
+       data-load: 0=演出前 / 1=冒頭演出中 / 2=ヒーロー表示（motion.js が進める）
+       冒頭演出はトップページで1セッションに1回。2回目以降と下層ページは最初から 2。
+       動きを減らす設定の人には演出を出さない */
     (function () {
       var d = document.documentElement;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      d.classList.add('js-motion');
-      try {
-        if (location.pathname === '/' && !sessionStorage.getItem('tegg-intro')) {
-          d.classList.add('js-intro');
-          sessionStorage.setItem('tegg-intro', '1');
-        }
-      } catch (e) {}
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var load = '2';
+      if (!reduce) {
+        d.classList.add('js-motion');
+        try {
+          if (location.pathname === '/' && !sessionStorage.getItem('tegg-opening')) {
+            sessionStorage.setItem('tegg-opening', '1');
+            load = '0';
+            d.classList.add('js-opening');
+          }
+        } catch (e) {}
+      }
+      d.setAttribute('data-load', load);
     })();
   </script>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230d1b2e'/><rect x='6.5' y='6.5' width='19' height='19' fill='none' stroke='%23bc3b1e' stroke-width='1.5'/><path d='M11 21V11h4.5a3 3 0 0 1 0 6H11' stroke='white' stroke-width='1.6' fill='none'/></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23313131'/><circle cx='16' cy='16' r='11' fill='none' stroke='%23c4c4c4' stroke-width='1'/><path d='M10.5 11.5h11M16 11.5v10' stroke='white' stroke-width='2.6' fill='none'/></svg>">
 
   <script type="application/ld+json">
   {
@@ -49,15 +58,16 @@
   }
   </script>
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
 
-<div class="intro" aria-hidden="true">
-  <div class="intro__lines"><i></i><i></i><i></i><i></i></div>
-  <p class="intro__name">TEGG <small>Engineering</small></p>
-  <p class="intro__count">0</p>
-</div>
+<a class="skip" href="#main">本文へ移動</a>
+
+{% block opening %}{% endblock %}
 
 {% include '_partials/header.html' %}
+
+{# 背景に固定で置く線の輪。motion.js が描く。動きを減らす設定では静止した輪を1回だけ描く #}
+<canvas class="ring" aria-hidden="true"></canvas>
 
 <main id="main">
   {% block content %}{% endblock %}
