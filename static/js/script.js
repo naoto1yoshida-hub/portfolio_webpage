@@ -1,10 +1,8 @@
 /* ==========================================================================
    TEGG Engineering — ポートフォリオ
 
-   担当: ナビの開閉 / スクロール表示 / 実績の詳細パネル / FAQ開閉 / 問い合わせ送信。
-   実績の詳細はサーバー側でページを持つ。トップの太陽型の図だけ、同じ内容の要約を
-   右のパネルで開く（JS が無いときは丸がそのまま事例ページへのリンクとして動く）。
-   動き（GSAP）は motion.js が持つ。
+   担当: ナビの開閉 / スクロール表示 / 面の色の切り替え / FAQ開閉 / 問い合わせ送信。
+   動き（冒頭演出・名前の組み上げ・GSAP）は motion.js が持つ。
    ========================================================================== */
 
 (function () {
@@ -12,31 +10,49 @@
 
   /* ---------------------------------------------------------------- ナビ */
 
+  // スマートフォンでは全画面の一覧として開く。ヘッダーの反転表示は開いている間だけ外す
   var toggle = document.getElementById('navToggle');
   var menu = document.getElementById('navMenu');
+  var header = document.querySelector('.hdr');
 
   if (toggle && menu) {
-    toggle.addEventListener('click', function () {
-      var open = menu.classList.toggle('is-open');
+    var setNav = function (open) {
+      menu.classList.toggle('is-open', open);
+      if (header) header.classList.toggle('is-open', open);
       toggle.setAttribute('aria-expanded', String(open));
       toggle.setAttribute('aria-label', open ? 'メニューを閉じる' : 'メニューを開く');
+    };
+
+    toggle.addEventListener('click', function () {
+      setNav(!menu.classList.contains('is-open'));
     });
 
     menu.addEventListener('click', function (e) {
-      if (e.target.tagName === 'A') {
-        menu.classList.remove('is-open');
-        toggle.setAttribute('aria-expanded', 'false');
-        toggle.setAttribute('aria-label', 'メニューを開く');
-      }
+      if (e.target.closest('a')) setNav(false);
     });
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && menu.classList.contains('is-open')) {
-        menu.classList.remove('is-open');
-        toggle.setAttribute('aria-expanded', 'false');
+        setNav(false);
         toggle.focus();
       }
     });
+  }
+
+  /* ----------------------------------------------------- 面の色の切り替え */
+
+  // data-zone="black" の区画が画面の中央に来ている間、面を黒へ移す
+  var zones = document.querySelectorAll('[data-zone="black"]');
+  if (zones.length && 'IntersectionObserver' in window) {
+    var inZone = new Set();
+    var zoneObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) inZone.add(entry.target);
+        else inZone.delete(entry.target);
+      });
+      document.body.classList.toggle('is-black', inZone.size > 0);
+    }, { rootMargin: '-50% 0px -50% 0px' });
+    Array.prototype.forEach.call(zones, function (el) { zoneObserver.observe(el); });
   }
 
   /* ------------------------------------------------------- スクロール表示 */
@@ -59,84 +75,6 @@
     Array.prototype.forEach.call(risers, function (el) { observer.observe(el); });
   }
 
-  /* ------------------------------------------------- 実績の詳細パネル */
-
-  // トップの太陽型の実績図。丸は事例ページへのリンクで、ここで右のパネルに差し替える
-  var drawer = document.getElementById('appDrawer');
-
-  if (drawer) {
-    var panel = drawer.querySelector('.drawer__panel');
-    var details = drawer.querySelectorAll('.app-detail');
-    var lastTrigger = null;
-    var closeTimer = null;
-
-    var openDrawer = function (slug, trigger) {
-      var target = null;
-      Array.prototype.forEach.call(details, function (el) {
-        var hit = el.getAttribute('data-app') === slug;
-        el.hidden = !hit;
-        if (hit) target = el;
-      });
-      if (!target) return false;
-
-      clearTimeout(closeTimer);
-      panel.setAttribute('aria-labelledby', 'app-title-' + slug);
-      panel.scrollTop = 0;
-      lastTrigger = trigger;
-      drawer.hidden = false;
-      document.documentElement.classList.add('is-locked');
-      void drawer.offsetWidth; // 表示直後に is-open を付けてスライドさせるための再計算
-      drawer.classList.add('is-open');
-      panel.focus();
-      return true;
-    };
-
-    var closeDrawer = function () {
-      if (drawer.hidden) return;
-      drawer.classList.remove('is-open');
-      document.documentElement.classList.remove('is-locked');
-      closeTimer = setTimeout(function () { drawer.hidden = true; }, reduce ? 0 : 450);
-      if (lastTrigger) lastTrigger.focus();
-    };
-
-    Array.prototype.forEach.call(document.querySelectorAll('.planet[data-app]'), function (link) {
-      link.addEventListener('click', function (e) {
-        // 新しいタブで開く操作は邪魔しない
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-        if (openDrawer(link.getAttribute('data-app'), link)) e.preventDefault();
-      });
-    });
-
-    drawer.addEventListener('click', function (e) {
-      if (e.target.closest('[data-drawer-close]')) closeDrawer();
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (drawer.hidden) return;
-      if (e.key === 'Escape') {
-        closeDrawer();
-        return;
-      }
-      if (e.key !== 'Tab') return;
-
-      // フォーカスをパネルの中に留める
-      var focusables = Array.prototype.filter.call(
-        panel.querySelectorAll('a[href], button'),
-        function (el) { return el.offsetParent !== null; }
-      );
-      if (!focusables.length) return;
-      var first = focusables[0];
-      var last = focusables[focusables.length - 1];
-      if (e.shiftKey && (document.activeElement === first || document.activeElement === panel)) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    });
-  }
-
   /* ---------------------------------------------------------------- FAQ */
 
   Array.prototype.forEach.call(document.querySelectorAll('.faq__q'), function (btn) {
@@ -156,6 +94,7 @@
   if (!form) return;
 
   var submit = document.getElementById('contactSubmit');
+  var submitLabel = submit.querySelector('[data-label]') || submit;
   var message = document.getElementById('formMessage');
 
   function show(text, ok) {
@@ -180,7 +119,7 @@
     }
 
     submit.disabled = true;
-    submit.textContent = '送信中...';
+    submitLabel.textContent = '送信中';
     message.className = 'form__msg';
 
     fetch('/contact', {
@@ -202,7 +141,7 @@
       })
       .then(function () {
         submit.disabled = false;
-        submit.textContent = '送信する';
+        submitLabel.textContent = '送信する';
       });
   });
 })();

@@ -1,5 +1,5 @@
-<section class="band band--ink band--tight cta-band">
-  <div class="wrap cta-band__inner">
+<section class="cta-band" data-zone="black">
+  <div class="shell cta-band__inner">
     <div>
       <h2 class="cta-band__title">まず、いま困っていることを聞かせてください</h2>
       <p class="cta-band__lead">
@@ -8,8 +8,8 @@
       </p>
     </div>
     <div class="cta-band__actions">
-      <a class="btn btn--primary" href="{{ url_for('index') }}#contact">無料で相談する</a>
-      <a class="btn btn--ghost" href="{{ url_for('works_index') }}">実績を見る</a>
+      <a class="more" href="{{ url_for('index') }}#contact"><span class="more__label">無料で相談する</span>{% include '_partials/play_icon.html' %}</a>
+      <a class="more more--quiet" href="{{ url_for('works_index') }}"><span class="more__label">実績を見る</span>{% include '_partials/play_icon.html' %}</a>
     </div>
   </div>
 </section>

@@ -1,258 +1,261 @@
 {% extends 'base.html' %}
-{% from '_partials/app_icon.html' import app_icon %}
+
+{% block body_class %}is-home{% endblock %}
+
+{# ========== 冒頭演出（1セッションに1回。段階は html[data-load] で進む） ========== #}
+{% block opening %}
+<div class="opening" aria-hidden="true">
+  <div class="opening__content">
+    <div class="opening__copy"><span>{{ hero.opening_copy }}</span></div>
+    <div class="opening__circle">
+      <svg viewBox="0 0 811 811"><circle cx="405.5" cy="405.5" r="405"/></svg>
+    </div>
+    {% for deg in [0, 90] %}
+    <div class="opening__hex" data-rotate="{{ deg }}">
+      <svg viewBox="0 0 808 700"><path d="M202 .5h404L807.5 350 606 699.5H202L.5 350Z"/></svg>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
 
 {% block content %}
 
 <!-- ========== ヒーロー ========== -->
-<section class="hero band--ink">
-  <div class="wrap hero__inner">
-    <p class="eyebrow">生成AI &times; 製造業 / 受託開発</p>
-
-    <h1 class="hero__title">製造業の現場に、<br><em>AIを実装してきました。</em></h1>
-
-    <p class="hero__lead">
-      図面17,588件の検索基盤、紙で回していた見積フローの置き換え、出典を原本まで辿れる社内チャットボット。
-      要件を聞くところから運用まで、ひとりで作って動かしています。
-      作ることより、現場で使われ続けることを設計します。
-    </p>
-
-    <div class="hero__figures">
-      <div class="tblock tblock--3">
-        {% for h in highlights %}
-        <div class="tblock__cell">
-          <span class="figure__num">{{ h.value }}{% if h.unit %}<span class="figure__unit">{{ h.unit }}</span>{% endif %}</span>
-          <span class="figure__label">{{ h.label }}</span>
-          <span class="figure__note">{{ h.note }}</span>
-        </div>
+<section class="hero" id="hero">
+  <div class="hero__bg{% if not hero_video %} hero__bg--still{% endif %}">
+    {% if hero_video %}
+    <video muted loop playsinline preload="auto"
+           {% if hero_poster %}poster="{{ url_for('static', filename=hero.poster) }}"{% endif %}
+           src="{{ url_for('static', filename=hero.video) }}"></video>
+    {% elif hero_poster %}
+    <img src="{{ url_for('static', filename=hero.poster) }}" alt="ヒーローの背景に置いた構造体の写真">
+    {% else %}
+    {# 動画が届くまでの仮の背景。梁が斜めに走る構造体を線と面で描く #}
+    <svg class="hero__beams" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g class="hero__beams-a">
+        {% for i in range(9) %}
+        <path d="M{{ 520 + i * 190 }} -80 L{{ 760 + i * 190 }} -80 L{{ 1560 + i * 190 }} 1000 L{{ 1320 + i * 190 }} 1000Z"/>
         {% endfor %}
+      </g>
+      <g class="hero__beams-b">
+        {% for i in range(6) %}
+        <path d="M-100 {{ 60 + i * 150 }} H900 V{{ 96 + i * 150 }} H-100Z"/>
+        {% endfor %}
+      </g>
+    </svg>
+    {% endif %}
+  </div>
+
+  <div class="hero__content">
+    <h1 class="visually-hidden">{{ site.name }} / {{ hero.name }} — {{ site.role }}。{{ site.tagline }}</h1>
+
+    {# 名前の演出。文字割りと幅合わせは motion.js が行う。JS が無くても2行はそのまま読める #}
+    <div class="title" aria-hidden="true">
+      <div class="title__zoom">
+        <div class="title__mini">{{ hero.mark }}</div>
+        <div class="title__mark">{{ hero.mark }}</div>
+        <div class="title__name">{{ hero.name }}</div>
+      </div>
+      <div class="title__roles">
+        {% for role in hero.roles %}<div><span>{{ role }}</span></div>{% endfor %}
       </div>
     </div>
+  </div>
 
-    <div class="hero__actions">
-      <a class="btn btn--primary" href="#contact">無料で相談する</a>
-      <a class="btn btn--ghost" href="#works">実績を見る</a>
-    </div>
-
-    <p class="hero__meta">
-      掲載実績 {{ works_total }}件 / 従業員100名未満の企業を主な対象 / フルリモート対応
-    </p>
+  <div class="scrolldown" aria-hidden="true">
+    <span class="scrolldown__label">SCROLL</span>
+    <span class="scrolldown__line"></span>
   </div>
 </section>
 
-<!-- ========== 技術スタックの流れる帯（装飾。内容は「使っている技術」と同じ） ========== -->
-<div class="mq" aria-hidden="true">
-  <div class="mq__track">
-    {% for _ in range(2) %}
-      {% for group in tech_stack %}{% for item in group['items'] %}<span class="mq__item">{{ item }}</span>{% endfor %}{% endfor %}
-    {% endfor %}
-  </div>
-</div>
 
+<!-- ========== 宣言文 ========== -->
+<section class="intro">
+  <div class="shell">
+    <p class="statement" aria-label="I build AI tools for the factory floor.">
+      {% for line in hero.statement %}
+      <span class="statement__line" style="--indent: {{ line.indent }};" aria-hidden="true">
+        <span class="statement__text">{{ line.text }}</span>{% if line.rule %}<i class="statement__rule"></i>{% endif %}
+      </span>
+      {% endfor %}
+    </p>
 
-<!-- ========== 実績（最上位） ========== -->
-<section class="band" id="works">
-  <div class="wrap">
-    <div class="sec-head sec-head--split">
-      <div>
-        <p class="eyebrow">Works</p>
-        <h2 class="sec-head__title">実績</h2>
-        <p class="sec-head__lead">
-          クライアント名は伏せ、業種と規模で表記しています。
-          掲載している数値はすべて実測値で、測定条件と時点を添えました。
-        </p>
+    <div class="intro__body">
+      <h2 class="intro__heading">{{ hero.lead_heading }}</h2>
+      <p class="intro__lead">{{ hero.lead }}</p>
+    </div>
+
+    <dl class="facts">
+      {% for h in highlights %}
+      <div class="facts__item rise">
+        <dt class="facts__label">{{ h.label }}</dt>
+        <dd class="facts__value">{{ h.value }}{% if h.unit %}<small>{{ h.unit }}</small>{% endif %}</dd>
+        <dd class="facts__note">{{ h.note }}</dd>
       </div>
-      <a class="tlink" href="{{ url_for('works_index') }}">
-        全{{ works_total }}件を見る <span class="tlink__arrow" aria-hidden="true">&rarr;</span>
+      {% endfor %}
+    </dl>
+  </div>
+</section>
+
+
+<!-- ========== 実績 ========== -->
+<section class="works" id="works">
+  <div class="shell">
+    <h2 class="head head--xl" data-split>WORKS<small>実績 — 詳細を書いた{{ featured|length }}件 / 全{{ works_total }}件</small></h2>
+  </div>
+
+  {# 流れる帯。同じ並びを2回置き、半分の幅だけ送って継ぎ目なく回す。2周目は読み上げ対象から外す #}
+  <div class="strip">
+    <div class="strip__track">
+      {% for round in range(2) %}
+      {% for shot in strip %}
+      <a class="strip__item" href="{{ url_for('work_detail', slug=shot.slug) }}"
+         {% if round %}aria-hidden="true" tabindex="-1"{% endif %}>
+        <img src="{{ url_for('static', filename=shot.src) }}" alt="{{ shot.alt }}" loading="lazy">
       </a>
+      {% endfor %}
+      {% endfor %}
     </div>
-
-    {#
-      太陽型の実績図。中央が Works、周りを各アプリの丸が囲む。
-      丸は事例ページへの普通のリンクで、JS があるときだけ右のパネルで詳細を開く
-    #}
-    <div class="orbit" style="--n: {{ featured|length }};">
-      <div class="orbit__ring" aria-hidden="true"></div>
-      <div class="orbit__sun" aria-hidden="true">
-        <span class="orbit__sun-en">Works</span>
-        <span class="orbit__sun-ja">主な実績 {{ featured|length }}件</span>
-      </div>
-      <ul class="orbit__list">
-        {% for case in featured %}
-        {% set o = orbit[case.slug] %}
-        <li class="orbit__item" style="--i: {{ loop.index0 }};">
-          <a class="planet planet--{{ o.icon }}" href="{{ url_for('work_detail', slug=case.slug) }}"
-             data-app="{{ case.slug }}" aria-haspopup="dialog" aria-describedby="tip-{{ case.slug }}">
-            <span class="planet__disc">{{ app_icon(o.icon) }}</span>
-            <span class="planet__name">{{ o.name }}</span>
-          </a>
-          <span class="planet__tip" id="tip-{{ case.slug }}" role="tooltip">{{ case.lead }}</span>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-    <p class="orbit__hint">丸を押すと、仕組みと数値の詳細が開きます</p>
   </div>
-</section>
 
-<!-- ========== 実績の詳細パネル（右から開く） ========== -->
-<div class="drawer" id="appDrawer" hidden>
-  <div class="drawer__overlay" data-drawer-close></div>
-  <div class="drawer__panel" role="dialog" aria-modal="true" tabindex="-1">
-    <button class="drawer__close" type="button" data-drawer-close aria-label="詳細を閉じる">
-      <span aria-hidden="true"></span>
-    </button>
+  <div class="shell works__more">
+    <p class="works__note">
+      クライアント名は伏せ、業種と規模で表記しています。
+      掲載している数値はすべて実測値で、測定条件と時点を添えました。
+    </p>
+    <a class="more" href="{{ url_for('works_index') }}">
+      <span class="more__label">VIEW<br>MORE</span>{% include '_partials/play_icon.html' %}
+    </a>
+  </div>
 
+  <div class="worklist">
     {% for case in featured %}
-    {% set o = orbit[case.slug] %}
-    <article class="app-detail" data-app="{{ case.slug }}" hidden>
-      <div class="app-detail__head">
-        <span class="app-detail__icon planet--{{ o.icon }}">{{ app_icon(o.icon) }}</span>
-        <div>
-          <div class="card__meta">
-            {% set badge = case.badge or case.status %}
-            <span class="chip {% if '稼働' in badge or '納品' in badge %}chip--live{% else %}chip--dev{% endif %}">{{ badge }}</span>
-            <span>{{ case.client }}</span>
-          </div>
-          <h3 class="app-detail__title" id="app-title-{{ case.slug }}">{{ case.title }}</h3>
+    <article class="work">
+      <a class="work__frame" href="{{ url_for('work_detail', slug=case.slug) }}" tabindex="-1" aria-hidden="true">
+        <img src="{{ url_for('static', filename='images/diagrams/' ~ case.diagram) }}"
+             alt="{{ case.diagram_alt }}" loading="lazy" width="1200" height="675">
+      </a>
+
+      <div class="work__foot">
+        <div class="work__index">
+          <span class="work__no">{{ '%02d'|format(loop.index) }}</span>
+          <span class="work__meta">{{ 'CLIENT' if case.category == 'client' else 'OWN' }}<br>{{ 'WORK' if case.category == 'client' else 'PRODUCT' }}</span>
+          <span class="work__year">{{ case.period[:4] }}</span>
         </div>
+
+        <h3 class="work__title">
+          <span class="work__en" aria-hidden="true">
+            <span class="work__en-outline">{{ case.slug|replace('-', ' ')|upper }}</span>
+            <span class="work__en-solid">{{ case.slug|replace('-', ' ')|upper }}</span>
+          </span>
+          <span class="work__ja">{{ case.title }}</span>
+        </h3>
+
+        <a class="work__read" href="{{ url_for('work_detail', slug=case.slug) }}"
+           aria-label="{{ case.title }}の詳細を読む">
+          <span>READ</span>
+          <svg viewBox="0 0 104 104" width="104" height="104" aria-hidden="true" focusable="false">
+            <rect x=".5" y=".5" width="103" height="103"/><circle cx="52" cy="52" r="51.5"/>
+            <path d="M6 30 103 52 6 74Z M6 30 30 52 6 74"/>
+          </svg>
+        </a>
       </div>
 
-      <p class="app-detail__lead">{{ case.lead }}</p>
-      <p class="app-detail__summary">{{ case.summary }}</p>
-
-      <h4 class="app-detail__label">仕組み（構成図）</h4>
-      <figure class="app-detail__figure">
-        <img src="{{ url_for('static', filename='images/diagrams/' ~ case.diagram) }}"
-             alt="{{ case.diagram_alt }}" loading="lazy" width="640" height="360">
-      </figure>
-
-      <h4 class="app-detail__label">数値</h4>
-      <ul class="app-detail__stats">
-        {% for stat in case.stats %}
-        <li>
-          <b>{{ stat.value }}<small>{{ stat.unit }}</small></b>
-          <span>{{ stat.label }}</span>
-          <em>{{ stat.note }}</em>
-        </li>
-        {% endfor %}
-      </ul>
-
-      <h4 class="app-detail__label">つくり方の要点</h4>
-      <ol class="app-detail__steps">
-        {% for a in case.approach %}<li>{{ a.heading }}</li>{% endfor %}
-      </ol>
-
-      <h4 class="app-detail__label">使った技術</h4>
-      <dl class="app-detail__stack">
-        {% for s in case.stack %}<dt>{{ s.label }}</dt><dd>{{ s['items'] }}</dd>{% endfor %}
-      </dl>
-
-      <a class="btn btn--primary btn--block app-detail__more" href="{{ url_for('work_detail', slug=case.slug) }}">この案件の詳細を読む</a>
+      <div class="work__body">
+        <p class="work__lead">{{ case.lead }}</p>
+        <p class="work__client">{{ case.client }} / {{ case.badge or case.status }}</p>
+        <ul class="work__stats">
+          {% for stat in case.stats[:2] %}
+          <li><b>{{ stat.value }}<small>{{ stat.unit }}</small></b><span>{{ stat.label }}</span><em>{{ stat.note }}</em></li>
+          {% endfor %}
+        </ul>
+      </div>
     </article>
     {% endfor %}
   </div>
-</div>
+</section>
 
 
 <!-- ========== 継続導入 ========== -->
-<section class="band band--ink">
-  <div class="wrap">
-    <div class="cont__grid">
-      <div>
-        <p class="eyebrow">Continuity</p>
-        <h2 class="cont__title rise">{{ continuous.heading }}</h2>
-        <p class="cont__body rise">{{ continuous.body }}</p>
-      </div>
-      <ul class="stack-list rise">
-        {% for s in continuous.systems %}
-        <li>
-          <span class="stack-list__name">
-            {% if s.slug %}<a href="{{ url_for('work_detail', slug=s.slug) }}">{{ s.name }}</a>
-            {% else %}{{ s.name }}{% endif %}
-          </span>
-          <span class="stack-list__status{% if '本番稼働' in s.status %} stack-list__status--live{% endif %}">{{ s.status }}</span>
-        </li>
-        {% endfor %}
-      </ul>
+<section class="cont">
+  <div class="shell cont__grid">
+    <div>
+      <h2 class="cont__title">{{ continuous.heading }}</h2>
+      <p class="cont__body">{{ continuous.body }}</p>
     </div>
-
-    {% if continuous.screen %}
-    <figure class="cont__shot rise">
-      <div class="figure-frame__scroll">
-        <img src="{{ url_for('static', filename='images/screens/' ~ continuous.screen.file) }}"
-             alt="{{ continuous.screen.alt }}" loading="lazy">
-      </div>
-      <figcaption>{{ continuous.screen.caption }}</figcaption>
-    </figure>
-    {% endif %}
+    <ul class="ledger rise">
+      {% for s in continuous.systems %}
+      <li>
+        <span class="ledger__name">
+          {% if s.slug %}<a href="{{ url_for('work_detail', slug=s.slug) }}">{{ s.name }}</a>
+          {% else %}{{ s.name }}{% endif %}
+        </span>
+        <span class="ledger__status{% if '本番稼働' in s.status %} is-live{% endif %}">{{ s.status }}</span>
+      </li>
+      {% endfor %}
+    </ul>
   </div>
+
+  {% if continuous.screen %}
+  <figure class="cont__shot rise">
+    <div class="figure-frame__scroll">
+      <img src="{{ url_for('static', filename='images/screens/' ~ continuous.screen.file) }}"
+           alt="{{ continuous.screen.alt }}" loading="lazy">
+    </div>
+    <figcaption>{{ continuous.screen.caption }}</figcaption>
+  </figure>
+  {% endif %}
 </section>
 
 
 <!-- ========== サービス・料金 ========== -->
-<section class="band band--sheet" id="services">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Services</p>
-      <h2 class="sec-head__title">できることと、料金の目安</h2>
-      <p class="sec-head__lead">
-        小さく試してから広げる進め方を基本にしています。いきなり本開発ではなく、
-        まず動くものを作って判断していただけます。
-      </p>
-    </div>
+<section class="svc" id="services">
+  <div class="shell">
+    <h2 class="head head--xl" data-split>SERVICES<small>できることと、料金の目安</small></h2>
+    <p class="svc__intro">
+      小さく試してから広げる進め方を基本にしています。いきなり本開発ではなく、
+      まず動くものを作って判断していただけます。
+    </p>
 
-    <div class="svc rise">
+    <div class="svc__rows">
       {% for s in services %}
-      <div class="svc__col">
+      <div class="svc__row rise">
         <h3 class="svc__name">{{ s.name }}</h3>
         <p class="svc__price">{{ s.price }}</p>
-        <p class="svc__lead">{{ s.lead }}</p>
-        <ul class="svc__items">
-          {% for item in s['items'] %}<li>{{ item }}</li>{% endfor %}
-        </ul>
-        <p class="svc__eg"><b>実績例</b>{{ s.example }}</p>
+        <div class="svc__detail">
+          <p class="svc__lead">{{ s.lead }}</p>
+          <ul class="svc__items">
+            {% for item in s['items'] %}<li>{{ item }}</li>{% endfor %}
+          </ul>
+          <p class="svc__eg"><b>実績例</b>{{ s.example }}</p>
+        </div>
+      </div>
+      {% endfor %}
+
+      {% for extra in [free_consult, support] %}
+      <div class="svc__row svc__row--extra rise">
+        <h3 class="svc__name">{{ extra.name }}</h3>
+        <p class="svc__price">{{ extra.price }}</p>
+        <div class="svc__detail"><p class="svc__lead">{{ extra.lead }}</p></div>
       </div>
       {% endfor %}
     </div>
 
-    <div class="svc-extra rise">
-      <div class="svc-extra__item">
-        <span class="svc-extra__price">{{ free_consult.price }}</span>
-        <div>
-          <p class="svc-extra__name">{{ free_consult.name }}</p>
-          <p class="svc-extra__lead">{{ free_consult.lead }}</p>
-        </div>
-      </div>
-      <div class="svc-extra__item">
-        <span class="svc-extra__price">{{ support.price }}</span>
-        <div>
-          <p class="svc-extra__name">{{ support.name }}</p>
-          <p class="svc-extra__lead">{{ support.lead }}</p>
-        </div>
-      </div>
-    </div>
-
-    <p class="price-note">{{ price_note }}</p>
+    <p class="fineprint">{{ price_note }}</p>
   </div>
 </section>
 
 
 <!-- ========== 進め方 ========== -->
-<section class="band" id="process">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Process</p>
-      <h2 class="sec-head__title">進め方</h2>
-      <p class="sec-head__lead">
-        仕様書の文字ではなく、動くもので認識を合わせます。
-        方向が違えば、作り込む前に戻れます。
-      </p>
-    </div>
+<section class="proc" id="process">
+  <div class="shell">
+    <h2 class="head" data-split>PROCESS<small>進め方 — 仕様書の文字ではなく、動くもので認識を合わせます</small></h2>
 
     <ol class="steps">
       {% for step in process %}
-      <li class="step rise rise-{{ loop.index0 % 4 }}">
-        <span class="step__num">STEP {{ step.number }}</span>
+      <li class="step rise">
+        <span class="step__num">{{ step.number }}</span>
         <h3 class="step__title">{{ step.title }}</h3>
         <p class="step__body">{{ step.body }}</p>
         <p class="step__note">{{ step.note }}</p>
@@ -264,45 +267,88 @@
 
 
 <!-- ========== 選ばれる理由 ========== -->
-<section class="band band--sheet" id="strengths">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Why</p>
-      <h2 class="sec-head__title">依頼先として選ばれる理由</h2>
-    </div>
+<section class="why" id="strengths">
+  <div class="shell">
+    <h2 class="head" data-split>REASONS<small>依頼先として選ばれる理由</small></h2>
 
     <div class="reasons">
       {% for r in strengths %}
       <div class="reason rise">
-        <div class="reason__num">{{ r.number }}</div>
+        <h3 class="reason__title">{{ r.title }}</h3>
         <div>
-          <h3 class="reason__title">{{ r.title }}</h3>
           <p class="reason__body">{{ r.body }}</p>
+          <p class="reason__proof">{{ r.proof }}</p>
         </div>
-        <p class="reason__proof">{{ r.proof }}</p>
       </div>
       {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+{# ========== 写真の帯（static/images/gallery に写真を置いたときだけ出る） ========== #}
+{% if gallery %}
+<div class="gallery" aria-hidden="true">
+  {% for src in gallery %}
+  <div class="gallery__item"><img src="{{ url_for('static', filename=src) }}" alt="現場のイメージ写真 {{ loop.index }}" loading="lazy"></div>
+  {% endfor %}
+</div>
+{% endif %}
+
+
+<!-- ========== プロフィール ========== -->
+<section class="prof" id="profile" data-zone="black">
+  <div class="shell prof__grid">
+    <h2 class="head" data-split>PROFILE</h2>
+
+    <div class="prof__side">
+      <img class="prof__photo"
+           src="{{ url_for('static', filename=profile_data.photo) }}"
+           alt="{{ profile_data.photo_alt }}" width="300" height="375">
+      <ul class="prof__links">
+        {% for link in profile_data.links %}
+        <li><a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.label }}<small>{{ link.note }}</small></a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="prof__text">
+      <h3 class="prof__name">{{ profile_data.name }}<span>{{ profile_data.role }}</span></h3>
+      <p class="prof__headline">{{ profile_data.headline }}</p>
+      {% for para in profile_data.story %}<p>{{ para }}</p>{% endfor %}
+
+      <dl class="prof__table">
+        {% for c in profile_data.career %}
+        <div><dt>{{ c.period }}</dt><dd>{{ c.title }}<small>{{ c.note }}</small></dd></div>
+        {% endfor %}
+      </dl>
+
+      <dl class="prof__table">
+        {% for d in profile_data.details %}
+        <div><dt>{{ d.label }}</dt><dd>{{ d.value }}</dd></div>
+        {% endfor %}
+      </dl>
+
+      <a class="more" href="#contact">
+        <span class="more__label">CONTACT</span>{% include '_partials/play_icon.html' %}
+      </a>
     </div>
   </div>
 </section>
 
 
 <!-- ========== 技術スタック ========== -->
-<section class="band band--tight" id="tech">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Stack</p>
-      <h2 class="sec-head__title">使っている技術</h2>
-      <p class="sec-head__lead">実際の案件で使ったものだけを載せています。</p>
-    </div>
-
-    <div class="tech">
+<section class="stack" id="tech" data-zone="black">
+  <div class="shell">
+    <h2 class="visually-hidden">使っている技術</h2>
+    <p class="stack__note">実際の案件で使ったものだけを載せています。</p>
+    <div class="stack__cols">
       {% for group in tech_stack %}
-      <div class="tech__row rise">
-        <p class="tech__group">{{ group.group }}</p>
-        <div class="tech__items">
-          {% for item in group['items'] %}<span class="tech__item">{{ item }}</span>{% endfor %}
-        </div>
+      <div class="stack__col rise">
+        <h3 class="stack__group">{{ group.group }}</h3>
+        <ul>
+          {% for item in group['items'] %}<li>{{ item }}</li>{% endfor %}
+        </ul>
       </div>
       {% endfor %}
     </div>
@@ -310,72 +356,10 @@
 </section>
 
 
-<!-- ========== プロフィール ========== -->
-<section class="band band--sheet" id="profile">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Profile</p>
-      <h2 class="sec-head__title">プロフィール</h2>
-    </div>
-
-    <div class="prof">
-      <div class="prof__card rise">
-        <img class="prof__photo"
-             src="{{ url_for('static', filename='images/profile.jpg') }}"
-             alt="{{ profile_data.photo_alt }}" width="300" height="375">
-        <div class="prof__id">
-          <h3 class="prof__name">{{ profile_data.name }}<span>{{ profile_data.name_en }}</span></h3>
-          <p class="prof__role">{{ profile_data.role }}</p>
-          <div class="prof__badges">
-            {% for b in profile_data.badges %}<span class="chip">{{ b }}</span>{% endfor %}
-          </div>
-        </div>
-      </div>
-
-      <div class="rise">
-        <h3 class="prof__headline">{{ profile_data.headline }}</h3>
-        <div class="prof__story">
-          {% for para in profile_data.story %}<p>{{ para }}</p>{% endfor %}
-        </div>
-
-        <ul class="prof__career">
-          {% for c in profile_data.career %}
-          <li>
-            <span class="prof__period">{{ c.period }}</span>
-            <span class="prof__job">{{ c.title }}<small>{{ c.note }}</small></span>
-          </li>
-          {% endfor %}
-        </ul>
-
-        <div class="tblock tblock--4" style="margin-top: var(--s6);">
-          {% for d in profile_data.details %}
-          <div class="tblock__cell">
-            <span class="tblock__label">{{ d.label }}</span>
-            <span class="tblock__value">{{ d.value }}</span>
-          </div>
-          {% endfor %}
-        </div>
-
-        <div class="prof__links">
-          {% for link in profile_data.links %}
-          <a class="prof__link" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
-            {{ link.label }} <small>{{ link.note }}</small>
-          </a>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
 <!-- ========== FAQ ========== -->
-<section class="band" id="faq">
-  <div class="wrap wrap--text">
-    <div class="sec-head">
-      <p class="eyebrow">FAQ</p>
-      <h2 class="sec-head__title">よくある質問</h2>
-    </div>
+<section class="faqs" id="faq">
+  <div class="shell faqs__grid">
+    <h2 class="head" data-split>FAQ<small>よくある質問</small></h2>
 
     <div class="faq">
       {% for item in faq %}
@@ -395,35 +379,29 @@
 
 
 <!-- ========== お問い合わせ ========== -->
-<section class="band band--ink" id="contact">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Contact</p>
-      <h2 class="sec-head__title">お問い合わせ</h2>
-      <p class="sec-head__lead">
-        2営業日以内に返信します。内容が固まっていない段階でも構いません。
-      </p>
-    </div>
+<section class="contact" id="contact" data-zone="black">
+  <div class="shell">
+    <h2 class="head head--xl" data-split>CONTACT<small>お問い合わせ — 2営業日以内に返信します。内容が固まっていない段階でも構いません</small></h2>
 
     <div class="contact__grid">
       <form class="form" id="contactForm" novalidate>
         <div class="field">
-          <label class="field__label" for="cName">お名前<span class="field__req">*</span></label>
+          <label class="field__label" for="cName">お名前<span class="field__req">必須</span></label>
           <input class="input" type="text" id="cName" name="name" required autocomplete="name" placeholder="例: 山田 太郎">
         </div>
 
         <div class="field">
-          <label class="field__label" for="cEmail">メールアドレス<span class="field__req">*</span></label>
+          <label class="field__label" for="cEmail">メールアドレス<span class="field__req">必須</span></label>
           <input class="input" type="email" id="cEmail" name="email" required autocomplete="email" placeholder="例: yamada@example.com">
         </div>
 
         <div class="field">
           <span class="field__label" id="cTypeLabel">ご相談の種別</span>
           <div class="radios" role="radiogroup" aria-labelledby="cTypeLabel">
-            <label class="radio"><input type="radio" name="inquiry_type" value="無料相談" checked> 無料相談</label>
-            <label class="radio"><input type="radio" name="inquiry_type" value="開発依頼"> 開発依頼</label>
-            <label class="radio"><input type="radio" name="inquiry_type" value="見積依頼"> 見積依頼</label>
-            <label class="radio"><input type="radio" name="inquiry_type" value="その他"> その他</label>
+            <label class="radio"><input type="radio" name="inquiry_type" value="無料相談" checked><span>無料相談</span></label>
+            <label class="radio"><input type="radio" name="inquiry_type" value="開発依頼"><span>開発依頼</span></label>
+            <label class="radio"><input type="radio" name="inquiry_type" value="見積依頼"><span>見積依頼</span></label>
+            <label class="radio"><input type="radio" name="inquiry_type" value="その他"><span>その他</span></label>
           </div>
         </div>
 
@@ -440,27 +418,24 @@
         </div>
 
         <div class="field">
-          <label class="field__label" for="cMessage">ご相談内容<span class="field__req">*</span></label>
+          <label class="field__label" for="cMessage">ご相談内容<span class="field__req">必須</span></label>
           <textarea class="textarea" id="cMessage" name="message" required
             placeholder="例: 社内の図面を探すのに時間がかかっている。何ができるか相談したい。"></textarea>
         </div>
 
-        <button class="btn btn--primary btn--block form__submit" type="submit" id="contactSubmit">送信する</button>
+        <button class="more more--button form__submit" type="submit" id="contactSubmit">
+          <span class="more__label" data-label>送信する</span>{% include '_partials/play_icon.html' %}
+        </button>
         <p class="form__msg" id="formMessage" role="status" aria-live="polite"></p>
       </form>
 
       <aside class="contact__aside">
         <dl>
-          <dt>返信の目安</dt>
-          <dd>2営業日以内</dd>
-          <dt>初回ヒアリング</dt>
-          <dd>無料・オンライン（30〜60分）</dd>
-          <dt>対応形式</dt>
-          <dd>フルリモート。打ち合わせはオンラインで行います</dd>
-          <dt>主な対象</dt>
-          <dd>従業員100名未満の企業。個人事業の方もご相談ください</dd>
-          <dt>クラウドワークス経由</dt>
-          <dd><a href="https://crowdworks.jp/public/employees/6719291" target="_blank" rel="noopener noreferrer" style="border-bottom: 1px solid currentColor;">プロフィールから直接依頼</a>も受け付けています</dd>
+          <div><dt>返信の目安</dt><dd>2営業日以内</dd></div>
+          <div><dt>初回ヒアリング</dt><dd>無料・オンライン（30〜60分）</dd></div>
+          <div><dt>対応形式</dt><dd>フルリモート。打ち合わせはオンラインで行います</dd></div>
+          <div><dt>主な対象</dt><dd>従業員100名未満の企業。個人事業の方もご相談ください</dd></div>
+          <div><dt>クラウドワークス経由</dt><dd><a href="https://crowdworks.jp/public/employees/6719291" target="_blank" rel="noopener noreferrer">プロフィールから直接依頼</a>も受け付けています</dd></div>
         </dl>
       </aside>
     </div>

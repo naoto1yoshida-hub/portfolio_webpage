@@ -956,18 +956,12 @@ def works_by_category():
             grouped.append((category, items))
     return grouped
 
-# ---------------------------------------------------------------------------
-# トップページの太陽型の実績図（中央が Works、周りを各アプリの丸が囲む）
-# ---------------------------------------------------------------------------
-# 丸の下に常に出す短い名前（8文字以内）と、丸に入れるアイコンの種類。
-# アイコンの絵は templates/_partials/app_icon.html、丸の色は style.css の .planet--{icon}。
-# CASES に案件を足したらここにも足す（preflight が抜けを検出する）。
 
-ORBIT = {
-    "drawing-search": {"name": "図面検索", "icon": "drawing"},
-    "estimate": {"name": "見積もり作成", "icon": "estimate"},
-    "ec-dashboard": {"name": "在庫アラート", "icon": "stock"},
-    "voice-input": {"name": "音声入力", "icon": "voice"},
-    "quality-bot": {"name": "品質管理AI", "icon": "chat"},
-    "sns-automation": {"name": "SNS横断投稿", "icon": "share"},
-}
+def strip_images():
+    """トップの流れる帯に並べる画像（実画面 → 構成図の順）。alt は各ケースのものを使う。"""
+    shots, diagrams = [], []
+    for case in all_cases():
+        for shot in case.get("screens", []):
+            shots.append({"src": "images/screens/" + shot["file"], "alt": shot["alt"], "slug": case["slug"]})
+        diagrams.append({"src": "images/diagrams/" + case["diagram"], "alt": case["diagram_alt"], "slug": case["slug"]})
+    return shots + diagrams

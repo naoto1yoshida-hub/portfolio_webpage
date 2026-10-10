@@ -18,6 +18,33 @@ SITE = {
     "url": "https://portfolio-webpage-zz11.vercel.app",
 }
 
+# トップの冒頭演出とヒーローの文言。
+# mark は極太の上段、name は細い明朝の下段で、2行の幅を揃えて組む（幅は motion.js が合わせる）。
+# 文言を変えるときはここだけ直せば、演出の文字割りも追従する。
+HERO = {
+    "opening_copy": "Not to ship, ...but to be used.",
+    "mark": "TEGG",
+    "name": "NAOTO YOSHIDA",
+    "roles": ["AI ENGINEER/", "FOR MANUFACTURING"],
+    # 動画が無いときは同じ色調の静止背景を出す。置き場所は static/video/hero.mp4
+    "video": "video/hero.mp4",
+    "poster": "images/hero-poster.jpg",
+    # ヒーロー直下の宣言文。1行ずつ字下げをずらして組む（indent は左からの vw）
+    "statement": [
+        {"text": "I build", "indent": 0},
+        {"text": "AI tools", "indent": 7},
+        {"text": "for", "indent": 3.8, "rule": True},
+        {"text": "the factory", "indent": 34},
+        {"text": "floor.", "indent": 22},
+    ],
+    "lead_heading": "製造業の現場に、AIを実装してきました。",
+    "lead": (
+        "図面17,588件の検索基盤、紙で回していた見積フローの置き換え、出典を原本まで辿れる社内チャットボット。"
+        "要件を聞くところから運用まで、ひとりで作って動かしています。"
+        "作ることより、現場で使われ続けることを設計します。"
+    ),
+}
+
 # ヒーローに出すハイライト（すべて一次資料で裏付けのある事実）
 HIGHLIGHTS = [
     {
