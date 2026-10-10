@@ -139,7 +139,7 @@
         {% if shot %}
         <img src="{{ url_for('static', filename='images/screens/' ~ shot.file) }}"
              alt="{{ shot.alt }}" loading="lazy">
-        <span class="work__kind">実際の画面（ダミーデータで撮影）</span>
+        <span class="work__kind">{{ shot.label or '実際の画面（ダミーデータで撮影）' }}</span>
         {% else %}
         <img src="{{ url_for('static', filename='images/diagrams/' ~ case.diagram) }}"
              alt="{{ case.diagram_alt }}" loading="lazy" width="1200" height="675">
