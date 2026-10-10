@@ -105,14 +105,25 @@
     <h2 class="head head--xl" data-split>WORKS<small>実績 — 詳細を書いた{{ featured|length }}件 / 全{{ works_total }}件</small></h2>
   </div>
 
-  {# 流れる帯。同じ並びを2回置き、半分の幅だけ送って継ぎ目なく回す。2周目は読み上げ対象から外す #}
+  {#
+    色面の帯。1実績を1色の面にして、番号・英語名・代表の数値1つ・和文名だけを置く。
+    画面や図はここでは見せない（すぐ下の区画が画面を見せる）。
+    同じ並びを2回置き、半分の幅だけ送って継ぎ目なく回す。2周目は読み上げ対象から外す
+  #}
   <div class="strip">
     <div class="strip__track">
       {% for round in range(2) %}
-      {% for shot in strip %}
-      <a class="strip__item" href="{{ url_for('work_detail', slug=shot.slug) }}"
+      {% for case in featured %}
+      {% set stat = case.stats[0] %}
+      <a class="tile" href="{{ url_for('work_detail', slug=case.slug) }}"
          {% if round %}aria-hidden="true" tabindex="-1"{% endif %}>
-        <img src="{{ url_for('static', filename=shot.src) }}" alt="{{ shot.alt }}" loading="lazy">
+        <span class="tile__no" aria-hidden="true">{{ '%02d'|format(loop.index) }}</span>
+        <span class="tile__en" aria-hidden="true">{% for word in case.slug.split('-') %}<span>{{ word|upper }}</span>{% endfor %}</span>
+        <span class="tile__foot">
+          <span class="tile__value">{{ stat.value }}<small>{{ stat.unit }}</small></span>
+          <span class="tile__label">{{ stat.label }}</span>
+          <span class="tile__name">{{ case.title }}</span>
+        </span>
       </a>
       {% endfor %}
       {% endfor %}

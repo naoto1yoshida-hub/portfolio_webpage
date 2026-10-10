@@ -570,14 +570,42 @@ main { flex: 1 0 auto; position: relative; z-index: 1; overflow-x: clip; }
 
 .strip { margin-top: 3.6vw; overflow: hidden; }
 .strip__track { display: flex; width: max-content; }
-.js-motion .strip__track { animation: stripScroll 80s linear infinite; }
+.js-motion .strip__track { animation: stripScroll 60s linear infinite; }
 .js-motion .strip:hover .strip__track,
 .js-motion .strip:focus-within .strip__track { animation-play-state: paused; }
 @keyframes stripScroll { to { transform: translateX(-50%); } }
 html:not(.js-motion) .strip { overflow-x: auto; }
 
-.strip__item { flex: none; display: block; height: 28.9vw; background: var(--cream); }
-.strip__item img { width: auto; max-width: none; height: 100%; }
+/* 色面のタイル。サイトの地は白と灰だけなので、色はここ1か所にまとめて使う。
+   6色を実績の並び順に割り当てる（帯は同じ6件を2周置くので 6n で回る） */
+.tile {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  width: 26vw;
+  height: 28.9vw;
+  padding: 1.8vw 2vw 1.9vw;
+  background: var(--tile);
+  color: var(--tile-ink, var(--white));
+  transition: filter 0.4s var(--ease-expo);
+}
+.tile:nth-child(6n + 1) { --tile: #1c7c80; }                       /* 青緑 */
+.tile:nth-child(6n + 2) { --tile: #cf4a2c; }                       /* 朱 */
+.tile:nth-child(6n + 3) { --tile: #e2ae2f; --tile-ink: #1d1d1d; }  /* からし（地が明るいので字は墨） */
+.tile:nth-child(6n + 4) { --tile: #2c58c9; }                       /* 群青 */
+.tile:nth-child(6n + 5) { --tile: #8b3f7d; }                       /* 紫 */
+.tile:nth-child(6n + 6) { --tile: #4f7429; }                       /* 苔 */
+.tile:hover, .tile:focus-visible { filter: brightness(1.12); }
+
+.tile__no { font-family: var(--serif); font-size: clamp(16px, 1.67vw, 30px); line-height: 1; letter-spacing: 0.1em; }
+.tile__en { display: block; margin-top: 1.4vw; font-family: var(--serif); font-size: clamp(24px, 3.2vw, 62px); line-height: 0.96; letter-spacing: 0.02em; }
+.tile__en > span { display: block; }
+
+.tile__foot { display: flex; flex-direction: column; margin-top: auto; }
+.tile__value { font-family: var(--serif), var(--ja); font-size: clamp(26px, 3.3vw, 62px); line-height: 1.05; letter-spacing: 0.02em; white-space: nowrap; }
+.tile__value small { margin-left: 0.25em; font-family: var(--ja); font-size: 0.34em; font-weight: 700; letter-spacing: 0.06em; }
+.tile__label { margin-top: 0.3vw; font-size: clamp(11px, 0.83vw, 14px); font-weight: 700; line-height: 1.5; }
+.tile__name { margin-top: 0.9vw; padding-top: 0.8vw; border-top: 1px solid currentColor; font-size: clamp(11px, 0.83vw, 14px); font-weight: 700; line-height: 1.5; }
 
 .works__more { display: flex; justify-content: space-between; align-items: flex-start; gap: 4vw; margin-top: 3.2vw; }
 .works__note { max-width: 430px; font-size: 12px; line-height: 1.9; color: var(--g3); }
@@ -1138,7 +1166,13 @@ html:not(.js-motion) .strip { overflow-x: auto; }
   .is-pinned .pcard { padding-bottom: 14vh; }
   .is-pinned .panel__button { top: calc(50% + 24vw); margin-top: 16vw; }
   .is-pinned .panel__button::before { height: 12vw; }
-  .strip__item { height: 56vw; }
+  .tile { width: 62vw; height: 74vw; padding: 5vw 5.4vw 5.4vw; }
+  .tile__no { font-size: 4.6vw; }
+  .tile__en { margin-top: 4vw; font-size: 9.4vw; }
+  .tile__value { font-size: 9vw; }
+  .tile__label, .tile__name { font-size: 3vw; }
+  .tile__label { margin-top: 1vw; }
+  .tile__name { margin-top: 2.6vw; padding-top: 2.2vw; }
   .works__more { flex-direction: column-reverse; align-items: flex-end; gap: 8vw; margin-top: 8vw; }
   .works__note { align-self: flex-start; }
 

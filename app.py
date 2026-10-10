@@ -155,7 +155,6 @@ def index():
         hero_poster=static_exists(profile.HERO['poster']),
         gallery=gallery_images(),
         featured=works.all_cases(),
-        strip=works.strip_images(),
         continuous=profile.CONTINUOUS,
         highlights=profile.HIGHLIGHTS,
         services=services.SERVICES,

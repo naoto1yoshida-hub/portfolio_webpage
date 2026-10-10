@@ -1000,14 +1000,3 @@ def works_by_category():
     return grouped
 
 
-def strip_images():
-    """トップの流れる帯に並べる画像（構成図と、2枚目以降の画面）。alt は各ケースのものを使う。
-
-    各ケースの1枚目の画面は、帯のすぐ下の「重ねて見せる区画」が出すので、ここには入れない。
-    """
-    shots, diagrams = [], []
-    for case in all_cases():
-        for shot in case.get("screens", [])[1:]:
-            shots.append({"src": "images/screens/" + shot["file"], "alt": shot["alt"], "slug": case["slug"]})
-        diagrams.append({"src": "images/diagrams/" + case["diagram"], "alt": case["diagram_alt"], "slug": case["slug"]})
-    return shots + diagrams
