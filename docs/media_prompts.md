@@ -5,12 +5,28 @@
 
 | 素材 | 必須か | 置き場所 | 無いとき |
 |---|---|---|---|
-| ヒーロー動画 | 必須 | `static/video/hero.mp4` | 青緑の仮背景（線と面の構造体）が出る |
+| ヒーロー動画 | 必須 | `static/video/`（使う1本を `data/profile.py` の `HERO["video"]` で指定） | 青緑の仮背景（線と面の構造体）が出る |
 | ヒーロー静止画 | 任意 | `static/images/hero-poster.jpg` | 動画の読み込み中は青緑の単色が出る |
 | 写真の帯 | 任意 | `static/images/gallery/01.jpg` 〜 | 帯ごと出ない |
 
 色調の基準は参照サイト（shinyaokano.jp）のヒーロー動画。実測では **青緑の単色調（#1b4a50 〜 #2a6a70 付近）、
 彩度は低め、白飛びなし**。上に白い文字を載せるので、画面中央に明るい被写体や細かい模様を置かない。
+
+---
+
+## 現在入っている動画（2026-10-10）
+
+| ファイル | 中身 | 元の素材からの加工 |
+|---|---|---|
+| `static/video/hero-roof.mp4`（使用中） | 第1案。工場の屋根の鉄骨 | 音声を除去 / 最初の1秒と最後の1秒を重ねて継ぎ目を消す（10秒 → 9秒）/ 天窓の白飛びを抑える |
+| `static/video/hero-cnc.mp4`（予備） | 第2案。切削の接写 | 音声を除去 / 継ぎ目を消す（10秒 → 9秒）。色は元のまま |
+
+継ぎ目を消す加工は次のとおり（入力が10秒のとき）。屋根の方はこの前に `curves=all='0/0 0.55/0.46 1/0.74',` を足している。
+
+```
+ffmpeg -i input.mp4 -filter_complex "[0:v]split[a][b];[a]trim=0:1,setpts=PTS-STARTPTS[head];[b]trim=1:10,setpts=PTS-STARTPTS[body];[body][head]xfade=transition=fade:duration=1:offset=8,format=yuv420p[v]" ^
+  -map "[v]" -an -c:v libx264 -profile:v main -crf 22 -preset slow -movflags +faststart output.mp4
+```
 
 ---
 

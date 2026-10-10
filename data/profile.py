@@ -26,8 +26,10 @@ HERO = {
     "mark": "TEGG",
     "name": "NAOTO YOSHIDA",
     "roles": ["AI ENGINEER/", "FOR MANUFACTURING"],
-    # 動画が無いときは同じ色調の静止背景を出す。置き場所は static/video/hero.mp4
-    "video": "video/hero.mp4",
+    # 動画が無いときは同じ色調の静止背景を出す。
+    # 候補は2本: video/hero-roof.mp4（工場の屋根の鉄骨）/ video/hero-cnc.mp4（切削の接写）。
+    # 切り替えるときは poster も同じ動画の1コマ目から作り直す（docs/media_prompts.md）
+    "video": "video/hero-roof.mp4",
     "poster": "images/hero-poster.jpg",
     # ヒーロー直下の宣言文。1行ずつ字下げをずらして組む（indent は左からの vw）
     "statement": [

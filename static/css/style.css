@@ -373,6 +373,16 @@ main { flex: 1 0 auto; position: relative; z-index: 1; overflow-x: clip; }
 .hero__bg video,
 .hero__bg img { width: 100%; height: 100%; object-fit: cover; }
 
+/* 上端だけ薄く暗くする。明るい被写体（天窓など）がナビの文字に重なっても読めるように */
+.hero__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 22%;
+  background: linear-gradient(rgba(6, 22, 25, 0.62), rgba(6, 22, 25, 0));
+  pointer-events: none;
+}
+
 /* 動画が届くまでの仮の背景 */
 .hero__bg--still { background: linear-gradient(160deg, #1b4a50 0%, #2a6a70 46%, #173f45 100%); }
 .hero__beams { width: 100%; height: 100%; }
