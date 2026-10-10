@@ -163,8 +163,10 @@
       </div>
 
       <div class="work__body">
+        <div>
         <p class="work__lead">{{ case.lead }}</p>
         <p class="work__client">{{ case.client }} / {{ case.badge or case.status }}</p>
+        </div>
         <ul class="work__stats">
           {% for stat in case.stats[:2] %}
           <li><b>{{ stat.value }}<small>{{ stat.unit }}</small></b><span>{{ stat.label }}</span><em>{{ stat.note }}</em></li>

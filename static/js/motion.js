@@ -89,6 +89,8 @@
   if (!window.gsap || !window.ScrollTrigger) {
     root.classList.remove('js-motion', 'js-opening');
     root.setAttribute('data-load', '2');
+    var still = document.querySelector('.hero__bg video');
+    if (still) still.play().catch(function () {});
     return;
   }
 
