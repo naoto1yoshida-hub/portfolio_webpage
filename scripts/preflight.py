@@ -59,7 +59,9 @@ def scan_text_files():
     for path in ROOT.rglob('*'):
         if not path.is_file() or path.suffix not in exts:
             continue
-        if any(part in skip for part in path.parts):
+        # ROOT からの相対パスで見る。絶対パスで見ると、worktree（.claude/worktrees/ 配下）で
+        # 実行したときに全ファイルが除外され、走査系の検査が空振りのまま「パス」になる
+        if any(part in skip for part in path.relative_to(ROOT).parts):
             continue
         if path.name == 'preflight.py':  # 検査語そのものを持つので除外
             continue
