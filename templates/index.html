@@ -132,9 +132,19 @@
   <div class="worklist">
     {% for case in featured %}
     <article class="work">
-      <a class="work__frame" href="{{ url_for('work_detail', slug=case.slug) }}" tabindex="-1" aria-hidden="true">
+      {# 画面を撮れている案件は画面を、撮れない案件は構成図を出す。何を見せているかは左下の札で明示する #}
+      {% set shot = case.screens[0] if case.screens else none %}
+      <a class="work__frame{% if shot %} work__frame--screen{% endif %}"
+         href="{{ url_for('work_detail', slug=case.slug) }}" tabindex="-1" aria-hidden="true">
+        {% if shot %}
+        <img src="{{ url_for('static', filename='images/screens/' ~ shot.file) }}"
+             alt="{{ shot.alt }}" loading="lazy">
+        <span class="work__kind">実際の画面（ダミーデータで撮影）</span>
+        {% else %}
         <img src="{{ url_for('static', filename='images/diagrams/' ~ case.diagram) }}"
              alt="{{ case.diagram_alt }}" loading="lazy" width="1200" height="675">
+        <span class="work__kind">構成図</span>
+        {% endif %}
       </a>
 
       <div class="work__foot">
