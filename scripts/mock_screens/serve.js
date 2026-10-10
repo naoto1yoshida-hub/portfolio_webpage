@@ -75,9 +75,11 @@ http.createServer((req, res) => {
   // 2. ページ（実物のテンプレートを読み、式と固有名詞を置き換える）
   const page = app.pages && app.pages[route];
   if (page) {
-    let html = page.file
-      ? fs.readFileSync(path.join(__dirname, 'apps', page.file), 'utf8')
-      : renderJinja(path.join(PROJECTS, app.templatesDir), page.template);
+    let html = page.render
+      ? page.render()
+      : page.file
+        ? fs.readFileSync(path.join(__dirname, 'apps', page.file), 'utf8')
+        : renderJinja(path.join(PROJECTS, app.templatesDir), page.template);
     (page.replace || []).concat(app.replace || []).forEach(([from, to]) => { html = html.replace(from, to); });
     const left = html.match(/\{[{%][^}]*[%}]\}/);
     if (left) console.warn('[warn] 置き換え漏れのテンプレート式: ' + left[0]);
