@@ -122,69 +122,56 @@
   <div class="shell works__more">
     <p class="works__note">
       クライアント名は伏せ、業種と規模で表記しています。
-      掲載している数値はすべて実測値で、測定条件と時点を添えました。
+      画面はどれも架空のデータを入れて撮ったもので、実案件のデータは写していません。
     </p>
-    <a class="more" href="{{ url_for('works_index') }}">
-      <span class="more__label">VIEW<br>MORE</span>{% include '_partials/play_icon.html' %}
-    </a>
   </div>
 
-  <div class="worklist">
-    {% for case in featured %}
-    <article class="work">
-      {# 画面を撮れている案件は画面を、撮れない案件は構成図を出す。何を見せているかは左下の札で明示する #}
+  {#
+    実績の画面を1枚ずつ見せる区画。
+    画面に固定され、スクロールに合わせてカードが下から競り上がり、前のカードに重なっていく（motion.js）。
+    背後には大きな文字が横に流れる。
+    JS が無いとき・動きを減らす設定のときは固定せず、カードが縦に並ぶだけの一覧になる。
+  #}
+  <div class="panel" data-panel>
+    <div class="panel__bg" aria-hidden="true">
+      {% for _ in range(6) %}<span>ACTUAL SCREENS</span>{% endfor %}
+    </div>
+
+    <ol class="panel__cards">
+      {% for case in featured %}
+      {# 画面を撮れている案件は画面を、撮れない案件は構成図を出す。何を見せているかは札で明示する #}
       {% set shot = case.screens[0] if case.screens else none %}
-      <a class="work__frame{% if shot %} work__frame--screen{% endif %}"
-         href="{{ url_for('work_detail', slug=case.slug) }}" tabindex="-1" aria-hidden="true">
-        {% if shot %}
-        <img src="{{ url_for('static', filename='images/screens/' ~ shot.file) }}"
-             alt="{{ shot.alt }}" loading="lazy">
-        <span class="work__kind">{{ shot.label or '実際の画面（ダミーデータで撮影）' }}</span>
-        {% else %}
-        <img src="{{ url_for('static', filename='images/diagrams/' ~ case.diagram) }}"
-             alt="{{ case.diagram_alt }}" loading="lazy" width="1200" height="675">
-        <span class="work__kind">構成図</span>
-        {% endif %}
-      </a>
-
-      <div class="work__foot">
-        <div class="work__index">
-          <span class="work__no">{{ '%02d'|format(loop.index) }}</span>
-          <span class="work__meta">{{ 'CLIENT' if case.category == 'client' else 'OWN' }}<br>{{ 'WORK' if case.category == 'client' else 'PRODUCT' }}</span>
-          <span class="work__year">{{ case.period[:4] }}</span>
-        </div>
-
-        <h3 class="work__title">
-          <span class="work__en" aria-hidden="true">
-            <span class="work__en-outline">{{ case.slug|replace('-', ' ')|upper }}</span>
-            <span class="work__en-solid">{{ case.slug|replace('-', ' ')|upper }}</span>
+      <li class="pcard" data-panel-card>
+        <h3 class="visually-hidden">{{ case.title }}</h3>
+        <a class="pcard__link" href="{{ url_for('work_detail', slug=case.slug) }}"
+           aria-label="{{ case.title }} — {{ case.lead }}。詳細を読む">
+          <span class="pcard__num" aria-hidden="true">{% for digit in '%02d'|format(loop.index) %}<span>{{ digit }}</span>{% endfor %}</span>
+          <span class="pcard__content" aria-hidden="true">
+            <span class="pcard__cat"><span>{{ 'CLIENT WORK' if case.category == 'client' else 'OWN PRODUCT' }}</span></span>
+            <span class="pcard__title"><span><em>{{ case.slug|replace('-', ' ')|upper }}</em></span></span>
           </span>
-          <span class="work__ja">{{ case.title }}</span>
-        </h3>
-
-        <a class="work__read" href="{{ url_for('work_detail', slug=case.slug) }}"
-           aria-label="{{ case.title }}の詳細を読む">
-          <span>READ</span>
-          <svg viewBox="0 0 104 104" width="104" height="104" aria-hidden="true" focusable="false">
-            <rect x=".5" y=".5" width="103" height="103"/><circle cx="52" cy="52" r="51.5"/>
-            <path d="M6 30 103 52 6 74Z M6 30 30 52 6 74"/>
-          </svg>
+          <span class="pcard__image{% if not shot %} pcard__image--diagram{% endif %}">
+            <span class="pcard__image-inner">
+              {% if shot %}
+              <img src="{{ url_for('static', filename='images/screens/' ~ shot.file) }}" alt="{{ shot.alt }}">
+              {% else %}
+              <img src="{{ url_for('static', filename='images/diagrams/' ~ case.diagram) }}" alt="{{ case.diagram_alt }}">
+              {% endif %}
+            </span>
+            <span class="pcard__kind">{% if shot %}{{ shot.label or '実際の画面（ダミーデータで撮影）' }}{% else %}構成図{% endif %}</span>
+          </span>
+          <span class="pcard__caption" aria-hidden="true"><b>{{ case.title }}</b>{{ case.lead }}</span>
         </a>
-      </div>
+      </li>
+      {% endfor %}
+    </ol>
 
-      <div class="work__body">
-        <div>
-        <p class="work__lead">{{ case.lead }}</p>
-        <p class="work__client">{{ case.client }} / {{ case.badge or case.status }}</p>
-        </div>
-        <ul class="work__stats">
-          {% for stat in case.stats[:2] %}
-          <li><b>{{ stat.value }}<small>{{ stat.unit }}</small></b><span>{{ stat.label }}</span><em>{{ stat.note }}</em></li>
-          {% endfor %}
-        </ul>
-      </div>
-    </article>
-    {% endfor %}
+    <div class="panel__button">
+      <a class="more" href="{{ url_for('works_index') }}">
+        <span class="more__label">VIEW<br>MORE</span>{% include '_partials/play_icon.html' %}
+      </a>
+      <p>ALL {{ works_total }} WORKS</p>
+    </div>
   </div>
 </section>
 

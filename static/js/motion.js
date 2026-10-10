@@ -330,6 +330,44 @@
     startHero(0.15);
   }
 
+  /* ------------------------------------------- 実績の画面を重ねて見せる */
+
+  // 区画を画面に固定し、スクロール量に合わせてカードを1枚ずつ下から競り上げる。
+  // 1枚の動きは「大きいまま上がってくる → 定位置で等倍まで縮む」。中の画像も少し遅れて縮む。
+  // 見出しのせり上げより先に作る（固定で増えるスクロール量を、後ろの区画の位置計算に含めるため）
+  var panel = document.querySelector('[data-panel]');
+  if (panel) {
+    var cards = Array.prototype.slice.call(panel.querySelectorAll('[data-panel-card]'));
+    var settle = window.matchMedia('(max-width: 768px)').matches ? 1.1 : 1.2;
+    panel.classList.add('is-pinned');
+
+    var stack = gsap.timeline({
+      scrollTrigger: {
+        trigger: panel,
+        pin: true,
+        scrub: true,
+        start: 'top top',
+        end: '+=' + cards.length * 120 + '%'
+      }
+    });
+
+    cards.forEach(function (card) {
+      stack
+        .fromTo(card,
+          { yPercent: 100, scale: 1.3 },
+          {
+            yPercent: 0,
+            scale: settle,
+            transformOrigin: 'center center',
+            onComplete: function () { card.classList.add('is-in'); }
+          })
+        .to(card, { scale: 1, transformOrigin: 'center center' })
+        .fromTo(card.querySelector('.pcard__image-inner'),
+          { scale: 1.1 },
+          { scale: 1, transformOrigin: 'center center' }, '<');
+    });
+  }
+
   /* --------------------------------------------- 見出し・宣言文のせり上げ */
 
   // 見出しの欧文を1文字ずつ包む。<small>（和文の副題）は触らない

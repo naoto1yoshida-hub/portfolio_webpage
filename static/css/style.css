@@ -582,31 +582,54 @@ html:not(.js-motion) .strip { overflow-x: auto; }
 .works__more { display: flex; justify-content: space-between; align-items: flex-start; gap: 4vw; margin-top: 3.2vw; }
 .works__note { max-width: 430px; font-size: 12px; line-height: 1.9; color: var(--g3); }
 
-.worklist { margin-top: 14vw; }
-.work { margin-bottom: 11vw; }
+/* 実績の画面を1枚ずつ見せる区画。
+   既定はカードが縦に並ぶ一覧。motion.js が .is-pinned を付けると、画面に固定して
+   カードを同じ位置に重ね、スクロールに合わせて1枚ずつ競り上げる */
+.panel { position: relative; margin-top: 9vw; }
 
-.work__frame { display: block; margin-left: var(--gut); height: 33.7vw; background: var(--cream); overflow: hidden; }
-.work__frame img {
-  width: 100%;
-  height: 100%;
-  padding: 2vw 3vw;
-  object-fit: contain;
-  mix-blend-mode: multiply;
-  transition: transform 1.4s var(--ease-expo);
+.panel__bg { display: none; }
+.panel__cards { display: grid; gap: 9vw; justify-items: center; padding: 0 var(--gut); }
+
+.pcard { width: 100%; max-width: var(--card-w); --card-w: clamp(520px, 52.8vw, 1000px); }
+
+/* カードの中の寸法は、カード幅 760px を 76em として持つ（幅に比例して全体が伸縮する） */
+.pcard__link { position: relative; display: block; font-size: calc(var(--card-w) / 76); color: var(--white); }
+
+.pcard__num {
+  position: absolute;
+  z-index: 2;
+  left: 2.4em;
+  top: 1.3em;
+  font-family: var(--serif);
+  line-height: 1;
+  letter-spacing: 0.1em;
+  color: #ccc;
+  mix-blend-mode: difference;
 }
-.work:hover .work__frame img { transform: scale(1.03); }
+.pcard__num > span { display: inline-block; font-size: 3.8em; }
 
-/* 画面を載せる枠。台紙を敷かず、画面の左上から幅いっぱいに見せる */
-.work__frame { position: relative; }
-.work__frame--screen { background: var(--black); }
-.work__frame--screen img { padding: 0; object-fit: cover; object-position: 0 0; mix-blend-mode: normal; }
+.pcard__content { position: absolute; z-index: 1; left: 2.8em; padding-top: 5.3em; font-family: var(--serif); letter-spacing: 0.1em; }
+.pcard__content::before { content: ""; position: absolute; left: 0.8em; top: 2.7em; width: 5.6em; height: 2em; background: #101010; }
+/* 題字の黒帯は上へはみ出して小ラベルの下端に掛かるので、小ラベルを手前に出す */
+.pcard__cat { position: relative; z-index: 2; display: block; line-height: 1; }
+.pcard__cat > span { display: inline-block; padding: 0.3em 0.2em 0.1em; background: #101010; font-size: 1.4em; color: var(--white); }
+.pcard__title { display: block; margin: -1px 0 0 2.8em; line-height: 1; }
+.pcard__title > span { position: relative; display: inline-block; }
+.pcard__title > span::before { content: ""; position: absolute; left: 0; top: -0.8em; width: 102%; height: 100%; background: #101010; }
+.pcard__title em { position: relative; z-index: 1; font-size: 5em; font-style: normal; letter-spacing: 0.05em; white-space: nowrap; color: var(--g2); }
+
+.pcard__image { position: relative; display: block; aspect-ratio: 2 / 1; overflow: hidden; background: var(--black); }
+.pcard__image-inner { display: block; width: 100%; height: 100%; transform-origin: 50% 50%; }
+.pcard__image img { width: 100%; height: 100%; object-fit: cover; object-position: 0 0; }
+.pcard__image--diagram { background: var(--cream); }
+.pcard__image--diagram img { padding: 4%; object-fit: contain; mix-blend-mode: multiply; }
 
 /* 枠の中身が「画面」か「構成図」かを示す札 */
-.work__kind {
+.pcard__kind {
   position: absolute;
-  left: 0;
+  right: 0;
   bottom: 0;
-  padding: 5px 14px;
+  padding: 4px 12px;
   background: var(--bg);
   font-size: 11px;
   font-weight: 700;
@@ -615,65 +638,66 @@ html:not(.js-motion) .strip { overflow-x: auto; }
   color: var(--g1);
 }
 
-.work__foot {
-  display: grid;
-  grid-template-columns: 8vw 1fr auto;
-  align-items: end;
-  margin: 1.5vw 0 0 var(--gut);
-  padding-right: 4.2vw;
-  border-bottom: 1px solid var(--line);
-}
+.pcard__caption { display: block; margin-top: 12px; font-size: 13px; line-height: 1.8; color: var(--g1); }
+.pcard__caption b { margin-right: 1.2em; color: var(--white); }
 
-.work__index { display: flex; flex-direction: column; padding-bottom: 0.4vw; font-family: var(--serif); color: var(--g1); }
-.work__no { font-size: clamp(22px, 1.95vw, 36px); line-height: 1; letter-spacing: 0.06em; color: var(--white); }
-.work__meta { margin-top: 1em; font-size: clamp(11px, 0.9vw, 16px); line-height: 1.1; letter-spacing: 0.06em; }
-.work__year { margin-top: 0.4em; font-size: clamp(18px, 1.67vw, 30px); line-height: 1.2; letter-spacing: 0.1em; }
+.panel__button { display: flex; flex-direction: column; align-items: center; margin-top: 7vw; }
+.panel__button p { margin-top: 12px; font-family: var(--serif); font-size: 12px; letter-spacing: 0.14em; color: var(--g2); }
 
-.work__title { line-height: 1; font-weight: 400; }
-.work__en {
-  display: block;
-  font-family: var(--serif);
-  font-size: clamp(34px, 5.2vw, 100px);
-  line-height: 0.8;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-}
-.work__en > span { display: block; }
-.work__en-outline { color: transparent; -webkit-text-stroke: 1px var(--white); }
-.work__en-solid { color: var(--white); margin-bottom: -0.09em; }
-.work__ja { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* ---- 固定して重ねる状態 ---- */
 
-.work__read {
+.panel.is-pinned { height: 100vh; margin-top: 0; overflow: hidden; }
+
+/* 背後を流れる大きな文字。同じ語を6つ並べ、3分の1（2つぶん）だけ送って継ぎ目なく回す */
+.is-pinned .panel__bg {
   display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  font-family: var(--label);
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: 0.08em;
-  color: var(--g1);
+  position: absolute;
+  left: 0;
+  top: calc(50% - 7.4vw);
+  width: max-content;
+  animation: panelFlow 15s linear infinite;
 }
-.work__read span { padding-bottom: 3px; margin-bottom: 4px; border-bottom: 2px solid currentColor; }
-.work__read svg { width: clamp(64px, 7.2vw, 138px); height: auto; fill: none; stroke: currentColor; stroke-width: 1; overflow: visible; }
-.work__read svg path, .work__read svg circle { transform-origin: 50% 50%; transform-box: view-box; transition: transform 1s var(--ease-expo); }
-.work__read:hover, .work__read:focus-visible { color: var(--white); }
-.work__read:hover svg path, .work__read:focus-visible svg path { transform: rotate(180deg); }
+.panel__bg span { flex: none; margin-right: 3.5vw; font-family: var(--serif); font-size: 12.4vw; line-height: 1; letter-spacing: 0.02em; white-space: nowrap; color: #252525; }
+@keyframes panelFlow { to { transform: translateX(-33.3333%); } }
 
-.work__body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 4.2vw;
-  margin: 2vw var(--gut) 0 calc(var(--gut) + 8vw);
+.is-pinned .panel__cards { position: absolute; inset: 0; z-index: 2; display: block; padding: 0; }
+.is-pinned .pcard {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: none;
+  padding-bottom: 9vh;
+  will-change: transform;
 }
-.work__lead { font-size: clamp(16px, 1.25vw, 20px); font-weight: 700; line-height: 1.8; color: var(--white); }
-.work__client { margin-top: 0.8em; font-size: 12px; color: var(--g3); }
-.work__stats li { display: grid; grid-template-columns: minmax(11em, auto) 1fr; column-gap: 1.5em; align-items: baseline; padding: 12px 0; border-top: 1px solid var(--line-soft); }
-.work__stats li:first-child { border-top: 0; padding-top: 0; }
-.work__stats b { grid-row: span 2; font-family: var(--serif), var(--ja); font-size: clamp(26px, 2.64vw, 50px); font-weight: 400; line-height: 1.1; letter-spacing: 0.02em; color: var(--white); white-space: nowrap; }
-.work__stats b small { margin-left: 0.2em; font-family: var(--ja); font-size: 0.4em; font-weight: 700; }
-.work__stats span { font-size: 13px; font-weight: 700; color: var(--white); }
-.work__stats em { font-size: 12px; font-style: normal; line-height: 1.7; color: var(--g3); }
+.is-pinned .pcard__link { width: var(--card-w); }
+
+.is-pinned .panel__button { position: absolute; z-index: 3; left: 50%; top: calc(50% + 8.1vw); margin-top: 9vw; transform: translateX(-50%); }
+.is-pinned .panel__button::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  width: 1px;
+  height: 6.25vw;
+  background: var(--g1);
+  animation: scrolldown 1.8s var(--ease-inout) infinite;
+}
+
+/* カードが定位置に着いたら、番号・黒い札・題字を出す */
+.is-pinned .pcard__content::before { clip-path: inset(0 100% 0 0); transition: clip-path 1.6s cubic-bezier(0.075, 0.82, 0.165, 1) 0.1s; }
+.is-pinned .pcard.is-in .pcard__content::before { clip-path: inset(0); }
+.is-pinned .pcard__num > span { transform: translateY(50%); opacity: 0; transition: transform 1s var(--ease-expo), opacity 1s var(--ease-expo); }
+.is-pinned .pcard__num > span:nth-child(1) { transition-delay: 0.2s; }
+.is-pinned .pcard__num > span:nth-child(2) { transition-delay: 0.25s; }
+.is-pinned .pcard.is-in .pcard__num > span { transform: none; opacity: 1; }
+.is-pinned .pcard__cat > span,
+.is-pinned .pcard__title > span { clip-path: inset(0 100% 0 0); transition: clip-path 1.2s var(--ease-expo) 0.25s; }
+.is-pinned .pcard__title > span { transition-delay: 0.35s; }
+.is-pinned .pcard.is-in .pcard__cat > span,
+.is-pinned .pcard.is-in .pcard__title > span { clip-path: inset(-1em -2% 0 0); }
+
 
 /* --------------------------------------------------------------------------
    継続導入
@@ -1038,7 +1062,6 @@ html:not(.js-motion) .strip { overflow-x: auto; }
   .svc__row { grid-template-columns: 1fr 1fr; row-gap: 20px; }
   .svc__detail { grid-column: 1 / -1; }
   .steps { grid-template-columns: repeat(2, 1fr); gap: 40px 28px; }
-  .work__body { margin-left: var(--gut); }
   .prof__grid { grid-template-columns: 1fr 90px minmax(300px, 46vw); }
   .prof__grid .head { grid-column: 1 / -1; margin-bottom: 40px; }
   .prof__photo { height: 310px; }
@@ -1102,25 +1125,24 @@ html:not(.js-motion) .strip { overflow-x: auto; }
   .head { font-size: 10vw; }
 
   .strip { margin-top: 8vw; }
+
+  .panel { margin-top: 18vw; }
+  .panel__cards { gap: 16vw; }
+  .pcard { --card-w: 82vw; }
+  .pcard__kind { font-size: 10px; padding: 3px 8px; }
+  .pcard__caption { font-size: 12px; }
+  .pcard__caption b { display: block; }
+  .panel__button { margin-top: 14vw; }
+  .panel__bg span { font-size: 26vw; }
+  .is-pinned .panel__bg { top: calc(50% - 22vw); }
+  .is-pinned .pcard { padding-bottom: 14vh; }
+  .is-pinned .panel__button { top: calc(50% + 24vw); margin-top: 16vw; }
+  .is-pinned .panel__button::before { height: 12vw; }
   .strip__item { height: 56vw; }
   .works__more { flex-direction: column-reverse; align-items: flex-end; gap: 8vw; margin-top: 8vw; }
   .works__note { align-self: flex-start; }
 
-  .worklist { margin-top: 22vw; }
-  .work { margin-bottom: 22vw; }
-  .work__frame { height: 56vw; }
-  .work__foot { grid-template-columns: minmax(0, 1fr) auto; row-gap: 3vw; margin-top: 5vw; padding-right: var(--gut); }
-  .work__index { flex-direction: row; align-items: baseline; gap: 14px; grid-column: 1 / -1; }
-  .work__meta { margin-top: 0; }
-  .work__meta br { display: none; }
-  .work__year { margin-top: 0; }
 
-  .work__read svg { width: 44px; }
-  .work__title { grid-column: 1 / -1; }
-  .work__read { grid-column: 1 / -1; justify-self: end; margin-bottom: 3vw; }
-  .work__en { font-size: 8.4vw; }
-  .work__read { font-size: 13px; }
-  .work__body { grid-template-columns: 1fr; gap: 7vw; margin: 6vw var(--gut) 0; }
 
   .cont { padding-top: 10vw; }
   .cont__grid { grid-template-columns: 1fr; gap: 10vw; }
