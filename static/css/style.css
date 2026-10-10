@@ -1168,7 +1168,7 @@ html:not(.js-motion) .strip { overflow-x: auto; }
   .is-pinned .panel__button::before { height: 12vw; }
   .tile { width: 62vw; height: 74vw; padding: 5vw 5.4vw 5.4vw; }
   .tile__no { font-size: 4.6vw; }
-  .tile__en { margin-top: 4vw; font-size: 9.4vw; }
+  .tile__en { margin-top: 4vw; font-size: 7.6vw; }
   .tile__value { font-size: 9vw; }
   .tile__label, .tile__name { font-size: 3vw; }
   .tile__label { margin-top: 1vw; }
