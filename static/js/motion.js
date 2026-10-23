@@ -330,6 +330,161 @@
     startHero(0.15);
   }
 
+  /* ------------------------------------------------- 実績の色面カルーセル */
+
+  // 色面のタイルを奥行きのある並びにし、中央の1枚を大きく明るく、奥ほど傾けて小さく暗くする
+  // （UI MOTION 48 の47番）。一定間隔で1枚ずつ左へ送り、止まるときに少し行き過ぎて戻る。
+  // マウスが乗っている間・キーボードで操作中・画面外・タブが裏の間は送らない。
+  // 横のタイルを押すとそのタイルが中央に来て、中央のタイルを押すと詳細へ移る。
+  // 区画の固定より先に作る（帯の高さが変わるので、固定の位置計算に含めるため）
+  (function carousel() {
+    var strip = document.querySelector('[data-strip]');
+    if (!strip) return;
+    var track = strip.querySelector('.strip__track');
+    var tiles = Array.prototype.slice.call(strip.querySelectorAll('[data-strip-tile]'));
+    var n = tiles.length;
+    if (n < 3) return;
+
+    var INTERVAL = 3200;
+    // 中央からの距離ごとの見え方。x はタイル幅に対する横位置。最後の段は奥に隠れて入れ替わりを待つ位置
+    var SLOTS = [
+      { x: 0, rot: 0, scale: 1.08, dim: 0, alpha: 1 },
+      { x: 0.92, rot: 24, scale: 0.84, dim: 0.4, alpha: 1 },
+      { x: 1.62, rot: 36, scale: 0.7, dim: 0.62, alpha: 1 },
+      { x: 2.2, rot: 44, scale: 0.6, dim: 1, alpha: 0 }
+    ];
+    var HIDE = SLOTS.length - 1;
+
+    var current = 0;
+    // 各タイルの中央からの距離。左が負、右が正。最初は 0, 1, 2, -3, -2, -1（6枚のとき）
+    var offsets = tiles.map(function (tile, i) { return i < n - Math.floor(n / 2) ? i : i - n; });
+
+    function place(tile, d) {
+      var slot = SLOTS[Math.min(Math.abs(d), HIDE)];
+      var sign = d < 0 ? -1 : 1;
+      tile.style.transform = 'perspective(1400px) translate3d(' + (sign * slot.x * tile.offsetWidth).toFixed(1) + 'px, 0, 0)' +
+        ' rotateY(' + (-sign * slot.rot) + 'deg) scale(' + slot.scale + ')';
+      tile.style.opacity = slot.alpha;
+      tile.style.zIndex = 10 - Math.abs(d);
+      tile.style.pointerEvents = Math.abs(d) >= HIDE ? 'none' : '';
+      tile.style.setProperty('--dim', slot.dim);
+      tile.classList.toggle('is-current', d === 0);
+    }
+
+    // 送る向きで並びの範囲を決め、範囲からはみ出したタイルは反対側の奥へ瞬時に回してから入れる
+    function go(step) {
+      if (!step) return;
+      current = ((current + step) % n + n) % n;
+      var lo = step > 0 ? -Math.floor(n / 2) : 1 - Math.ceil(n / 2);
+      tiles.forEach(function (tile, i) {
+        var d = offsets[i] - step;
+        var wrapped = false;
+        while (d < lo) { d += n; wrapped = true; }
+        while (d > lo + n - 1) { d -= n; wrapped = true; }
+        if (wrapped) {
+          tile.classList.add('is-wrap');
+          place(tile, step > 0 ? HIDE : -HIDE);
+          void tile.offsetWidth;
+          tile.classList.remove('is-wrap');
+        }
+        offsets[i] = d;
+        place(tile, d);
+      });
+      dots.forEach(function (dot, i) { dot.setAttribute('aria-current', i === current ? 'true' : 'false'); });
+    }
+
+    function goTo(index) {
+      var step = ((index - current) % n + n) % n;
+      if (step > n / 2) step -= n;
+      go(step);
+    }
+
+    // ページドット。押すとそのタイルが中央に来る
+    var nav = document.createElement('div');
+    nav.className = 'strip__dots';
+    var dots = tiles.map(function (tile, i) {
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'strip__dot';
+      dot.setAttribute('aria-label', tile.querySelector('.tile__name').textContent + 'を中央に表示');
+      dot.addEventListener('click', function () { goTo(i); restart(); });
+      nav.appendChild(dot);
+      return dot;
+    });
+    strip.appendChild(nav);
+
+    // ---- 自動で送る
+    var timer = 0;
+    var hover = false;
+    var inView = false;
+    function canPlay() { return inView && !hover && !document.hidden && !strip.querySelector(':focus-visible'); }
+    function restart() {
+      clearTimeout(timer);
+      if (canPlay()) timer = setTimeout(function () { go(1); restart(); }, INTERVAL);
+    }
+    strip.addEventListener('mouseenter', function () { hover = true; restart(); });
+    strip.addEventListener('mouseleave', function () { hover = false; restart(); });
+    strip.addEventListener('focusin', restart);
+    strip.addEventListener('focusout', function () { setTimeout(restart, 0); });
+    document.addEventListener('visibilitychange', restart);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) { inView = entries[0].isIntersecting; restart(); }).observe(strip);
+    } else {
+      inView = true;
+    }
+
+    // ---- 押す・キーボード・スワイプ
+    var startX = null;
+    var dragged = false;
+    tiles.forEach(function (tile, i) {
+      tile.addEventListener('click', function (e) {
+        if (dragged) { e.preventDefault(); return; }
+        if (i !== current) { e.preventDefault(); goTo(i); restart(); }
+      });
+      // Tab で奥のタイルに入ったら、そのタイルを中央に出す（マウスで押したときの focus は click 側で扱う）
+      tile.addEventListener('focus', function () {
+        if (i !== current && tile.matches(':focus-visible')) goTo(i);
+      });
+      tile.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    });
+    strip.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      go(e.key === 'ArrowRight' ? 1 : -1);
+      if (strip.contains(document.activeElement) && document.activeElement.hasAttribute('data-strip-tile')) {
+        tiles[current].focus({ preventScroll: true });
+      }
+    });
+    track.addEventListener('pointerdown', function (e) { startX = e.clientX; dragged = false; });
+    track.addEventListener('pointermove', function (e) {
+      if (startX !== null && Math.abs(e.clientX - startX) > 10) dragged = true;
+    });
+    track.addEventListener('pointerup', function (e) {
+      if (startX === null) return;
+      var dx = e.clientX - startX;
+      startX = null;
+      if (Math.abs(dx) > 40) { go(dx < 0 ? 1 : -1); restart(); }
+    });
+    track.addEventListener('pointercancel', function () { startX = null; });
+
+    // 幅が変わったら位置を置き直す（横位置はタイル幅に比例する）
+    var resizing = 0;
+    window.addEventListener('resize', function () {
+      cancelAnimationFrame(resizing);
+      resizing = requestAnimationFrame(function () {
+        tiles.forEach(function (tile, i) { tile.classList.add('is-wrap'); place(tile, offsets[i]); });
+        void track.offsetWidth;
+        tiles.forEach(function (tile) { tile.classList.remove('is-wrap'); });
+      });
+    });
+
+    strip.classList.add('is-carousel');
+    tiles.forEach(function (tile, i) { tile.classList.add('is-wrap'); place(tile, offsets[i]); });
+    void track.offsetWidth;
+    tiles.forEach(function (tile) { tile.classList.remove('is-wrap'); });
+    dots.forEach(function (dot, i) { dot.setAttribute('aria-current', i === current ? 'true' : 'false'); });
+  })();
+
   /* ------------------------------------------- 実績の画面を重ねて見せる */
 
   // 区画を画面に固定し、スクロール量に合わせてカードを1枚ずつ下から競り上げる。

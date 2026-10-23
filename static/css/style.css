@@ -568,16 +568,73 @@ main { flex: 1 0 auto; position: relative; z-index: 1; overflow-x: clip; }
 
 .works { position: relative; }
 
-.strip { margin-top: 3.6vw; overflow: hidden; }
+/* 既定（JS が無い・動きを減らす設定）は横に並べてスクロールする一覧 */
+.strip { margin-top: 3.6vw; overflow-x: auto; }
 .strip__track { display: flex; width: max-content; }
-.js-motion .strip__track { animation: stripScroll 60s linear infinite; }
-.js-motion .strip:hover .strip__track,
-.js-motion .strip:focus-within .strip__track { animation-play-state: paused; }
-@keyframes stripScroll { to { transform: translateX(-50%); } }
-html:not(.js-motion) .strip { overflow-x: auto; }
+
+/* ---- カルーセルの状態（motion.js が .is-carousel を付ける） ----
+   タイルを同じ位置に重ね、中央からの距離に応じた位置・傾き・大きさ・暗さを motion.js が与える。
+   止まるときに少し行き過ぎて戻るよう、transform にはバネ寄りの曲線を使う */
+.strip.is-carousel {
+  --tile-h: 28.9vw;
+  position: relative;
+  overflow: hidden;
+  padding-block: 2.2vw 0;
+}
+/* 奥行きは各タイルの transform の perspective() で付ける（親で 3D 空間を共有すると
+   傾いたタイル同士が交差して重なり順が崩れるため、平面の重なり順 z-index で前後を決める） */
+.is-carousel .strip__track {
+  position: relative;
+  width: auto;
+  height: calc(var(--tile-h) * 1.1);
+  touch-action: pan-y;
+}
+.is-carousel .tile {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: calc(var(--tile-h) / -2) 0 0 -13vw;
+  transition: transform 0.9s cubic-bezier(0.34, 1.3, 0.5, 1), opacity 0.5s ease, filter 0.4s var(--ease-expo);
+  will-change: transform;
+}
+/* 奥のタイルを暗くする幕。filter はホバーの明るさに使っているので、暗さは別の層で持つ */
+.is-carousel .tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #101010;
+  opacity: var(--dim, 0);
+  pointer-events: none;
+  transition: opacity 0.7s var(--ease-expo);
+}
+.is-carousel .tile.is-wrap,
+.is-carousel .tile.is-wrap::after { transition: none; }
+.is-carousel .tile:not(.is-current):hover { filter: none; }
+
+.strip__dots { display: flex; justify-content: center; gap: 4px; margin-top: 2.4vw; }
+.strip__dot {
+  display: grid;
+  place-items: center;
+  height: 28px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.strip__dot::before {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--line);
+  transition: width 0.6s var(--ease-expo), background-color 0.6s var(--ease-expo);
+}
+.strip__dot[aria-current="true"]::before { width: 32px; background: var(--white); }
+.strip__dot:focus-visible { outline: 1px solid var(--white); outline-offset: 2px; }
 
 /* 色面のタイル。サイトの地は白と灰だけなので、色はここ1か所にまとめて使う。
-   6色を実績の並び順に割り当てる（帯は同じ6件を2周置くので 6n で回る） */
+   6色を実績の並び順に割り当てる */
 .tile {
   flex: none;
   display: flex;
@@ -1198,6 +1255,9 @@ html:not(.js-motion) .strip { overflow-x: auto; }
   .is-pinned .panel__button { top: calc(50% + 24vw); margin-top: 16vw; }
   .is-pinned .panel__button::before { height: 12vw; }
   .tile { width: 62vw; height: 74vw; padding: 5vw 5.4vw 5.4vw; }
+  .strip.is-carousel { --tile-h: 74vw; padding-top: 5vw; }
+  .is-carousel .tile { margin-left: -31vw; }
+  .strip__dots { margin-top: 5vw; }
   .tile__no { font-size: 4.6vw; }
   .tile__en { margin-top: 4vw; font-size: 7.6vw; }
   .tile__value { font-size: 9vw; }

@@ -108,15 +108,14 @@
   {#
     色面の帯。1実績を1色の面にして、番号・英語名・代表の数値1つ・和文名だけを置く。
     画面や図はここでは見せない（すぐ下の区画が画面を見せる）。
-    同じ並びを2回置き、半分の幅だけ送って継ぎ目なく回す。2周目は読み上げ対象から外す
+    既定は横に並べてスクロールする一覧。motion.js が .is-carousel を付けると、奥行きのある
+    カルーセルになり、中央の1枚を大きく明るく見せて一定間隔で1枚ずつ送る。ドットも motion.js が作る
   #}
-  <div class="strip">
+  <div class="strip" data-strip role="region" aria-label="実績の一覧">
     <div class="strip__track">
-      {% for round in range(2) %}
       {% for case in featured %}
       {% set stat = case.stats[0] %}
-      <a class="tile" href="{{ url_for('work_detail', slug=case.slug) }}"
-         {% if round %}aria-hidden="true" tabindex="-1"{% endif %}>
+      <a class="tile" href="{{ url_for('work_detail', slug=case.slug) }}" data-strip-tile>
         <span class="tile__no" aria-hidden="true">{{ '%02d'|format(loop.index) }}</span>
         <span class="tile__en" aria-hidden="true">{% for word in case.slug.split('-') %}<span>{{ word|upper }}</span>{% endfor %}</span>
         <span class="tile__foot">
@@ -125,7 +124,6 @@
           <span class="tile__name">{{ case.title }}</span>
         </span>
       </a>
-      {% endfor %}
       {% endfor %}
     </div>
   </div>
