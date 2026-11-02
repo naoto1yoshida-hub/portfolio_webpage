@@ -18,6 +18,15 @@
     <h1 class="case__title">{{ case.title }}</h1>
     <p class="case__lead">{{ case.lead }}</p>
 
+    {% if case.demo_url %}
+    <div class="case__demo">
+      <a class="btn btn--primary" href="{{ case.demo_url }}" target="_blank" rel="noopener noreferrer">
+        {{ case.demo_label or '公開ページを見る' }} <span aria-hidden="true">&#8599;</span>
+      </a>
+      {% if case.demo_note %}<p class="case__demo-note">{{ case.demo_note }}</p>{% endif %}
+    </div>
+    {% endif %}
+
     <div class="tblock tblock--4 case__tblock">
       <div class="tblock__cell">
         <span class="tblock__label">Client</span>
@@ -193,7 +202,7 @@
       {% for other in others %}
       <a class="nextcase" href="{{ url_for('work_detail', slug=other.slug) }}">
         {% set badge = other.badge or other.status %}
-        {% if '稼働' in badge or '納品' in badge %}
+        {% if '稼働' in badge or '納品' in badge or '公開' in badge %}
           <span class="chip chip--live">{{ badge }}</span>
         {% else %}
           <span class="chip chip--dev">{{ badge }}</span>

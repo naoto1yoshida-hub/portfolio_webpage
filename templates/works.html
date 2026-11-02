@@ -62,7 +62,7 @@
               {% else %}{{ w.title }}{% endif %}
             </h4>
             <div class="row__meta">
-              {% if '本番稼働' in w.status or '納品' in w.status or '公開中' in w.status %}
+              {% if '本番稼働' in w.status or '納品' in w.status or '公開' in w.status %}
                 <span class="chip chip--live">{{ w.status }}</span>
               {% else %}
                 <span class="chip">{{ w.status }}</span>
@@ -82,7 +82,7 @@
               {% endif %}
               {% if w.url %}
               <a class="tlink" href="{{ w.url }}" target="_blank" rel="noopener noreferrer">
-                公開ページを見る <span class="tlink__arrow" aria-hidden="true">&#8599;</span>
+                {{ '公開デモを見る' if w.detail_slug else '公開ページを見る' }} <span class="tlink__arrow" aria-hidden="true">&#8599;</span>
               </a>
               {% endif %}
             </div>

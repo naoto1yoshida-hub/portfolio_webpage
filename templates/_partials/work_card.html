@@ -10,7 +10,7 @@
   <div class="card__body">
     <div class="card__meta">
       {% set badge = case.badge or case.status %}
-      {% if '稼働' in badge or '納品' in badge %}
+      {% if '稼働' in badge or '納品' in badge or '公開' in badge %}
         <span class="chip chip--live">{{ badge }}</span>
       {% else %}
         <span class="chip chip--dev">{{ badge }}</span>
@@ -35,6 +35,11 @@
       <a class="tlink" href="{{ url_for('work_detail', slug=case.slug) }}">
         この案件の詳細を読む <span class="tlink__arrow" aria-hidden="true">&rarr;</span>
       </a>
+      {% if case.demo_url %}
+      <a class="tlink" href="{{ case.demo_url }}" target="_blank" rel="noopener noreferrer">
+        公開デモを見る <span class="tlink__arrow" aria-hidden="true">&#8599;</span>
+      </a>
+      {% endif %}
     </div>
   </div>
 </article>

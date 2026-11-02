@@ -156,7 +156,7 @@
            aria-label="{{ case.title }} — {{ case.lead }}。詳細を読む">
           <span class="pcard__num" aria-hidden="true">{% for digit in '%02d'|format(loop.index) %}<span>{{ digit }}</span>{% endfor %}</span>
           <span class="pcard__content" aria-hidden="true">
-            <span class="pcard__cat"><span>{{ 'CLIENT WORK' if case.category == 'client' else 'OWN PRODUCT' }}</span></span>
+            <span class="pcard__cat"><span>{{ 'CLIENT WORK' if case.category == 'client' else ('PUBLIC DEMO' if case.category == 'demo' else 'OWN PRODUCT') }}</span></span>
             <span class="pcard__title"><span><em>{{ case.slug|replace('-', ' ')|upper }}</em></span></span>
           </span>
           <span class="pcard__image{% if not shot %} pcard__image--diagram{% endif %}">

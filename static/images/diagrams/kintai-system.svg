@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="勤怠管理システムの流れ図">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#78859a"/>
+    </marker>
+    <style>
+      .jp { font-family: 'Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif; }
+      .mn { font-family: 'SFMono-Regular',Consolas,'Courier New',monospace; }
+      .box { fill:#fff; stroke:#0d1b2e; stroke-width:1.6; }
+      .box-a { fill:#fff; stroke:#bc3b1e; stroke-width:2.2; }
+      .lbl { font-size:20px; letter-spacing:.14em; fill:#78859a; }
+      .ttl { font-size:27px; font-weight:700; fill:#0d1b2e; }
+      .sub { font-size:20px; fill:#465468; }
+      .arw { stroke:#78859a; stroke-width:1.6; fill:none; marker-end:url(#ar); }
+    </style>
+  </defs>
+
+  <text class="mn lbl" x="50" y="80">FLOW — 打刻から、給与ソフト用CSVまで</text>
+  <line x1="50" y1="98" x2="1150" y2="98" stroke="#d7dde4"/>
+
+  <!-- 打刻の3経路 -->
+  <rect class="box" x="50" y="130" width="250" height="52" rx="3"/>
+  <text class="jp ttl" x="70" y="165" style="font-size:21px">ICカード端末</text>
+  <rect class="box" x="50" y="192" width="250" height="52" rx="3"/>
+  <text class="jp ttl" x="70" y="227" style="font-size:21px">スマホ打刻・外出記録</text>
+  <rect class="box" x="50" y="254" width="250" height="52" rx="3"/>
+  <text class="jp ttl" x="70" y="289" style="font-size:21px">打刻機のCSV取り込み</text>
+
+  <path class="arw" d="M302 218 L326 218"/>
+
+  <!-- 申請・承認 -->
+  <rect class="box" x="330" y="130" width="240" height="176" rx="3"/>
+  <text class="mn lbl" x="352" y="164" style="font-size:18px">01</text>
+  <text class="jp ttl" x="352" y="204">申請・承認</text>
+  <text class="jp sub" x="352" y="240" style="font-size:18px">打刻修正・残業・有休</text>
+  <text class="jp sub" x="352" y="268" style="font-size:18px">部署長が承認する</text>
+
+  <path class="arw" d="M572 218 L606 218"/>
+
+  <!-- 集計（純粋関数） -->
+  <rect class="box-a" x="610" y="130" width="270" height="176" rx="3"/>
+  <text class="mn lbl" x="632" y="164" style="font-size:18px; fill:#bc3b1e">02 PURE FUNCTION</text>
+  <text class="jp ttl" x="632" y="204">純粋関数で集計</text>
+  <text class="jp sub" x="632" y="240" style="font-size:18px">DBにも時計にも触れない</text>
+  <text class="jp sub" x="632" y="268" style="font-size:18px">同じ入力なら同じ結果</text>
+
+  <path class="arw" d="M882 218 L916 218"/>
+
+  <!-- 締め -->
+  <rect class="box" x="920" y="130" width="230" height="176" rx="3"/>
+  <text class="mn lbl" x="942" y="164" style="font-size:18px">03</text>
+  <text class="jp ttl" x="942" y="204">月末締め</text>
+  <text class="jp sub" x="942" y="240" style="font-size:18px">結果を保存する</text>
+  <text class="jp sub" x="942" y="268" style="font-size:18px">締め済みは凍結</text>
+
+  <!-- 出力 -->
+  <path class="arw" d="M1035 308 L1035 350"/>
+  <rect class="box" x="610" y="354" width="170" height="130" rx="3"/>
+  <text class="jp ttl" x="630" y="404" style="font-size:24px">画面</text>
+  <text class="jp sub" x="630" y="436" style="font-size:18px">集計結果</text>
+  <text class="jp sub" x="630" y="462" style="font-size:18px">ダッシュボード</text>
+
+  <rect class="box" x="790" y="354" width="170" height="130" rx="3"/>
+  <text class="jp ttl" x="810" y="404" style="font-size:24px">CSV</text>
+  <text class="jp sub" x="810" y="436" style="font-size:18px">給与ソフト用</text>
+  <text class="jp sub" x="810" y="462" style="font-size:18px">Shift_JIS</text>
+
+  <rect class="box" x="970" y="354" width="180" height="130" rx="3"/>
+  <text class="jp ttl" x="990" y="404" style="font-size:24px">Excel</text>
+  <text class="jp sub" x="990" y="436" style="font-size:18px">全体と</text>
+  <text class="jp sub" x="990" y="462" style="font-size:18px">部署別の集計表</text>
+
+  <!-- 保存結果が唯一の元 -->
+  <path class="arw" d="M606 419 L574 419"/>
+  <rect class="box-a" x="50" y="354" width="520" height="130" rx="3"/>
+  <text class="mn lbl" x="76" y="390" style="font-size:18px; fill:#bc3b1e">STORED RESULT — 保存した結果が唯一の元</text>
+  <text class="jp ttl" x="76" y="434">画面・CSV・Excelは同じ値</text>
+  <text class="jp sub" x="76" y="466" style="font-size:18px">画面側で再計算しないので、数字が食い違わない</text>
+
+  <line x1="50" y1="560" x2="1150" y2="560" stroke="#d7dde4"/>
+  <line x1="50" y1="556" x2="50" y2="565" stroke="#d7dde4"/>
+  <line x1="1150" y1="556" x2="1150" y2="565" stroke="#d7dde4"/>
+  <text class="mn lbl" x="50" y="596" style="font-size:19px">Next.js / TypeScript / PostgreSQL（Neon）/ Drizzle ORM / Vercel</text>
+  <text class="jp sub" x="50" y="628" style="font-size:19px; fill:#78859a">締めと書き込みは同じロックで直列にし、締め済みの期間は変更を断る</text>
+</svg>
