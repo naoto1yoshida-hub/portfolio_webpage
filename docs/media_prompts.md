@@ -139,8 +139,10 @@ SERVICES のカード左側に、右辺を斜めに切った形で出る。置�
 - **正方形 1:1（1600×1600 推奨）**。同じ1枚を、PC では縦長（約1:2）、スマホでは横長（約16:9）に切り抜いて使う。
   どちらでも残るのは **画像の中央** だけなので、主役は中央の 50% 四方に収める
 - PC では右辺が斜めに切れるので、右下は欠けても困らない構図にする
-- 3枚の色調をそろえる。暗部は深いティール（#23595f 付近）、明部は生成りのクリーム（#edeae0 付近）、彩度は低め。
-  カードの台紙（クリーム）と、サイトの暗い背景（#313131）の両方になじませるため
+- 方向性は「IT感」（2026-11-04 オーナー指定）。暗い室内で、画面から発光する線・ノード・データの流れが浮き上がる絵にする
+- 3枚の色調をそろえる。背景は暗いチャコール〜深いティール（#23595f 付近）、発光は **ティール〜シアン 1系統だけ**
+  （青・紫・ピンクを混ぜない）、ハイライトはわずかに生成りのクリーム（#edeae0 付近）。
+  サイトの暗い背景（#313131）とカードの台紙（クリーム）の両方になじませるため
 - 画面・書類の文字は読めないこと。数字入りのグラフや「◯%削減」のような絵は入れない（架空の数値を載せない規律。`scripts/preflight.py` 参照）
 - 人物の顔・社名・ロゴ・実在の図面は入れない（実績の証拠として読めてしまうため）
 
@@ -148,32 +150,40 @@ SERVICES のカード左側に、右辺を斜めに切った形で出る。置�
 
 ```
 1) 業務自動化・ツール開発 → static/images/services/automation.jpg
-A laptop on a steel desk in a small factory office, its screen showing an abstract spreadsheet
-grid with a few highlighted cells and thin connector lines flowing to a second panel
-(no readable text or numbers). A stack of printed sheets sits beside it, slightly blurred.
-Subject centered, square composition, shallow depth of field, soft window light from the left.
-Muted color grade: deep teal shadows, warm off-white highlights, low saturation.
-Editorial documentary photography, 1:1.
+A laptop on a dark desk in a dim room. From its screen, rows of spreadsheet-like cells lift off
+as small glowing translucent tiles and travel along thin luminous lines into a looping pipeline,
+passing through simple node points, like an automated workflow running by itself.
+Glowing teal-cyan light trails, tiny particles, faint holographic grid lines in the air.
+No readable text or numbers. Subject centered, square composition, shallow depth of field,
+cinematic low-key lighting. Color palette: charcoal and deep teal background, teal-cyan glow,
+subtle warm off-white highlights. High-end technology photography, 1:1.
 
 2) AIチャットボット・社内検索 → static/images/services/ai.jpg
-A tablet propped on a desk next to tall shelves of binders and rolled engineering drawings,
-the tablet showing an abstract chat interface: alternating message bubbles made of blank grey
-bars, one bubble linked by a thin line to a small document thumbnail (no readable text).
-Subject centered, square composition, shallow depth of field, quiet overcast light.
-Muted color grade: deep teal shadows, warm off-white highlights, low saturation.
-Editorial documentary photography, 1:1.
+Above a tablet lying on a dark desk, a glowing neural-network sphere made of fine luminous
+nodes and connecting lines hovers in the air. Around it, several small translucent document
+cards orbit and are linked to the sphere by thin light beams, as if an AI is searching and
+citing documents. A few abstract chat bubbles made of blank glowing bars float near the tablet.
+Glowing teal-cyan light, tiny particles, depth haze. No readable text or numbers.
+Subject centered, square composition, shallow depth of field, cinematic low-key lighting.
+Color palette: charcoal and deep teal background, teal-cyan glow, subtle warm off-white highlights.
+High-end technology photography, 1:1.
 
 3) 業務システム開発 → static/images/services/system.jpg
-On a wooden desk, a neat stack of paper forms with a clipboard on the left, and on the right a
-laptop showing an abstract web dashboard: a vertical sequence of three status blocks joined by
-arrows, like a request-approve-confirm workflow (blank bars only, no readable text or numbers).
-The paper and the screen are placed side by side to read as "paper becoming a system".
-Subject centered, square composition, shallow depth of field, soft side light.
-Muted color grade: deep teal shadows, warm off-white highlights, low saturation.
-Editorial documentary photography, 1:1.
+A laptop on a dark desk with a single sheet of paper next to it. The paper dissolves into a
+stream of glowing pixels that flows into the screen, and above the laptop three translucent
+holographic panels rise in a clean isometric stack, joined by arrows of light, like a
+request-approve-confirm workflow becoming a web system. Panels contain only blank glowing bars
+and simple icons. Glowing teal-cyan light, faint grid lines. No readable text or numbers.
+Subject centered, square composition, shallow depth of field, cinematic low-key lighting.
+Color palette: charcoal and deep teal background, teal-cyan glow, subtle warm off-white highlights.
+High-end technology photography, 1:1.
 ```
 
-共通のネガティブ: `people, faces, hands, readable text, numbers, percentages, charts with values, brand names, logos, watermark, illustration, cartoon, 3D render look, neon, oversaturated colors`
+共通のネガティブ: `people, faces, hands, robot, humanoid, readable text, letters, numbers, percentages, charts with values, brand names, logos, watermark, cartoon, flat illustration, blue and purple neon, pink, rainbow colors, cluttered sci-fi, oversaturated colors`
+
+生成ツールごとの補足:
+- Midjourney は末尾に `--ar 1:1 --style raw` を付け、ネガティブは `--no` に並べる
+- 文字が混ざりやすいツールでは、画面の部分を「blank glowing bars」に寄せて再生成するのが早い
 
 置き場所は `static/images/services/`、ファイル名は上の3つ（`data/services.py` の `image` と一致させる）。
 jpg で 1600px 四方・400KB 前後まで圧縮してから置く。置けば自動で仮の図柄と入れ替わる。
