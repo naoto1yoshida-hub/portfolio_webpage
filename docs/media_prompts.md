@@ -130,6 +130,56 @@ ffmpeg -i static/video/hero.mp4 -frames:v 1 -q:v 4 static/images/hero-poster.jpg
 
 ---
 
+## 4. サービスのカード写真（3枚）
+
+SERVICES のカード左側に、右辺を斜めに切った形で出る。置くまでのあいだはティールの斜線と番号の仮の図柄が出る。
+
+### 仕様
+
+- **正方形 1:1（1600×1600 推奨）**。同じ1枚を、PC では縦長（約1:2）、スマホでは横長（約16:9）に切り抜いて使う。
+  どちらでも残るのは **画像の中央** だけなので、主役は中央の 50% 四方に収める
+- PC では右辺が斜めに切れるので、右下は欠けても困らない構図にする
+- 3枚の色調をそろえる。暗部は深いティール（#23595f 付近）、明部は生成りのクリーム（#edeae0 付近）、彩度は低め。
+  カードの台紙（クリーム）と、サイトの暗い背景（#313131）の両方になじませるため
+- 画面・書類の文字は読めないこと。数字入りのグラフや「◯%削減」のような絵は入れない（架空の数値を載せない規律。`scripts/preflight.py` 参照）
+- 人物の顔・社名・ロゴ・実在の図面は入れない（実績の証拠として読めてしまうため）
+
+### プロンプト
+
+```
+1) 業務自動化・ツール開発 → static/images/services/automation.jpg
+A laptop on a steel desk in a small factory office, its screen showing an abstract spreadsheet
+grid with a few highlighted cells and thin connector lines flowing to a second panel
+(no readable text or numbers). A stack of printed sheets sits beside it, slightly blurred.
+Subject centered, square composition, shallow depth of field, soft window light from the left.
+Muted color grade: deep teal shadows, warm off-white highlights, low saturation.
+Editorial documentary photography, 1:1.
+
+2) AIチャットボット・社内検索 → static/images/services/ai.jpg
+A tablet propped on a desk next to tall shelves of binders and rolled engineering drawings,
+the tablet showing an abstract chat interface: alternating message bubbles made of blank grey
+bars, one bubble linked by a thin line to a small document thumbnail (no readable text).
+Subject centered, square composition, shallow depth of field, quiet overcast light.
+Muted color grade: deep teal shadows, warm off-white highlights, low saturation.
+Editorial documentary photography, 1:1.
+
+3) 業務システム開発 → static/images/services/system.jpg
+On a wooden desk, a neat stack of paper forms with a clipboard on the left, and on the right a
+laptop showing an abstract web dashboard: a vertical sequence of three status blocks joined by
+arrows, like a request-approve-confirm workflow (blank bars only, no readable text or numbers).
+The paper and the screen are placed side by side to read as "paper becoming a system".
+Subject centered, square composition, shallow depth of field, soft side light.
+Muted color grade: deep teal shadows, warm off-white highlights, low saturation.
+Editorial documentary photography, 1:1.
+```
+
+共通のネガティブ: `people, faces, hands, readable text, numbers, percentages, charts with values, brand names, logos, watermark, illustration, cartoon, 3D render look, neon, oversaturated colors`
+
+置き場所は `static/images/services/`、ファイル名は上の3つ（`data/services.py` の `image` と一致させる）。
+jpg で 1600px 四方・400KB 前後まで圧縮してから置く。置けば自動で仮の図柄と入れ替わる。
+
+---
+
 ## 文言を変えるとき
 
 冒頭の一文・名前の2行・肩書き・宣言文は `data/profile.py` の `HERO` にある。

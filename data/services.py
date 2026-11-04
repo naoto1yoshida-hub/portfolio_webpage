@@ -2,11 +2,16 @@
 提供サービスと料金の目安、進め方の正本。
 
 料金はオーナー確定の目安レンジ。個別見積の下限ではなく「相場観を伝えるための目安」として扱う。
+
+SERVICES の en はカードの欧文見出し（1要素=1行）。image は static 配下のカード写真で、
+ファイルが無いあいだはテンプレート側が仮の図柄を出す（生成プロンプト: docs/media_prompts.md）。
 """
 
 SERVICES = [
     {
         "key": "automation",
+        "en": ["WORK", "AUTOMATION"],
+        "image": "images/services/automation.jpg",
         "name": "業務自動化・ツール開発",
         "price": "10万円〜",
         "lead": "手作業で回している一部の工程を、動くツールに置き換えます",
@@ -19,6 +24,8 @@ SERVICES = [
     },
     {
         "key": "ai",
+        "en": ["AI", "KNOWLEDGE BOT"],
+        "image": "images/services/ai.jpg",
         "name": "AIチャットボット・社内検索",
         "price": "30万円〜",
         "lead": "社内に溜まった資料を、質問すれば出典付きで答える形にします",
@@ -31,6 +38,8 @@ SERVICES = [
     },
     {
         "key": "system",
+        "en": ["BUSINESS", "SYSTEM"],
+        "image": "images/services/system.jpg",
         "name": "業務システム開発",
         "price": "50万円〜",
         "lead": "紙とExcelで回している業務フローごと、Webシステムに載せ替えます",

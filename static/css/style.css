@@ -839,10 +839,92 @@ main { flex: 1 0 auto; position: relative; z-index: 1; overflow-x: clip; }
    サービス・料金
    -------------------------------------------------------------------------- */
 
-.svc { padding: 16vw 0 0; }
+.svc { position: relative; padding: 16vw 0 0; overflow-x: clip; }
+/* 背景を斜めに横切る淡い帯。カードの千鳥の段差を背後でつなぐ */
+.svc::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 30%;
+  transform: translateX(-50%) skewX(-12deg);
+  background: rgba(255, 255, 255, 0.035);
+  pointer-events: none;
+}
+.svc > .shell { position: relative; }
 .svc__intro { max-width: 36em; margin-top: 2.4vw; }
 
-.svc__rows { margin-top: 5.5vw; border-bottom: 1px solid var(--line); }
+/* サービスのカード。2列の千鳥で、右列だけ下げる */
+.svc__cards { display: grid; grid-template-columns: 1fr 1fr; column-gap: 3.9vw; margin-top: 5.5vw; }
+.svc__col { display: flex; flex-direction: column; gap: 4.4vw; }
+.svc__col--low { margin-top: 8.9vw; }
+
+.scard {
+  position: relative;
+  min-height: 22rem;
+  background: var(--cream);
+  color: #1d1d1b;
+  transition: translate 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.45s;
+}
+@media (hover: hover) {
+  .scard:hover { translate: 0 -6px; box-shadow: 0 32px 60px -24px rgba(0, 0, 0, 0.7); }
+  .scard:hover .scard__media img { transform: scale(1.05); }
+}
+
+/* 写真は左40%。右辺を斜めに切り、本文側へ食い込ませる */
+.scard__media {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  overflow: hidden;
+  clip-path: polygon(0 0, 100% 0, 78% 100%, 0 100%);
+  background: var(--teal);
+}
+.scard__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease-expo); }
+.scard__media--blank {
+  background:
+    repeating-linear-gradient(-58deg, transparent 0 22px, rgba(237, 234, 224, 0.07) 22px 23px),
+    var(--teal);
+}
+.scard__ph {
+  position: absolute;
+  left: 14%;
+  bottom: 6%;
+  font-family: var(--serif);
+  font-size: clamp(64px, 6vw, 110px);
+  line-height: 1;
+  color: rgba(237, 234, 224, 0.42);
+}
+
+.scard__body { margin-left: 36%; padding: 2.5vw 2.2vw 2.5vw 2.8vw; }
+.scard__name { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: #1d1d1b; }
+.scard__en {
+  margin-top: 12px;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(24px, 1.95vw, 34px);
+  line-height: 1.12;
+  letter-spacing: 0.08em;
+  color: var(--black);
+}
+.scard__en span { display: block; }
+.scard__lead { margin-top: 20px; font-size: 14px; font-weight: 700; line-height: 1.75; color: #1d1d1b; word-break: auto-phrase; }
+.scard__items { margin-top: 12px; }
+.scard__items li { position: relative; padding-left: 13px; font-size: 12.5px; line-height: 1.8; color: #4f4d48; }
+.scard__items li + li { margin-top: 4px; }
+.scard__items li::before { content: ""; position: absolute; left: 0; top: 0.8em; width: 4px; height: 4px; border-radius: 50%; background: var(--teal); }
+
+.scard__foot { margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(29, 29, 27, 0.16); }
+.scard__price { font-family: var(--serif), var(--ja); font-size: clamp(26px, 2.1vw, 36px); line-height: 1.1; color: var(--black); }
+.scard__price small { margin-right: 10px; font-family: var(--ja); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; vertical-align: 0.5em; color: var(--teal); }
+.scard__eg { margin-top: 10px; font-size: 11.5px; line-height: 1.8; color: #4f4d48; }
+.scard__eg b { margin-right: 8px; padding: 1px 7px; border: 1px solid var(--teal); font-size: 10.5px; color: var(--teal); }
+
+/* カードの下に置く、料金だけの行（初回ヒアリング・月額保守） */
+.svc__rows { margin-top: 7vw; border-bottom: 1px solid var(--line); }
 .svc__row { display: grid; grid-template-columns: 24vw 17vw 1fr; column-gap: 2vw; align-items: start; padding: 3.2vw 0; border-top: 1px solid var(--line); }
 .svc__name { font-size: clamp(17px, 1.39vw, 24px); line-height: 1.6; }
 .svc__price {
@@ -853,12 +935,6 @@ main { flex: 1 0 auto; position: relative; z-index: 1; overflow-x: clip; }
   color: var(--white);
 }
 .svc__lead { font-size: 15px; font-weight: 700; color: var(--white); }
-.svc__items { margin-top: 1.2em; }
-.svc__items li { position: relative; padding-left: 26px; line-height: 1.9; }
-.svc__items li + li { margin-top: 0.3em; }
-.svc__items li::before { content: ""; position: absolute; left: 0; top: 0.95em; width: 14px; height: 1px; background: var(--g3); }
-.svc__eg { margin-top: 1.4em; font-size: 12px; line-height: 1.9; color: var(--g3); }
-.svc__eg b { margin-right: 10px; padding: 2px 8px; border: 1px solid var(--line); font-size: 11px; color: var(--g1); }
 
 .svc__row--extra { padding: 2vw 0; border-top-color: var(--line-soft); }
 .svc__row--extra .svc__price { font-size: clamp(24px, 1.95vw, 36px); line-height: 1.4; }
@@ -1173,6 +1249,10 @@ main { flex: 1 0 auto; position: relative; z-index: 1; overflow-x: clip; }
    -------------------------------------------------------------------------- */
 
 @media (max-width: 1029px) {
+  /* 1列にするときは列の枠を外し、カードの order で番号順に並べる */
+  .svc__cards { display: flex; flex-direction: column; gap: 40px; }
+  .svc__col { display: contents; }
+  .scard__body { padding: 36px 36px 36px 40px; }
   .svc__row { grid-template-columns: 1fr 1fr; row-gap: 20px; }
   .svc__detail { grid-column: 1 / -1; }
   .steps { grid-template-columns: repeat(2, 1fr); gap: 40px 28px; }
@@ -1278,6 +1358,13 @@ main { flex: 1 0 auto; position: relative; z-index: 1; overflow-x: clip; }
   .svc, .proc { padding-top: 28vw; }
   .why { padding-top: 24vw; }
   .svc__intro { margin-top: 6vw; }
+  .svc__cards { margin-top: 12vw; gap: 8vw; }
+  .svc::before { display: none; }
+  /* スマホは写真を上に置き、下辺を斜めに切る */
+  .scard { min-height: 0; }
+  .scard__media { position: relative; width: 100%; height: 48vw; clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%); }
+  .scard__body { margin-left: 0; padding: 4vw 6.4vw 8vw; }
+  .scard__ph { left: 6.4vw; bottom: 14%; font-size: 18vw; }
   .svc__rows { margin-top: 12vw; }
   .svc__row { grid-template-columns: 1fr; row-gap: 10px; padding: 9vw 0; }
   .svc__row--extra { padding: 7vw 0; }

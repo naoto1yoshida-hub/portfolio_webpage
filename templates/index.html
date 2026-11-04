@@ -237,21 +237,41 @@
       まず動くものを作って判断していただけます。
     </p>
 
-    <div class="svc__rows">
-      {% for s in services %}
-      <div class="svc__row rise">
-        <h3 class="svc__name">{{ s.name }}</h3>
-        <p class="svc__price">{{ s.price }}</p>
-        <div class="svc__detail">
-          <p class="svc__lead">{{ s.lead }}</p>
-          <ul class="svc__items">
-            {% for item in s['items'] %}<li>{{ item }}</li>{% endfor %}
-          </ul>
-          <p class="svc__eg"><b>実績例</b>{{ s.example }}</p>
-        </div>
+    {# 2列の千鳥。左列に奇数番、右列に偶数番を置き、右列だけ下げて段差をつける #}
+    <div class="svc__cards">
+      {% for col in [services[0::2], services[1::2]] %}
+      <div class="svc__col{% if loop.index == 2 %} svc__col--low{% endif %}">
+        {% for s in col %}
+        {% set num = services.index(s) + 1 %}
+        {# order は1列表示のとき列の枠を外して番号順に並べ直すため #}
+        <article class="scard rise" style="order: {{ num }}">
+          <div class="scard__media{% if not service_images[s.key] %} scard__media--blank{% endif %}">
+            {% if service_images[s.key] %}
+            <img src="{{ url_for('static', filename=s.image) }}" alt="" loading="lazy" decoding="async">
+            {% else %}
+            {# 写真が届くまでの仮の図柄。番号だけを大きく置く #}
+            <span class="scard__ph" aria-hidden="true">{{ '%02d'|format(num) }}</span>
+            {% endif %}
+          </div>
+          <div class="scard__body">
+            <p class="scard__name">{{ s.name }}</p>
+            <h3 class="scard__en">{% for line in s.en %}<span>{{ line }}</span>{% endfor %}</h3>
+            <p class="scard__lead">{{ s.lead }}</p>
+            <ul class="scard__items">
+              {% for item in s['items'] %}<li>{{ item }}</li>{% endfor %}
+            </ul>
+            <div class="scard__foot">
+              <p class="scard__price"><small>目安</small>{{ s.price }}</p>
+              <p class="scard__eg"><b>実績例</b>{{ s.example }}</p>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
       </div>
       {% endfor %}
+    </div>
 
+    <div class="svc__rows">
       {% for extra in [free_consult, support] %}
       <div class="svc__row svc__row--extra rise">
         <h3 class="svc__name">{{ extra.name }}</h3>
