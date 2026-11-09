@@ -98,11 +98,11 @@ function thumb(name) {
 /* ------------------------------------------------------------------ 設定 */
 
 module.exports = {
-  templatesDir: 'nagase_drawing_search/app/templates',
+  templatesDir: 'nagase_tools/drawing_search/app/templates',
   pages: {
     '/': { template: 'search.html', replace: [[/\{\{\s*"\{:,\}"\.format\(total\)\s*\}\}/, '17,588']] },
   },
-  statics: [['/static/', 'nagase_drawing_search/public']],
+  statics: [['/static/', 'nagase_tools/drawing_search/public']],
   api(req, url) {
     if (url.pathname.startsWith('/mock/thumb/')) {
       const svg = thumb(url.pathname.slice('/mock/thumb/'.length));

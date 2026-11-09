@@ -19,7 +19,7 @@
 ### 1. 複製して .env を消す
 
 ```powershell
-$src = "C:\Users\naoto\ai_company\projects\nagase_tasks"
+$src = "C:\Users\naoto\ai_company\projects\nagase_tools\tasks"
 $dst = "<一時ディレクトリ>\shot_tasks"
 Get-ChildItem $src -Exclude @('.git','.venv','*.db','.vercel','__pycache__') |
   Copy-Item -Destination $dst -Recurse -Force

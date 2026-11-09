@@ -44,7 +44,7 @@ function sse() {
 module.exports = {
   // 撮影時に画面へ入力する質問
   question: '図番 SMP-0871-01 で過去に不具合はあった？',
-  templatesDir: 'nagase_quality/app/templates',
+  templatesDir: 'nagase_tools/quality/app/templates',
   pages: {
     '/': {
       template: 'chat.html',
@@ -57,7 +57,7 @@ module.exports = {
       ],
     },
   },
-  statics: [['/static/', 'nagase_quality/public']],
+  statics: [['/static/', 'nagase_tools/quality/public']],
   api(req, url) {
     if (url.pathname === '/api/chat') return { stream: sse() };
     return null;
