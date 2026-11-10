@@ -247,7 +247,7 @@
         <article class="scard rise" style="order: {{ num }}">
           <div class="scard__media{% if not service_images[s.key] %} scard__media--blank{% endif %}">
             {% if service_images[s.key] %}
-            <img src="{{ url_for('static', filename=s.image) }}" alt="" loading="lazy" decoding="async">
+            <img src="{{ url_for('static', filename=s.image) }}" alt="{{ s.image_alt }}" loading="lazy" decoding="async">
             {% else %}
             {# 写真が届くまでの仮の図柄。番号だけを大きく置く #}
             <span class="scard__ph" aria-hidden="true">{{ '%02d'|format(num) }}</span>

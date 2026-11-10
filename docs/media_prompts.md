@@ -195,6 +195,10 @@ subtle warm off-white highlights. High-end technology photography, 1:1.
 - Midjourney は末尾に `--ar 1:1 --style raw` を付け、ネガティブは `--no` に並べる
 - 文字が混ざりやすいツールでは、画面の部分を「blank glowing bars」に寄せて再生成するのが早い
 
+2026-11-10 に採用した画像: `system.jpg` と `ai.jpg` は上のプロンプトどおり。`automation.jpg` は 11-04 版の
+AIチャットボット用プロンプト（資料をつなぐ光の網目の球）で生成したものを、資料がつながる絵として自動化に転用した。
+画像を差し替えたら `data/services.py` の `image_alt` も絵の中身に合わせて直す。
+
 置き場所は `static/images/services/`、ファイル名は上の3つ（`data/services.py` の `image` と一致させる）。
 jpg で 1600px 四方・400KB 前後まで圧縮してから置く。置けば自動で仮の図柄と入れ替わる。
 
