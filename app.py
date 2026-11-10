@@ -158,6 +158,7 @@ def index():
         continuous=profile.CONTINUOUS,
         highlights=profile.HIGHLIGHTS,
         services=services.SERVICES,
+        service_images={s['key']: static_exists(s['image']) for s in services.SERVICES},
         support=services.SUPPORT,
         free_consult=services.FREE_CONSULT,
         price_note=services.PRICE_NOTE,

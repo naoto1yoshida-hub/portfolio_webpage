@@ -130,6 +130,80 @@ ffmpeg -i static/video/hero.mp4 -frames:v 1 -q:v 4 static/images/hero-poster.jpg
 
 ---
 
+## 4. サービスのカード写真（3枚）
+
+SERVICES のカード左側に、右辺を斜めに切った形で出る。置くまでのあいだはティールの斜線と番号の仮の図柄が出る。
+
+### 仕様
+
+- **正方形 1:1（1600×1600 推奨）**。同じ1枚を、PC では縦長（約1:2）、スマホでは横長（約16:9）に切り抜いて使う。
+  どちらでも残るのは **画像の中央** だけなので、主役は中央の 50% 四方に収める
+- PC では右辺が斜めに切れるので、右下は欠けても困らない構図にする
+- 方向性は「IT感」（2026-11-04 オーナー指定）。暗い室内で、画面から発光する線・ノード・データの流れが浮き上がる絵にする
+- 3枚の色調をそろえる。背景は暗いチャコール〜深いティール（#23595f 付近）、発光は **ティール〜シアン 1系統だけ**
+  （青・紫・ピンクを混ぜない）、ハイライトはわずかに生成りのクリーム（#edeae0 付近）。
+  サイトの暗い背景（#313131）とカードの台紙（クリーム）の両方になじませるため
+- 画面・書類の文字は読めないこと。数字入りのグラフや「◯%削減」のような絵は入れない（架空の数値を載せない規律。`scripts/preflight.py` 参照）
+- 人物の顔・社名・ロゴ・実在の図面は入れない（実績の証拠として読めてしまうため）
+
+### プロンプト
+
+```
+1) 業務自動化・ツール開発 → static/images/services/automation.jpg
+A laptop on a dark desk in a dim room. From its screen, rows of spreadsheet-like cells lift off
+as small glowing translucent tiles and travel along thin luminous lines into a looping pipeline,
+passing through simple node points, like an automated workflow running by itself.
+Glowing teal-cyan light trails, tiny particles, faint holographic grid lines in the air.
+No readable text or numbers. Subject centered, square composition, shallow depth of field,
+cinematic low-key lighting. Color palette: charcoal and deep teal background, teal-cyan glow,
+subtle warm off-white highlights. High-end technology photography, 1:1.
+
+2) AIチャットボット・社内検索 → static/images/services/ai.jpg
+（2026-11-10 改: 抽象的な球体をやめ、スマホでチャットしている場面にした）
+Close-up of a hand holding a smartphone over a dark office desk, seen from slightly above
+over the shoulder (no face visible). The phone screen clearly shows a messaging-style chat app:
+a short question bubble on the right, and a longer answer bubble on the left with a small
+attached document card under it, like an AI assistant answering with a cited source.
+All text is rendered as soft blurred lines, not readable. In the blurred background, a laptop
+on the desk shows the same chat interface. A few faint teal-cyan light lines rise from the phone
+screen toward small translucent document icons floating just above it.
+The phone is the clear main subject in the center. Square composition, 50mm lens,
+shallow depth of field, cinematic low-key lighting with the screen as the main light source.
+Color palette: charcoal and deep teal background, teal-cyan screen glow,
+subtle warm off-white highlights. High-end technology photography, 1:1.
+
+3) 業務システム開発 → static/images/services/system.jpg
+（2026-11-10 改: 紙が溶けるホログラムをやめ、ノートPCの画面に業務ツールが映っている場面にした）
+A modern laptop on a dark desk, seen from a three-quarter front angle, the screen filling
+the center of the frame. The screen clearly shows a business web application: a slim dark
+left sidebar with menu items, a top bar, and a main area with a data table of several rows,
+each row ending in a small colored status pill (teal, amber, grey), and one highlighted teal
+primary button in the upper right. A side panel on the right shows a simple three-step
+progress tracker: three circles joined by a line, the first two filled teal, the last one empty.
+All text is rendered as soft blurred lines, not readable. A printed paper form lies beside
+the laptop, slightly out of focus, hinting that paper work moved into the system.
+Soft teal-cyan glow from the screen reflects on the desk.
+Square composition, 35mm lens, shallow depth of field, cinematic low-key lighting.
+Color palette: charcoal and deep teal background, teal-cyan screen glow,
+subtle warm off-white highlights. High-end technology photography, 1:1.
+```
+
+共通のネガティブ: `faces, robot, humanoid, readable text, letters, numbers, percentages, charts with values, brand names, logos, watermark, cartoon, flat illustration, blue and purple neon, pink, rainbow colors, cluttered sci-fi, oversaturated colors`
+1) と 3) は人を入れないので、ネガティブに `people, hands` を足す。2) は手だけ写す（顔は入れない）。
+
+生成ツールごとの補足:
+- Midjourney は末尾に `--ar 1:1 --style raw` を付け、ネガティブは `--no` に並べる
+- 文字が混ざりやすいツールでは、画面の部分を「blank glowing bars」に寄せて再生成するのが早い
+
+2026-11-10 に採用した画像: `system.jpg` と `ai.jpg` は上のプロンプトどおり。`automation.jpg` は 11-04 版の
+AIチャットボット用プロンプト（資料をつなぐ光の網目の球）で生成したものを、資料がつながる絵として自動化に転用した。
+画像を差し替えたら `data/services.py` の `image_alt` も絵の中身に合わせて直す。
+
+置き場所は `static/images/services/`、ファイル名は上の3つ（`data/services.py` の `image` と一致させる）。
+jpg で 1600px 四方・400KB 前後まで圧縮してから置く。置けば自動で仮の図柄と入れ替わる。
+
+---
+
 ## 文言を変えるとき
 
 冒頭の一文・名前の2行・肩書き・宣言文は `data/profile.py` の `HERO` にある。
