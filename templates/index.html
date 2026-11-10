@@ -106,91 +106,99 @@
   </div>
 
   {#
-    色面の帯。1実績を1色の面にして、番号・英語名・代表の数値1つ・和文名だけを置く。
-    画面や図はここでは見せない（すぐ下の区画が画面を見せる）。
-    既定は横に並べてスクロールする一覧。motion.js が .is-carousel を付けると、奥行きのある
-    カルーセルになり、中央の1枚を大きく明るく見せて一定間隔で1枚ずつ送る。ドットも motion.js が作る
+    実績を「号」として机に並べる。1件を1冊の号の表紙にし、押すと見開きの誌面に開く（script.js）。
+    表紙と目次はそれぞれ詳細ページへのリンクで、JS が無いときはそのまま詳細へ移る。
+    色は紙・墨・ティールだけで、案件ごとに色を変えない（.design/rejections.md 2026-11-10）
   #}
-  <div class="strip" data-strip role="region" aria-label="実績の一覧">
-    <div class="strip__track">
+  <div class="shell works__lead">
+    <p>1件を1冊の号として並べました。表紙を押すと、説明と実際の画面が見開きで開きます。</p>
+  </div>
+
+  <div class="issues" data-issues role="list" aria-label="実績の号">
+    {% for case in featured %}
+    {% set shot = case.screens[0] if case.screens else none %}
+    {% set stat = case.stats[0] %}
+    <a class="cover" role="listitem" href="{{ url_for('work_detail', slug=case.slug) }}" data-issue="{{ loop.index0 }}"
+       aria-label="No.{{ '%02d'|format(loop.index) }} {{ case.title }} — {{ case.lead }}">
+      <span class="cover__in" aria-hidden="true">
+        <span class="cover__mast"><b>TEGG WORKS</b><span>No.{{ '%02d'|format(loop.index) }} — {{ case.period.split('月')[0]|replace('年', '.') }}</span></span>
+        <span class="cover__en">{% for word in case.slug.split('-') %}<span>{{ word|upper }}</span>{% endfor %}<i>{{ 'client work' if case.category == 'client' else ('public demo' if case.category == 'demo' else 'own product') }}</i></span>
+        <span class="cover__pic{% if not shot %} cover__pic--diagram{% endif %}">
+          {% if shot %}
+          <img src="{{ url_for('static', filename='images/screens/' ~ shot.file) }}" alt="{{ shot.alt }}" loading="lazy" decoding="async">
+          {% else %}
+          <img src="{{ url_for('static', filename='images/diagrams/' ~ case.diagram) }}" alt="{{ case.diagram_alt }}" loading="lazy" decoding="async">
+          {% endif %}
+        </span>
+        <span class="cover__lines"><span class="cover__val">{{ stat.value }}<small>{{ stat.unit }}</small></span><span class="cover__cap"><b>{{ case.title }}</b>{{ stat.label }}</span></span>
+      </span>
+    </a>
+    {% endfor %}
+  </div>
+
+  <div class="shell">
+    <p class="contents__head">CONTENTS</p>
+    <ol class="contents">
       {% for case in featured %}
       {% set stat = case.stats[0] %}
-      <a class="tile" href="{{ url_for('work_detail', slug=case.slug) }}" data-strip-tile>
-        <span class="tile__no" aria-hidden="true">{{ '%02d'|format(loop.index) }}</span>
-        <span class="tile__en" aria-hidden="true">{% for word in case.slug.split('-') %}<span>{{ word|upper }}</span>{% endfor %}</span>
-        <span class="tile__foot">
-          <span class="tile__value">{{ stat.value }}<small>{{ stat.unit }}</small></span>
-          <span class="tile__label">{{ stat.label }}</span>
-          <span class="tile__name">{{ case.title }}</span>
-        </span>
-      </a>
-      {% endfor %}
-    </div>
-  </div>
-
-  <div class="shell works__more">
-    <p class="works__note">
-      クライアント名は伏せ、業種と規模で表記しています。
-      画面はどれも架空のデータを入れて撮ったもので、実案件のデータは写していません。
-    </p>
-  </div>
-
-  {#
-    実績の画面を1枚ずつ見せる区画。
-    画面に固定され、スクロールに合わせてカードが下から競り上がり、前のカードに重なっていく（motion.js）。
-    背後には大きな文字が横に流れる。
-    JS が無いとき・動きを減らす設定のときは固定せず、カードが縦に並ぶだけの一覧になる。
-  #}
-  <div class="panel" data-panel>
-    <div class="panel__bg" aria-hidden="true">
-      {% for _ in range(6) %}<span>ACTUAL SCREENS</span>{% endfor %}
-    </div>
-
-    <ol class="panel__cards">
-      {% for case in featured %}
-      {# 画面を撮れている案件は画面を、撮れない案件は構成図を出す。何を見せているかは札で明示する #}
-      {% set shot = case.screens[0] if case.screens else none %}
-      <li class="pcard" data-panel-card>
-        <h3 class="visually-hidden">{{ case.title }}</h3>
-        <a class="pcard__link" href="{{ url_for('work_detail', slug=case.slug) }}"
-           aria-label="{{ case.title }} — {{ case.lead }}。詳細を読む">
-          <span class="pcard__num" aria-hidden="true">{% for digit in '%02d'|format(loop.index) %}<span>{{ digit }}</span>{% endfor %}</span>
-          <span class="pcard__content" aria-hidden="true">
-            <span class="pcard__cat"><span>{{ 'CLIENT WORK' if case.category == 'client' else ('PUBLIC DEMO' if case.category == 'demo' else 'OWN PRODUCT') }}</span></span>
-            <span class="pcard__title"><span><em>{{ case.slug|replace('-', ' ')|upper }}</em></span></span>
-          </span>
-          <span class="pcard__image{% if not shot %} pcard__image--diagram{% endif %}">
-            <span class="pcard__image-inner">
-              {% if shot %}
-              <img src="{{ url_for('static', filename='images/screens/' ~ shot.file) }}" alt="{{ shot.alt }}">
-              {% else %}
-              <img src="{{ url_for('static', filename='images/diagrams/' ~ case.diagram) }}" alt="{{ case.diagram_alt }}">
-              {% endif %}
-            </span>
-            <span class="pcard__kind">{% if shot %}{{ shot.label or '実際の画面（ダミーデータで撮影）' }}{% else %}構成図{% endif %}</span>
-          </span>
-          <span class="pcard__caption" aria-hidden="true"><b>{{ case.title }}</b>{{ case.lead }}</span>
-        </a>
-      </li>
+      <li><a href="{{ url_for('work_detail', slug=case.slug) }}" data-issue="{{ loop.index0 }}"><span class="contents__n">No.{{ '%02d'|format(loop.index) }}</span><span class="contents__t">{{ case.title }}</span><span class="contents__v">{{ stat.value }}{{ stat.unit }}</span></a></li>
       {% endfor %}
     </ol>
 
-    {#
-      固定して重ねるときの説明書き。カードは同じ位置に重なるので、説明をカードごとに持たせると
-      前のカードの文字が下に残って重なる。ここに1か所だけ置き、着いたカードのものに差し替える。
-      読み上げにはカード側のリンク名を使うので、ここは対象から外す
-    #}
-    <div class="panel__captions" aria-hidden="true">
-      {% for case in featured %}
-      <p class="panel__caption" data-panel-caption><b>{{ case.title }}</b><span>{{ case.lead }}</span></p>
-      {% endfor %}
+    <div class="works__more">
+      <p class="works__note">
+        クライアント名は伏せ、業種と規模で表記しています。
+        画面はどれも架空のデータを入れて撮ったもので、実案件のデータは写していません。
+      </p>
+      <div class="works__button">
+        <a class="more" href="{{ url_for('works_index') }}">
+          <span class="more__label">VIEW<br>MORE</span>{% include '_partials/play_icon.html' %}
+        </a>
+        <p>ALL {{ works_total }} WORKS</p>
+      </div>
     </div>
+  </div>
 
-    <div class="panel__button">
-      <a class="more" href="{{ url_for('works_index') }}">
-        <span class="more__label">VIEW<br>MORE</span>{% include '_partials/play_icon.html' %}
-      </a>
-      <p>ALL {{ works_total }} WORKS</p>
+  {# 見開きの中身。号ごとに左頁・右頁を用意し、開いたときに script.js が見開きへ写す #}
+  {% for case in featured %}
+  {% set shot = case.screens[0] if case.screens else none %}
+  <template data-issue-tpl>
+    <div data-part="l">
+      <div class="spread__kicker"><span>No.{{ '%02d'|format(loop.index) }} — {{ 'CLIENT WORK' if case.category == 'client' else ('PUBLIC DEMO' if case.category == 'demo' else 'OWN PRODUCT') }}</span><span>{{ case.badge }}</span></div>
+      <h3 class="spread__en">{{ case.slug|replace('-', ' ')|upper }}</h3>
+      <p class="spread__ja">{{ case.title }}</p>
+      <p class="spread__stand">{{ case.lead }}</p>
+      <p class="spread__body">{{ case.summary }}</p>
+      <div class="spread__figs">
+        {% for s in case.stats[:3] %}<div><b>{{ s.value }}<small>{{ s.unit }}</small></b><span>{{ s.label }}</span></div>{% endfor %}
+      </div>
+      <dl class="spread__meta"><dt>顧客</dt><dd>{{ case.client }}</dd><dt>期間</dt><dd>{{ case.period }}</dd></dl>
+    </div>
+    <div data-part="r">
+      <figure class="spread__fig">
+        {% if shot %}
+        <img src="{{ url_for('static', filename='images/screens/' ~ shot.file) }}" alt="{{ shot.alt }}" decoding="async">
+        {% else %}
+        <img src="{{ url_for('static', filename='images/diagrams/' ~ case.diagram) }}" alt="{{ case.diagram_alt }}" decoding="async">
+        {% endif %}
+      </figure>
+      <p class="spread__cap"><span><i>Fig. {{ loop.index }}</i>{% if shot %}{{ shot.label or '実際の画面（ダミーデータで撮影）' }}{% else %}構成図{% endif %}</span><span>{{ case.slug|replace('-', ' ')|upper }}</span></p>
+      <a class="spread__read" href="{{ url_for('work_detail', slug=case.slug) }}">詳細を読む</a>
+    </div>
+  </template>
+  {% endfor %}
+
+  <div class="issue-view" data-issue-view hidden>
+    <div class="issue-view__shade" data-issue-close></div>
+    <div class="spread" role="dialog" aria-modal="true" aria-label="実績の見開き">
+      <div class="spread__leaf spread__leaf--l"><div class="spread__page" data-leaf="l"></div><span class="spread__folio" data-folio="l"></span></div>
+      <div class="spread__leaf spread__leaf--r"><div class="spread__page" data-leaf="r"></div><span class="spread__folio" data-folio="r"></span></div>
+    </div>
+    <button type="button" class="issue-view__close" data-issue-close>CLOSE</button>
+    <div class="issue-view__ctrl">
+      <button type="button" data-issue-step="-1">PREV ISSUE</button>
+      <span data-issue-count></span>
+      <button type="button" data-issue-step="1">NEXT ISSUE</button>
     </div>
   </div>
 </section>

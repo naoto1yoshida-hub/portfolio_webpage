@@ -1,0 +1,504 @@
+<title>WORKS 改善案 第2弾</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Barlow:wght@500;600&family=Barlow+Condensed:wght@500&display=swap">
+<style>
+/* 案件を色で塗り分けない4案。本番サイトと同じ暗い地・同じ書体で比べる。単一テーマ（暗）で固定 */
+:root {
+  --bg: #262626;
+  --site: #313131;
+  --ink: #f2f0ea;
+  --sub: #b9b6ad;
+  --mute: #8d8b85;
+  --line: rgba(255, 255, 255, 0.16);
+  --cream: #edeae0;
+  --paper-ink: #1d1d1b;
+  --teal: #23595f;
+  --teal-hi: #3d8a90;
+  --serif: 'Bodoni Moda', 'Didot', 'Bodoni MT', 'Times New Roman', serif;
+  --ja: 'Zen Kaku Gothic New', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+  --label: 'Barlow', 'Arial Narrow', sans-serif;
+  --cond: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--ja); font-size: 14px; line-height: 1.8; letter-spacing: 0.04em; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--cream); outline-offset: 2px; }
+
+.page { max-width: 1240px; margin: 0 auto; padding-block: 48px 96px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.eyebrow { font-family: var(--label); font-size: 12px; font-weight: 600; letter-spacing: 0.16em; color: var(--mute); }
+h1 { margin: 8px 0 0; font-family: var(--serif); font-weight: 400; font-size: clamp(36px, 5vw, 64px); line-height: 1.05; letter-spacing: 0.04em; text-wrap: balance; }
+h1 small { display: block; margin-top: 14px; font-family: var(--ja); font-size: 15px; font-weight: 700; letter-spacing: 0.06em; color: var(--sub); }
+
+.rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 36px 0 0; padding: 0; list-style: none; }
+.rules li { padding: 18px 20px 20px; border-top: 1px solid var(--line); }
+.rules b { display: block; margin-bottom: 6px; font-size: 14px; }
+.rules p { margin: 0; font-size: 13px; color: var(--sub); }
+.rules .tag { font-family: var(--label); font-size: 11px; letter-spacing: 0.12em; color: var(--mute); }
+
+.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 48px; padding-block: 12px; background: var(--bg); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.tab { display: flex; align-items: baseline; gap: 10px; padding: 10px 16px; border: 1px solid var(--line); background: transparent; cursor: pointer; text-align: left; transition: background-color .2s, border-color .2s; }
+.tab:hover { border-color: var(--sub); }
+.tab[aria-selected="true"] { background: var(--cream); border-color: var(--cream); color: var(--paper-ink); }
+.tab__key { font-family: var(--serif); font-size: 22px; line-height: 1; }
+.tab__name { font-size: 13px; font-weight: 700; }
+.tab__rec { font-size: 11px; font-weight: 700; padding: 1px 6px; border: 1px solid currentColor; }
+
+.plan { display: grid; grid-template-columns: minmax(0, 330px) minmax(0, 1fr); gap: 32px; margin-top: 24px; align-items: start; }
+.plan__side { position: sticky; top: 92px; }
+.plan__key { font-family: var(--serif); font-size: 56px; line-height: 1; }
+.plan__name { margin: 6px 0 0; font-size: 20px; font-weight: 700; line-height: 1.5; text-wrap: balance; }
+.plan__concept { margin: 10px 0 0; color: var(--sub); }
+.plan dl { margin: 20px 0 0; display: grid; gap: 14px; }
+.plan dt { font-size: 12px; font-weight: 700; color: var(--mute); letter-spacing: 0.1em; }
+.plan dd { margin: 2px 0 0; font-size: 13px; }
+.plan ul { margin: 2px 0 0; padding-left: 1.1em; font-size: 13px; }
+.scroll-cost { font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; }
+
+.device { display: inline-flex; margin-bottom: 10px; border: 1px solid var(--line); }
+.device button { padding: 6px 14px; border: 0; background: transparent; font-size: 12px; font-weight: 700; cursor: pointer; }
+.device button[aria-pressed="true"] { background: var(--ink); color: var(--paper-ink); }
+.hint { margin: 0 0 10px; font-size: 12px; color: var(--mute); }
+
+.stage { position: relative; height: min(640px, 78vh); border: 1px solid var(--line); background: var(--site); overflow: hidden; }
+.is-phone .stage { width: 390px; max-width: 100%; height: min(720px, 80vh); margin-inline: auto; }
+.vp { height: 100%; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; container-type: inline-size; scrollbar-width: thin; }
+.vp-pad { padding: 40px 6cqw 64px; }
+.whead { font-family: var(--serif); font-size: clamp(40px, 9cqw, 88px); line-height: 1; letter-spacing: 0.08em; }
+.whead small { display: block; margin-top: 10px; font-family: var(--ja); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: var(--sub); }
+.more { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 56px; font-family: var(--label); font-size: 18px; font-weight: 600; letter-spacing: 0.08em; text-decoration: none; }
+.more span { border-bottom: 1px solid currentColor; padding-bottom: 6px; }
+.more small { font-family: var(--serif); font-size: 11px; color: var(--sub); letter-spacing: 0.14em; }
+.shot { display: block; width: 100%; height: auto; }
+
+/* ================= 1: 図面シート ================= */
+.s-list { display: grid; gap: 48px; margin-top: 36px; }
+.sheet { position: relative; padding: 18px; background: var(--cream); color: var(--paper-ink); transition: transform .8s cubic-bezier(.19, 1, .22, 1), opacity .8s; }
+.sheet.is-off { transform: translateY(24px); opacity: .5; }
+/* 図面の区分記号（上下の数字・左右の英字）。外枠の余白に置く */
+.zone { position: absolute; font-family: var(--cond); font-size: 10px; line-height: 1; color: #6b6960; }
+.zone--t, .zone--b { left: 18px; right: 18px; display: flex; justify-content: space-around; }
+.zone--t { top: 4px; } .zone--b { bottom: 4px; }
+.zone--l, .zone--r { top: 18px; bottom: 18px; display: flex; flex-direction: column; justify-content: space-around; }
+.zone--l { left: 5px; } .zone--r { right: 5px; }
+.sheet__in { position: relative; border: 1.5px solid var(--paper-ink); padding: 22px 22px 0; }
+.sheet__fig { margin: 0; border: 1px solid #b9b6ad; background: #fff; }
+.sheet__figcap { display: flex; justify-content: space-between; gap: 12px; margin-top: 8px; font-size: 11px; color: #55534d; }
+.sheet__figcap b { font-family: var(--serif); font-weight: 400; font-style: italic; font-size: 13px; color: var(--paper-ink); }
+.sheet__foot { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); margin: 20px -22px 0; border-top: 1.5px solid var(--paper-ink); }
+.sheet__name { padding: 16px 20px 18px 22px; }
+.sheet__name .en { font-family: var(--serif); font-size: clamp(24px, 3.6cqw, 40px); line-height: 1; letter-spacing: 0.04em; }
+.sheet__name p { margin: 10px 0 0; font-size: 12px; line-height: 1.75; color: #3c3a35; }
+.sheet__name a { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 700; text-underline-offset: 4px; }
+/* 表題欄。罫で区切った表 */
+.tb { width: 100%; border-collapse: collapse; border-left: 1.5px solid var(--paper-ink); font-size: 12px; color: var(--paper-ink); }
+.tb th, .tb td { padding: 6px 10px; border-bottom: 1px solid var(--paper-ink); text-align: left; vertical-align: top; }
+.tb tr:last-child th, .tb tr:last-child td { border-bottom: 0; }
+.tb th { width: 5.6em; border-right: 1px solid var(--paper-ink); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #55534d; white-space: nowrap; }
+.tb .big { font-family: var(--serif); font-size: 26px; line-height: 1; }
+.tb .big small { margin-left: 4px; font-family: var(--ja); font-size: 11px; font-weight: 700; }
+.tb .no { font-family: var(--cond); font-size: 15px; letter-spacing: 0.08em; }
+@container (max-width: 600px) {
+  .sheet { padding: 14px; }
+  .sheet__in { padding: 14px 14px 0; }
+  .sheet__foot { grid-template-columns: 1fr; margin: 14px -14px 0; }
+  .sheet__name { padding: 14px; }
+  .tb { border-left: 0; border-top: 1px solid var(--paper-ink); }
+  .sheet__figcap { flex-direction: column; gap: 2px; }
+}
+
+/* ================= 2: 文字の索引 ================= */
+.t-wrap { position: relative; margin-top: 32px; }
+.t-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.t-row { border-bottom: 1px solid var(--line); }
+.t-link { display: grid; grid-template-columns: 3.2em minmax(0, 1fr) auto; align-items: baseline; gap: 2cqw; padding: 14px 4px 12px; text-decoration: none; color: rgba(242, 240, 234, 0.26); transition: color .35s; }
+.t-link .n { font-family: var(--cond); font-size: 14px; letter-spacing: 0.1em; }
+.t-link .en { font-family: var(--serif); font-size: clamp(26px, 5cqw, 62px); line-height: 1; letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t-link .side { text-align: right; font-size: 12px; line-height: 1.5; opacity: 0; transform: translateX(8px); transition: opacity .35s, transform .5s; }
+.t-link .side b { display: block; font-family: var(--serif); font-size: 24px; font-weight: 400; }
+.t-row.is-on .t-link { color: var(--ink); }
+.t-row.is-on .side { opacity: 1; transform: none; }
+.t-row.is-on .n { color: var(--teal-hi); }
+.t-inline { display: none; }
+/* マウスに付いてくる画面。PC だけ */
+.t-float { position: absolute; z-index: 3; left: 0; top: 0; width: min(46cqw, 520px); pointer-events: none; opacity: 0; transform: translate(-50%, -50%) scale(.92); transition: opacity .3s, transform .45s cubic-bezier(.19, 1, .22, 1); }
+.t-float.is-show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.t-float img { display: block; width: 100%; border: 1px solid rgba(255, 255, 255, .2); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .9); }
+.t-float span { display: block; margin-top: 8px; font-size: 11px; color: var(--sub); text-shadow: 0 1px 2px rgba(0, 0, 0, .8); }
+@container (max-width: 600px) {
+  .t-float { display: none; }
+  .t-link { grid-template-columns: 2.4em minmax(0, 1fr); }
+  .t-link .en { font-size: 30px; white-space: normal; }
+  .t-link .side { grid-column: 2; text-align: left; transform: none; }
+  .t-row .side { display: none; }
+  .t-row.is-on .side { display: block; }
+  .t-row.is-on .t-inline { display: block; padding: 2px 4px 18px; }
+}
+
+/* ================= 3: 机の上のパソコン ================= */
+.l-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 4cqw; margin-top: 32px; }
+.l-dev { position: sticky; top: 40px; align-self: start; }
+.lap__lid { padding: 2.4% 2.4% 3.2%; background: #121212; border: 1px solid #3c3c3c; border-radius: 14px 14px 2px 2px; }
+.lap__screen { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #f4f5f7; }
+.lap__screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 0 0; opacity: 0; transform: translateY(4%); transition: opacity .5s, transform .7s cubic-bezier(.19, 1, .22, 1); }
+.lap__screen img.is-on { opacity: 1; transform: none; }
+.lap__base { position: relative; height: 12px; margin: 0 -6%; background: #a9a69e; border-radius: 0 0 14px 14px; }
+.lap__base::before { content: ""; position: absolute; left: 50%; top: 0; width: 16%; height: 5px; transform: translateX(-50%); background: #7f7d77; border-radius: 0 0 6px 6px; }
+.lap__desk { height: 1px; margin: 18px -6% 0; background: var(--line); }
+.l-dev .cap { margin-top: 12px; font-size: 11px; color: var(--mute); }
+.l-texts { display: grid; gap: 0; padding-bottom: 160px; }
+.l-item { min-height: 400px; padding: 24px 0; border-top: 1px solid var(--line); opacity: .32; transition: opacity .45s; }
+.l-item.is-on { opacity: 1; }
+.l-item .n { font-family: var(--cond); font-size: 14px; letter-spacing: .1em; color: var(--sub); }
+.l-item .en { margin-top: 10px; font-family: var(--serif); font-size: clamp(26px, 3.4cqw, 40px); line-height: 1.02; letter-spacing: .03em; }
+.l-item h3 { margin: 10px 0 0; font-size: 15px; }
+.l-item p { margin: 8px 0 0; font-size: 13px; color: var(--sub); }
+.l-stat { display: flex; align-items: baseline; gap: 10px; margin-top: 18px; }
+.l-stat b { font-family: var(--serif); font-size: 36px; font-weight: 400; line-height: 1; }
+.l-stat small { font-size: 12px; color: var(--sub); }
+.pill { display: inline-block; margin-top: 14px; padding: 2px 10px; border: 1px solid var(--teal-hi); font-size: 11px; font-weight: 700; color: #9fd0d3; }
+.l-item a { display: block; margin-top: 12px; font-size: 12px; font-weight: 700; text-underline-offset: 4px; }
+@container (max-width: 600px) {
+  .l-grid { grid-template-columns: 1fr; gap: 8px; }
+  .l-dev { top: 0; z-index: 2; padding: 10px 0 12px; background: var(--site); }
+  .l-dev .cap { display: none; }
+  .l-item { min-height: 300px; }
+}
+
+/* ================= 4: デスクトップのウィンドウ ================= */
+.w-run { position: relative; }
+.w-stage { position: sticky; top: 0; overflow: hidden; background: #1b2324; }
+.w-desk { position: absolute; inset: 0; }
+.w-desk::before { content: "WORKS"; position: absolute; left: 5cqw; top: 22px; font-family: var(--serif); font-size: clamp(32px, 6cqw, 64px); letter-spacing: .08em; color: rgba(242, 240, 234, .9); }
+.w-desk::after { content: "実績 — 詳細を書いた7件 / 全28件"; position: absolute; left: 5cqw; top: calc(22px + clamp(32px, 6cqw, 64px) + 6px); font-size: 12px; font-weight: 700; color: var(--sub); }
+.win { position: absolute; width: 64cqw; border-radius: 8px; overflow: hidden; background: #f4f5f7; box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .85); will-change: transform, opacity; transform-origin: 50% 100%; }
+.win__bar { display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; background: #2a2a2a; color: #d9d6cd; font-size: 11px; }
+.win__bar i { width: 9px; height: 9px; border-radius: 50%; background: #555; flex: none; }
+.win__bar span { margin-left: 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.win img { display: block; width: 100%; height: auto; }
+.w-cap { position: absolute; right: 5cqw; top: 26px; width: 28cqw; text-align: right; font-size: 12px; line-height: 1.7; color: var(--sub); }
+.w-cap b { display: block; font-family: var(--serif); font-size: 34px; font-weight: 400; line-height: 1; color: var(--ink); }
+.w-cap strong { display: block; margin-top: 6px; font-size: 13px; color: var(--ink); }
+.dock { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; gap: 4px; padding: 6px; border: 1px solid rgba(255, 255, 255, .14); border-radius: 12px; background: rgba(20, 20, 20, .75); }
+.dock button { position: relative; padding: 6px 10px; border: 0; border-radius: 8px; background: transparent; font-family: var(--cond); font-size: 12px; letter-spacing: .06em; color: var(--sub); cursor: pointer; white-space: nowrap; }
+.dock button[aria-current="true"] { background: rgba(255, 255, 255, .1); color: var(--ink); }
+.dock button[aria-current="true"]::after { content: ""; position: absolute; left: 50%; bottom: 1px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--teal-hi); }
+@container (max-width: 600px) {
+  .win { width: 86cqw; }
+  .w-cap { left: 5cqw; right: auto; top: 108px; width: 90cqw; text-align: left; }
+  .w-cap b { font-size: 26px; }
+  .dock { gap: 0; padding: 4px; max-width: 94cqw; }
+  .dock button { padding: 5px 5px; font-size: 10px; }
+}
+
+/* ---------- 比較表 ---------- */
+.compare { margin-top: 72px; }
+.compare h2 { margin: 0; font-size: 18px; }
+.table-wrap { margin-top: 14px; overflow-x: auto; }
+.cmp { width: 100%; min-width: 680px; border-collapse: collapse; font-size: 13px; }
+.cmp th, .cmp td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.cmp thead th { font-size: 12px; color: var(--mute); font-weight: 700; }
+.cmp tbody th { font-family: var(--serif); font-size: 20px; font-weight: 400; white-space: nowrap; }
+.rec-row { background: rgba(237, 234, 224, 0.06); }
+
+@media (max-width: 900px) {
+  .plan { grid-template-columns: minmax(0, 1fr); }
+  .plan > * { min-width: 0; }
+  .plan__side { position: static; }
+  .rules { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+}
+</style>
+
+<div class="page">
+  <p class="eyebrow">TEGG ENGINEERING / PORTFOLIO</p>
+  <h1>WORKS の見せ方 第2弾<small>色カードを使わない4案</small></h1>
+
+  <ul class="rules">
+    <li><span class="tag">条件 1</span><b>案件を色で塗り分けない</b><p>色はサイトの暗い地・クリーム・白・ティールだけ。案件の違いは文字組と構図で出す。</p></li>
+    <li><span class="tag">条件 2</span><b>同じ7件を2回見せない</b><p>色の帯と画面の区画を1つにまとめ、1回見れば1件分が伝わるようにする。</p></li>
+    <li><span class="tag">条件 3</span><b>文字を画面に重ねない</b><p>題や説明は画面の外に置き、画面そのものを隠さない。</p></li>
+  </ul>
+
+  <div class="tabs" role="tablist" aria-label="改善案">
+    <button class="tab" role="tab" id="tab-1" aria-controls="plan-1" data-plan="1"><span class="tab__key">1</span><span class="tab__name">図面シート</span><span class="tab__rec">推奨</span></button>
+    <button class="tab" role="tab" id="tab-2" aria-controls="plan-2" data-plan="2"><span class="tab__key">2</span><span class="tab__name">文字の索引</span></button>
+    <button class="tab" role="tab" id="tab-3" aria-controls="plan-3" data-plan="3"><span class="tab__key">3</span><span class="tab__name">机の上のパソコン</span></button>
+    <button class="tab" role="tab" id="tab-4" aria-controls="plan-4" data-plan="4"><span class="tab__key">4</span><span class="tab__name">デスクトップのウィンドウ</span></button>
+  </div>
+
+  <section class="plan" id="plan-1" role="tabpanel" aria-labelledby="tab-1">
+    <div class="plan__side">
+      <div class="plan__key">1</div>
+      <h2 class="plan__name">図面シート</h2>
+      <p class="plan__concept">1件を1枚の図面として見せる。生成りの紙に外枠と区分記号を引き、画面を「図1」として載せ、右下の表題欄に図番・名称・顧客・状態・主な数値を書き込む。</p>
+      <dl>
+        <dt>なぜこの形か</dt><dd>お客さまの多くは製造業。毎日見ている図面の体裁なので、説明しなくても「きちんと整理された記録」と読める。このサイトにしか無い見せ方になる。</dd>
+        <dt>良い点</dt><dd><ul><li>画面が大きく、文字と重ならない</li><li>表題欄で、顧客・状態・数値を同じ位置で見比べられる</li><li>スクロールを止めない</li></ul></dd>
+        <dt>気になる点</dt><dd><ul><li>紙の面が明るいので、暗いサイトの中で一番目立つ区画になる</li></ul></dd>
+        <dt>スクロール量（PC）</dt><dd class="scroll-cost">約 5,600px</dd>
+      </dl>
+    </div>
+    <div>
+      <div class="device" role="group" aria-label="表示幅"><button type="button" data-dev="pc" aria-pressed="true">PC</button><button type="button" data-dev="sp" aria-pressed="false">スマホ</button></div>
+      <p class="hint">枠の中をスクロールして確認できます。</p>
+      <div class="stage"><div class="vp" id="vp-1"></div></div>
+    </div>
+  </section>
+
+  <section class="plan" id="plan-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+    <div class="plan__side">
+      <div class="plan__key">2</div>
+      <h2 class="plan__name">文字の索引</h2>
+      <p class="plan__concept">7件の英字の題を、大きな Bodoni で薄く並べる。マウスを乗せた行だけが白く浮き、その横に数値が出て、画面がマウスに付いてくる。</p>
+      <dl>
+        <dt>なぜこの形か</dt><dd>見出しの SERVICES・WORKS と同じ書体の流れで、サイトの文字組をそのまま主役にできる。</dd>
+        <dt>良い点</dt><dd><ul><li>7件が一画面に収まり、一番短い</li><li>静かで上品。サイトの雰囲気に一番近い</li><li>スマホでは、画面の中央に来た行の下に画面が開く</li></ul></dd>
+        <dt>気になる点</dt><dd><ul><li>マウスを乗せるまで画面が見えない</li><li>デザイン事務所のサイトでよく見る型ではある</li></ul></dd>
+        <dt>スクロール量（PC）</dt><dd class="scroll-cost">約 900px</dd>
+      </dl>
+    </div>
+    <div>
+      <div class="device" role="group" aria-label="表示幅"><button type="button" data-dev="pc" aria-pressed="true">PC</button><button type="button" data-dev="sp" aria-pressed="false">スマホ</button></div>
+      <p class="hint">行にマウスを乗せると画面が付いてきます。スマホ表示ではスクロールで切り替わります。</p>
+      <div class="stage"><div class="vp" id="vp-2"></div></div>
+    </div>
+  </section>
+
+  <section class="plan" id="plan-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+    <div class="plan__side">
+      <div class="plan__key">3</div>
+      <h2 class="plan__name">机の上のパソコン</h2>
+      <p class="plan__concept">ノートパソコンを1台だけ置いて止めておき、右の説明を読み進めると、パソコンの画面がその案件に入れ替わる。</p>
+      <dl>
+        <dt>なぜこの形か</dt><dd>SERVICES に入れたパソコンの写真と同じ「道具が使われている場面」の見せ方で、ページの中で話がつながる。</dd>
+        <dt>良い点</dt><dd><ul><li>「実際に動いているツール」に見える</li><li>説明と画面がいつも隣にある</li></ul></dd>
+        <dt>気になる点</dt><dd><ul><li>パソコンの枠のぶん、画面は少し小さくなる</li><li>スマホではパソコンが上に止まるので、説明の見える範囲が狭い</li></ul></dd>
+        <dt>スクロール量（PC）</dt><dd class="scroll-cost">約 3,000px</dd>
+      </dl>
+    </div>
+    <div>
+      <div class="device" role="group" aria-label="表示幅"><button type="button" data-dev="pc" aria-pressed="true">PC</button><button type="button" data-dev="sp" aria-pressed="false">スマホ</button></div>
+      <p class="hint">枠の中をスクロールすると、パソコンの画面が入れ替わります。</p>
+      <div class="stage"><div class="vp" id="vp-3"></div></div>
+    </div>
+  </section>
+
+  <section class="plan" id="plan-4" role="tabpanel" aria-labelledby="tab-4" hidden>
+    <div class="plan__side">
+      <div class="plan__key">4</div>
+      <h2 class="plan__name">デスクトップのウィンドウ</h2>
+      <p class="plan__concept">区画をパソコンのデスクトップに見立て、スクロールに合わせてアプリの窓が1枚ずつ開いて重なっていく。下の Dock が目次で、押すとその案件まで飛ぶ。</p>
+      <dl>
+        <dt>なぜこの形か</dt><dd>いまの「カードが重なっていく」動きを活かしたまま、重なる理由（窓を開いていく）を持たせる。</dd>
+        <dt>良い点</dt><dd><ul><li>動きの印象はいまと同じくらい強い</li><li>Dock で、何件目か・あと何件かが分かる</li><li>窓の題名の欄に説明が入るので、画面に文字が重ならない</li></ul></dd>
+        <dt>気になる点</dt><dd><ul><li>スクロールを止める作りはいまと同じ（長さは約半分）</li></ul></dd>
+        <dt>スクロール量（PC）</dt><dd class="scroll-cost">約 4,300px</dd>
+      </dl>
+    </div>
+    <div>
+      <div class="device" role="group" aria-label="表示幅"><button type="button" data-dev="pc" aria-pressed="true">PC</button><button type="button" data-dev="sp" aria-pressed="false">スマホ</button></div>
+      <p class="hint">枠の中をスクロールすると窓が開いていきます。Dock を押すとその案件へ飛びます。</p>
+      <div class="stage"><div class="vp" id="vp-4"></div></div>
+    </div>
+  </section>
+
+  <section class="compare">
+    <h2>4案の比べ方</h2>
+    <div class="table-wrap">
+      <table class="cmp">
+        <thead><tr><th>案</th><th>画面の見やすさ</th><th>動き</th><th>スクロールの短さ</th><th>このサイトらしさ</th><th>向いている見せ方</th></tr></thead>
+        <tbody>
+          <tr class="rec-row"><th>1</th><td>大きい・文字が重ならない</td><td>控えめ（入ってくる時だけ）</td><td>中</td><td>強い（製造業の図面）</td><td>1件ずつ、きちんと読んでほしい（推奨）</td></tr>
+          <tr><th>2</th><td>マウスを乗せた時だけ</td><td>控えめ</td><td>最短</td><td>中（書体が主役）</td><td>全件を一度に眺めてほしい</td></tr>
+          <tr><th>3</th><td>中（パソコンの枠の中）</td><td>中</td><td>中</td><td>中（SERVICES の写真とつながる）</td><td>動いている道具として見せたい</td></tr>
+          <tr><th>4</th><td>大きい</td><td>強い</td><td>長い</td><td>中（IT の道具感）</td><td>動きで印象を残したい</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  var W = [
+    { slug: 'drawing-search', en: 'DRAWING SEARCH', cat: 'CLIENT WORK', title: '図面検索システム', lead: '17,588件の図面を、フォルダを開かずに探せるようにした', value: '17,588', unit: '件', label: '取込図面数', client: '金属加工メーカー（従業員100名未満）', status: '本番稼働中', date: '2026.07', kind: '実際の画面（架空データで再現）' },
+    { slug: 'estimate', en: 'ESTIMATE', cat: 'CLIENT WORK', title: '見積もり作成ツール', lead: '紙で回していた見積依頼書を、そのままの並びでWeb化した', value: '5', unit: '工程', label: '1画面に収めた業務フロー', client: '金属加工メーカー（従業員100名未満）', status: '本番稼働中', date: '2026.07', kind: '実際の画面（ダミーデータで撮影）' },
+    { slug: 'task-board', en: 'TASK BOARD', cat: 'CLIENT WORK', title: '社内タスク管理・問い合わせツール', lead: '口頭の「あれ、どうなった？」を、誰で何日止まっているかが見える一覧に置き換えた', value: '5', unit: '画面', label: '口頭連絡を受け止める範囲', client: '金属加工メーカー（従業員100名未満）', status: '本番稼働中', date: '2026.07', kind: '実際の画面（ダミーデータで撮影）' },
+    { slug: 'ec-dashboard', en: 'EC DASHBOARD', cat: 'CLIENT WORK', title: 'EC在庫アラートダッシュボード', lead: '複数シートを見比べる発注判断を、1画面の色分けに置き換えた', value: '3.6', unit: '%', label: '翌月販売予測の誤差削減', client: 'EC事業者（Amazon・楽天で販売）', status: '納品済み・稼働中', date: '2026.05', kind: '実際の画面（架空データで再現）' },
+    { slug: 'voice-input', en: 'VOICE INPUT', cat: 'OWN PRODUCT', title: 'ローカル完結の音声入力アプリ', lead: '音声を外に出さずに、固有名詞の認識精度 F1 95.0% を出した', value: '95.0', unit: '%', label: '固有名詞 F1', client: '自社開発（製造現場での利用を想定）', status: '実装完了', date: '2026.07', kind: '実際の画面' },
+    { slug: 'quality-bot', en: 'QUALITY BOT', cat: 'CLIENT WORK', title: '品質管理サポートAIチャットボット', lead: '「たぶんこれ」で答えないRAGを作る', value: '809', unit: '件', label: '取り込んだ不適合記録', client: '金属加工メーカー（従業員100名未満）', status: '開発中', date: '2026.07', kind: '実際の画面（架空データで再現）' },
+    { slug: 'kintai-system', en: 'KINTAI SYSTEM', cat: 'PUBLIC DEMO', title: '勤怠管理システム（公開デモ）', lead: '打刻から給与ソフト用CSVまでを1本でつなぎ、数字が食い違わない作りにした', value: '0.1', unit: '秒', label: '85名分の月末集計', client: '自社制作（架空の製造業・85名を題材）', status: '公開デモ', date: '2026.10', kind: '公開デモの画面' }
+  ];
+  var N = W.length;
+  var no = function (i) { return (i < 9 ? '0' : '') + (i + 1); };
+  var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); };
+  var img = function (w, cls) { return '<img class="' + (cls || 'shot') + '" src="img/' + w.slug + '.jpg" alt="' + esc(w.title) + 'の画面" loading="lazy" decoding="async">'; };
+  var head = '<div class="whead">WORKS<small>実績 — 詳細を書いた7件 / 全28件</small></div>';
+  var more = '<a class="more" href="#" onclick="return false"><span>VIEW MORE</span><small>ALL 28 WORKS</small></a>';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var nearest = function (vp, els) {
+    var mid = vp.getBoundingClientRect().top + vp.clientHeight * 0.5, best = 0, bestD = Infinity;
+    els.forEach(function (e, k) { var r = e.getBoundingClientRect(); var d = Math.abs(r.top + r.height / 2 - mid); if (d < bestD) { bestD = d; best = k; } });
+    return best;
+  };
+
+  /* ---------- 1 図面シート ---------- */
+  var vp1 = document.getElementById('vp-1');
+  var zones = '<span class="zone zone--t" aria-hidden="true"><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i></span><span class="zone zone--b" aria-hidden="true"><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i></span>' +
+    '<span class="zone zone--l" aria-hidden="true"><i>A</i><i>B</i><i>C</i><i>D</i></span><span class="zone zone--r" aria-hidden="true"><i>A</i><i>B</i><i>C</i><i>D</i></span>';
+  vp1.innerHTML = '<div class="vp-pad">' + head + '<div class="s-list">' + W.map(function (w, i) {
+    return '<article class="sheet' + (i > 0 ? ' is-off' : '') + '">' + zones + '<div class="sheet__in">' +
+      '<figure class="sheet__fig">' + img(w) + '</figure>' +
+      '<div class="sheet__figcap"><span><b>Fig. ' + (i + 1) + '</b>　' + esc(w.kind) + '</span><span>' + w.cat + '</span></div>' +
+      '<div class="sheet__foot"><div class="sheet__name"><div class="en">' + w.en + '</div><p>' + esc(w.lead) + '</p><a href="#" onclick="return false">詳細を読む</a></div>' +
+      '<table class="tb"><tbody>' +
+      '<tr><th>図番</th><td class="no">TE-' + no(i) + ' / ' + no(N - 1) + '</td></tr>' +
+      '<tr><th>名称</th><td><b>' + esc(w.title) + '</b></td></tr>' +
+      '<tr><th>顧客</th><td>' + esc(w.client) + '</td></tr>' +
+      '<tr><th>状態</th><td>' + esc(w.status) + '　<span style="color:#55534d">' + w.date + '〜</span></td></tr>' +
+      '<tr><th>主な数値</th><td><span class="big">' + w.value + '<small>' + w.unit + '</small></span><br>' + esc(w.label) + '</td></tr>' +
+      '</tbody></table></div></div></article>';
+  }).join('') + '</div>' + more + '</div>';
+  var sheets = Array.prototype.slice.call(vp1.querySelectorAll('.sheet'));
+  vp1.addEventListener('scroll', function () {
+    var lim = vp1.getBoundingClientRect().bottom - 60;
+    sheets.forEach(function (s) { if (s.getBoundingClientRect().top < lim) s.classList.remove('is-off'); });
+  }, { passive: true });
+  if (reduce) sheets.forEach(function (s) { s.classList.remove('is-off'); });
+
+  /* ---------- 2 文字の索引 ---------- */
+  var vp2 = document.getElementById('vp-2');
+  vp2.innerHTML = '<div class="vp-pad">' + head + '<div class="t-wrap"><ol class="t-list">' + W.map(function (w, i) {
+    return '<li class="t-row" data-i="' + i + '"><a class="t-link" href="#" onclick="return false"><span class="n">' + no(i) + '</span><span class="en">' + w.en + '</span>' +
+      '<span class="side"><b>' + w.value + '<small style="font-family:var(--ja);font-size:11px;margin-left:3px">' + w.unit + '</small></b>' + esc(w.title) + '</span></a>' +
+      '<div class="t-inline">' + img(w) + '<p style="margin:8px 0 0;font-size:12px;color:var(--sub)">' + esc(w.lead) + '</p></div></li>';
+  }).join('') + '</ol><div class="t-float" aria-hidden="true"><img alt=""><span></span></div></div>' + more + '</div>';
+  var tRows = Array.prototype.slice.call(vp2.querySelectorAll('.t-row')), tWrap = vp2.querySelector('.t-wrap'), tFloat = vp2.querySelector('.t-float');
+  var tCur = -1;
+  var tSet = function (i) {
+    if (i === tCur) return; tCur = i;
+    tRows.forEach(function (r, k) { r.classList.toggle('is-on', k === i); });
+    tFloat.querySelector('img').src = 'img/' + W[i].slug + '.jpg';
+    tFloat.querySelector('span').textContent = W[i].lead;
+  };
+  tSet(0);
+  var narrow = function () { return vp2.clientWidth <= 600; };
+  tRows.forEach(function (r, k) {
+    r.addEventListener('mouseenter', function () { if (!narrow()) { tSet(k); tFloat.classList.add('is-show'); } });
+    r.querySelector('a').addEventListener('focus', function () { tSet(k); });
+  });
+  tWrap.addEventListener('mouseleave', function () { tFloat.classList.remove('is-show'); });
+  tWrap.addEventListener('mousemove', function (e) {
+    var b = tWrap.getBoundingClientRect();
+    /* 題の右側に寄せて浮かべ、選んだ行の題を隠さないようにする。縦は行の少し下 */
+    var x = Math.min(b.width * 0.76, Math.max(b.width * 0.62, e.clientX - b.left + b.width * 0.18));
+    tFloat.style.left = x + 'px'; tFloat.style.top = (e.clientY - b.top + 90) + 'px';
+  });
+  vp2.addEventListener('scroll', function () { if (narrow()) tSet(nearest(vp2, tRows)); }, { passive: true });
+
+  /* ---------- 3 机の上のパソコン ---------- */
+  var vp3 = document.getElementById('vp-3');
+  vp3.innerHTML = '<div class="vp-pad">' + head + '<div class="l-grid"><div class="l-dev"><div class="lap__lid"><div class="lap__screen">' +
+    W.map(function (w, i) { return img(w, i === 0 ? 'is-on' : ''); }).join('') + '</div></div><div class="lap__base" aria-hidden="true"></div><div class="lap__desk" aria-hidden="true"></div><p class="cap"></p></div>' +
+    '<div class="l-texts">' + W.map(function (w, i) {
+      return '<article class="l-item' + (i === 0 ? ' is-on' : '') + '"><span class="n">' + no(i) + ' / ' + no(N - 1) + '　' + w.cat + '</span><div class="en">' + w.en + '</div>' +
+        '<h3>' + esc(w.title) + '</h3><p>' + esc(w.lead) + '</p><div class="l-stat"><b>' + w.value + '</b><small>' + w.unit + '　' + esc(w.label) + '</small></div>' +
+        '<span class="pill">' + esc(w.status) + '</span><a href="#" onclick="return false">詳細を読む</a></article>';
+    }).join('') + '</div></div>' + more + '</div>';
+  var lItems = Array.prototype.slice.call(vp3.querySelectorAll('.l-item')), lImgs = Array.prototype.slice.call(vp3.querySelectorAll('.lap__screen img')), lCap = vp3.querySelector('.l-dev .cap');
+  var lCur = -1;
+  var lSet = function (i) {
+    if (i === lCur) return; lCur = i;
+    lItems.forEach(function (e, k) { e.classList.toggle('is-on', k === i); });
+    lImgs.forEach(function (e, k) { e.classList.toggle('is-on', k === i); });
+    lCap.textContent = W[i].kind;
+  };
+  lSet(0);
+  vp3.addEventListener('scroll', function () { lSet(nearest(vp3, lItems)); }, { passive: true });
+
+  /* ---------- 4 デスクトップのウィンドウ ---------- */
+  var vp4 = document.getElementById('vp-4');
+  vp4.innerHTML = '<div class="w-run"><div class="w-stage"><div class="w-desk" aria-hidden="true"></div>' + W.map(function (w, i) {
+    return '<div class="win" data-i="' + i + '"><div class="win__bar"><i></i><i></i><i></i><span>' + esc(w.title) + ' — ' + esc(w.lead) + '</span></div>' + img(w) + '</div>';
+  }).join('') + '<div class="w-cap" aria-live="polite"></div><div class="dock" role="group" aria-label="実績の目次">' + W.map(function (w, i) {
+    return '<button type="button" data-i="' + i + '">' + w.en.split(' ')[0] + '</button>';
+  }).join('') + '</div></div></div><div class="vp-pad" style="padding-top:8px">' + more + '</div>';
+  var wRun = vp4.querySelector('.w-run'), wStage = vp4.querySelector('.w-stage'), wins = Array.prototype.slice.call(vp4.querySelectorAll('.win'));
+  var wCap = vp4.querySelector('.w-cap'), dockBtns = Array.prototype.slice.call(vp4.querySelectorAll('.dock button'));
+  var STEP = 0.75; /* 1枚あたりの区画の高さに対する割合 */
+  var wCur = -1;
+  var wLayout = function () {
+    var h = vp4.clientHeight; if (!h) return;
+    wStage.style.height = h + 'px';
+    wRun.style.height = (h * (1 + STEP * (N - 1) + 0.3)) + 'px';
+    wUpdate();
+  };
+  var wUpdate = function () {
+    var h = vp4.clientHeight, cw = wStage.clientWidth, phone = cw <= 600;
+    if (!h || !cw) return;   /* 案4のタブが閉じている間は計算しない */
+    var t = vp4.scrollTop / (h * STEP);       /* 0 = 1枚目が開いた状態, N-1 = 最後 */
+    var baseTop = phone ? h * 0.42 : h * 0.26, stepX = phone ? cw * 0.012 : cw * 0.022, stepY = phone ? 10 : 16;
+    var cur = Math.max(0, Math.min(N - 1, Math.round(t)));
+    wins.forEach(function (win, k) {
+      var local = Math.max(0, Math.min(1, t - k + 1));   /* 0 → 1 で開く */
+      var left = (cw - win.offsetWidth) / 2 + (k - 3) * stepX;
+      var top = baseTop + (k % 4) * stepY;
+      var y = (1 - local) * h * 0.5, s = 0.88 + 0.12 * local;
+      var behind = Math.max(0, cur - k);
+      win.style.left = left + 'px'; win.style.top = top + 'px'; win.style.zIndex = k + 1;
+      win.style.opacity = k === 0 ? 1 : local;
+      win.style.transform = 'translateY(' + y + 'px) scale(' + s + ')';
+      win.style.filter = behind ? 'brightness(' + Math.max(0.35, 1 - behind * 0.18) + ')' : 'none';
+    });
+    if (cur !== wCur) {
+      wCur = cur;
+      var w = W[cur];
+      wCap.innerHTML = '<b>' + w.value + '<small style="font-family:var(--ja);font-size:12px;margin-left:4px">' + w.unit + '</small></b>' + esc(w.label) + '<strong>' + no(cur) + ' / ' + no(N - 1) + '　' + esc(w.title) + '</strong>';
+      dockBtns.forEach(function (b, k) { b.setAttribute('aria-current', k === cur ? 'true' : 'false'); });
+    }
+  };
+  vp4.addEventListener('scroll', wUpdate, { passive: true });
+  dockBtns.forEach(function (b, k) {
+    b.addEventListener('click', function () { vp4.scrollTo({ top: k * vp4.clientHeight * STEP + 2, behavior: reduce ? 'auto' : 'smooth' }); });
+  });
+
+  /* ---------- 案の切り替え・表示幅 ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var show = function (key) {
+    if (!/^[1-4]$/.test(key)) key = '1';
+    tabs.forEach(function (t) {
+      var on = t.dataset.plan === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById('plan-' + t.dataset.plan).hidden = !on;
+    });
+    if (key === '4') requestAnimationFrame(wLayout);
+  };
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () { show(t.dataset.plan); try { history.replaceState(null, '', '#plan-' + t.dataset.plan); } catch (e) {} });
+  });
+  var fromHash = function () { var m = /^#plan-([1-4])$/.exec(location.hash); show(m ? m[1] : '1'); };
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+  document.querySelectorAll('.device').forEach(function (g) {
+    g.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      var sp = b.dataset.dev === 'sp';
+      document.body.classList.toggle('is-phone', sp);
+      document.querySelectorAll('.device button').forEach(function (x) { x.setAttribute('aria-pressed', (x.dataset.dev === 'sp') === sp ? 'true' : 'false'); });
+      tCur = -1; tSet(0);
+      requestAnimationFrame(wLayout);
+    });
+  });
+  window.addEventListener('resize', function () { requestAnimationFrame(wLayout); });
+  var imgs = vp4.querySelectorAll('img'); Array.prototype.forEach.call(imgs, function (im) { im.addEventListener('load', wUpdate); });
+})();
+</script>
