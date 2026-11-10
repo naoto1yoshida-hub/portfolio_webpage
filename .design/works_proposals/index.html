@@ -1,0 +1,505 @@
+<title>WORKS 改善案</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Barlow:wght@500;600&display=swap">
+<style>
+/* 本番サイトと同じ暗い基調・同じ書体で、案ごとの見え方を比べるための1枚。単一テーマ（暗）で固定 */
+:root {
+  --bg: #262626;          /* ページ地。サイト(#313131)より一段沈めて、試作の枠を浮かせる */
+  --site: #313131;        /* 試作の中＝サイト本体の地 */
+  --ink: #f2f0ea;
+  --sub: #b9b6ad;
+  --mute: #8d8b85;
+  --line: rgba(255, 255, 255, 0.16);
+  --cream: #edeae0;
+  --teal: #23595f;
+  --serif: 'Bodoni Moda', 'Didot', 'Bodoni MT', 'Times New Roman', serif;
+  --ja: 'Zen Kaku Gothic New', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+  --label: 'Barlow', 'Arial Narrow', sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--ja); font-size: 14px; line-height: 1.8; letter-spacing: 0.04em; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--cream); outline-offset: 2px; }
+
+.page { max-width: 1240px; margin: 0 auto; padding-block: 48px 96px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* ---------- 冒頭 ---------- */
+.eyebrow { font-family: var(--label); font-size: 12px; font-weight: 600; letter-spacing: 0.16em; color: var(--mute); }
+h1 { margin: 8px 0 0; font-family: var(--serif); font-weight: 400; font-size: clamp(36px, 5vw, 64px); line-height: 1.05; letter-spacing: 0.04em; text-wrap: balance; }
+h1 small { display: block; margin-top: 14px; font-family: var(--ja); font-size: 15px; font-weight: 700; letter-spacing: 0.06em; color: var(--sub); }
+
+.issues { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 36px 0 0; padding: 0; list-style: none; }
+.issues li { padding: 18px 20px 20px; border-top: 1px solid var(--line); }
+.issues b { display: block; margin-bottom: 6px; font-size: 14px; color: var(--ink); }
+.issues p { margin: 0; font-size: 13px; color: var(--sub); }
+.issues .tag { font-family: var(--label); font-size: 11px; letter-spacing: 0.12em; color: var(--mute); }
+
+/* ---------- 案の切り替え ---------- */
+.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 48px; padding-block: 12px; background: var(--bg); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.tab { display: flex; align-items: baseline; gap: 10px; padding: 10px 16px; border: 1px solid var(--line); background: transparent; cursor: pointer; text-align: left; transition: background-color .2s, border-color .2s; }
+.tab:hover { border-color: var(--sub); }
+.tab[aria-selected="true"] { background: var(--cream); border-color: var(--cream); color: #1d1d1b; }
+.tab__key { font-family: var(--serif); font-size: 22px; line-height: 1; }
+.tab__name { font-size: 13px; font-weight: 700; }
+.tab__rec { font-size: 11px; font-weight: 700; padding: 1px 6px; border: 1px solid currentColor; }
+
+.plan { display: grid; grid-template-columns: minmax(0, 330px) minmax(0, 1fr); gap: 32px; margin-top: 24px; align-items: start; }
+.plan__side { position: sticky; top: 92px; }
+.plan__key { font-family: var(--serif); font-size: 56px; line-height: 1; }
+.plan__name { margin: 6px 0 0; font-size: 20px; font-weight: 700; line-height: 1.5; text-wrap: balance; }
+.plan__concept { margin: 10px 0 0; color: var(--sub); }
+.plan dl { margin: 20px 0 0; display: grid; gap: 14px; }
+.plan dt { font-size: 12px; font-weight: 700; color: var(--mute); letter-spacing: 0.1em; }
+.plan dd { margin: 2px 0 0; font-size: 13px; }
+.plan ul { margin: 2px 0 0; padding-left: 1.1em; font-size: 13px; }
+.plan .scroll-cost { font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; }
+
+.device { display: inline-flex; margin-bottom: 10px; border: 1px solid var(--line); }
+.device button { padding: 6px 14px; border: 0; background: transparent; font-size: 12px; font-weight: 700; cursor: pointer; }
+.device button[aria-pressed="true"] { background: var(--ink); color: #1d1d1b; }
+.hint { margin: 0 0 10px; font-size: 12px; color: var(--mute); }
+
+/* 試作の窓。この中だけがスクロールし、案の動きはこの窓のスクロールに合わせて動く */
+.stage { position: relative; height: min(640px, 78vh); border: 1px solid var(--line); background: var(--site); overflow: hidden; }
+.is-phone .stage { width: 390px; max-width: 100%; height: min(720px, 80vh); margin-inline: auto; }
+.vp { height: 100%; overflow-y: auto; overscroll-behavior: contain; container-type: inline-size; scrollbar-width: thin; }
+.vp-pad { padding: 40px 6cqw 64px; }
+.whead { font-family: var(--serif); font-size: clamp(40px, 9cqw, 88px); line-height: 1; letter-spacing: 0.08em; }
+.whead small { display: block; margin-top: 10px; font-family: var(--ja); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: var(--sub); }
+.more { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 48px; font-family: var(--label); font-size: 18px; font-weight: 600; letter-spacing: 0.08em; text-decoration: none; }
+.more span { border-bottom: 1px solid currentColor; padding-bottom: 6px; }
+.more small { font-family: var(--serif); font-size: 11px; color: var(--sub); letter-spacing: 0.14em; }
+
+/* 画面を載せる枠（ブラウザの窓）。全案で共通 */
+.frame { display: block; background: #f4f5f7; border-radius: 6px; overflow: hidden; box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.8); }
+.frame__bar { display: flex; align-items: center; gap: 5px; height: 22px; padding: 0 9px; background: #1c1c1c; }
+.frame__bar i { width: 7px; height: 7px; border-radius: 50%; background: #4a4a4a; }
+.frame__bar em { margin-left: 8px; font-style: normal; font-family: var(--label); font-size: 10px; letter-spacing: 0.06em; color: #8d8b85; }
+.frame img { display: block; width: 100%; height: auto; }
+.kind { display: block; margin-top: 8px; font-size: 11px; color: var(--mute); }
+
+/* 案件の色（サイトの色面タイルと同じ6色を順に回す） */
+.c1 { --w: #1c7c80; --wi: #fff; } .c2 { --w: #cf4a2c; --wi: #fff; } .c3 { --w: #e2ae2f; --wi: #1d1d1d; }
+.c4 { --w: #2c58c9; --wi: #fff; } .c5 { --w: #8b3f7d; --wi: #fff; } .c6 { --w: #4f7429; --wi: #fff; }
+
+.num { font-family: var(--serif); letter-spacing: 0.08em; }
+.en { font-family: var(--serif); line-height: 0.98; letter-spacing: 0.03em; }
+.val { font-family: var(--serif); line-height: 1; white-space: nowrap; }
+.val small { margin-left: 0.2em; font-family: var(--ja); font-size: 0.36em; font-weight: 700; }
+.cat { font-family: var(--label); font-size: 11px; font-weight: 600; letter-spacing: 0.16em; }
+
+/* ================= A: 説明が止まり、画面が流れる ================= */
+.a-chips { display: flex; gap: 6px; margin-top: 28px; }
+.a-chip { flex: 1; min-width: 0; height: 30px; border: 0; background: var(--w); opacity: 0.35; cursor: pointer; font-family: var(--serif); font-size: 12px; color: var(--wi); transition: opacity .3s, flex-grow .4s; }
+.a-chip[aria-current="true"] { opacity: 1; flex-grow: 3; }
+.a-grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr); gap: 4cqw; margin-top: 28px; }
+.a-info { position: sticky; top: 24px; align-self: start; min-height: 360px; padding: 28px 26px; background: var(--w); color: var(--wi); display: flex; flex-direction: column; transition: background-color .5s, color .5s; }
+.a-info .num { font-size: 18px; }
+.a-info .en { margin-top: 14px; font-size: clamp(22px, 3.3cqw, 40px); overflow-wrap: anywhere; }
+.a-info .val { margin-top: auto; padding-top: 32px; font-size: clamp(30px, 4.6cqw, 52px); }
+.a-info .lab { margin-top: 4px; font-size: 12px; font-weight: 700; }
+.a-info .name { margin-top: 14px; padding-top: 10px; border-top: 1px solid currentColor; font-size: 13px; font-weight: 700; }
+.a-info .lead { margin-top: 6px; font-size: 12px; line-height: 1.7; opacity: 0.9; }
+.a-info .go { margin-top: 14px; font-size: 12px; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+.a-info > * { transition: opacity .25s; }
+.a-info.is-swap > * { opacity: 0; }
+.a-shots { display: grid; gap: 56px; padding-bottom: 120px; }
+.a-shot { scroll-margin-top: 24px; opacity: 0.35; transform: scale(0.97); transition: opacity .5s, transform .6s; }
+.a-shot.is-on { opacity: 1; transform: none; }
+@container (max-width: 600px) {
+  .a-grid { grid-template-columns: 1fr; gap: 16px; }
+  .a-info { top: 0; z-index: 2; min-height: 0; padding: 14px 16px; display: grid; grid-template-columns: auto 1fr auto; align-items: end; column-gap: 12px; }
+  .a-info .en { margin: 0; font-size: 20px; grid-column: 2; }
+  .a-info .num { grid-column: 1; }
+  .a-info .val { grid-column: 3; grid-row: 1; margin: 0; padding: 0; font-size: 26px; }
+  .a-info .lab, .a-info .go { display: none; }
+  .a-info .name, .a-info .lead { grid-column: 1 / -1; }
+  .a-info .lead { display: none; }
+  .a-chips { margin-top: 20px; }
+  .a-shots { gap: 32px; }
+}
+
+/* ================= B: 横に流れる実績の帯 ================= */
+.b-runway { position: relative; }
+.b-stage { position: sticky; top: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+.b-top { display: flex; justify-content: space-between; align-items: end; padding: 0 6cqw; }
+.b-top .whead { font-size: clamp(32px, 6cqw, 64px); }
+.b-count { flex: none; font-family: var(--serif); font-size: 18px; letter-spacing: 0.1em; white-space: nowrap; }
+.b-count b { font-size: 32px; font-weight: 400; }
+.b-track { display: flex; gap: 3cqw; margin-top: 24px; padding: 0 6cqw; will-change: transform; }
+.b-slide { flex: none; width: 78cqw; display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 2fr); background: var(--w); color: var(--wi); }
+.b-panel { padding: 24px 22px; display: flex; flex-direction: column; }
+.b-panel .num { font-size: 16px; }
+.b-panel .en { margin-top: 10px; font-size: clamp(22px, 3.2cqw, 38px); }
+.b-panel .val { margin-top: auto; padding-top: 20px; font-size: clamp(28px, 4cqw, 46px); }
+.b-panel .lab { font-size: 11px; font-weight: 700; margin-top: 4px; }
+.b-panel .name { margin-top: 12px; padding-top: 8px; border-top: 1px solid currentColor; font-size: 12px; font-weight: 700; }
+.b-shot { padding: 18px 18px 18px 0; display: flex; align-items: center; }
+.b-shot .frame { width: 100%; }
+.b-bar { margin: 24px 6cqw 0; height: 2px; background: var(--line); }
+.b-bar i { display: block; height: 100%; width: 0; background: var(--cream); }
+@container (max-width: 600px) {
+  .b-slide { width: 82cqw; grid-template-columns: 1fr; }
+  .b-shot { padding: 0 12px 12px; }
+  .b-panel { padding: 16px; }
+  .b-panel .val { padding-top: 10px; }
+}
+
+/* ================= C: 目次と大きな画面 ================= */
+.c-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 4cqw; margin-top: 32px; align-items: start; }
+.c-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.c-row { border-bottom: 1px solid var(--line); }
+.c-btn { width: 100%; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 14px 12px; border: 0; background: transparent; text-align: left; cursor: pointer; transition: background-color .3s, color .3s; }
+.c-btn .num { font-size: 15px; color: var(--sub); }
+.c-btn .t { font-size: 14px; font-weight: 700; line-height: 1.5; }
+.c-btn .t small { display: block; font-family: var(--label); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; color: var(--mute); }
+.c-btn .val { font-size: 22px; }
+.c-btn .val small { color: var(--sub); }
+.c-btn:hover { background: rgba(255, 255, 255, 0.04); }
+.c-row.is-on .c-btn { background: var(--w); color: var(--wi); }
+.c-row.is-on .c-btn .num, .c-row.is-on .c-btn small { color: inherit; opacity: .85; }
+.c-inline { display: none; }
+.c-preview { position: sticky; top: 24px; }
+.c-preview__band { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 14px; background: var(--w); color: var(--wi); transition: background-color .4s; }
+.c-preview__band .en { font-size: clamp(20px, 3cqw, 32px); }
+.c-preview .frame { border-radius: 0 0 6px 6px; }
+.c-preview .frame img { transition: opacity .25s; }
+.c-preview.is-swap .frame img { opacity: 0; }
+.c-lead { margin-top: 12px; font-size: 13px; color: var(--sub); }
+.c-lead a { display: inline-block; margin-top: 6px; color: var(--ink); font-weight: 700; }
+@container (max-width: 600px) {
+  .c-grid { grid-template-columns: 1fr; }
+  .c-preview { display: none; }
+  .c-row.is-on .c-inline { display: block; padding: 12px 12px 18px; }
+  .c-inline p { margin: 10px 0 0; font-size: 12px; color: var(--sub); }
+}
+
+/* ================= D: 一覧で並べる（動きなし） ================= */
+.d-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 2.4cqw; margin-top: 32px; }
+.d-card { grid-column: span 2; display: flex; flex-direction: column; background: var(--w); color: var(--wi); text-decoration: none; }
+.d-card:nth-child(1) { grid-column: span 4; grid-row: span 2; }
+.d-card:nth-child(4), .d-card:nth-child(5) { grid-column: span 3; }
+.d-head { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 12px; min-width: 0; }
+.d-head .en { margin-top: 6px; font-size: clamp(16px, 2.2cqw, 24px); }
+.d-card:nth-child(1) .d-head .en { font-size: clamp(24px, 4cqw, 44px); }
+.d-head .val { font-size: clamp(20px, 2.6cqw, 30px); }
+.d-head .val span { display: block; margin-top: 4px; font-family: var(--ja); font-size: 10px; font-weight: 700; white-space: normal; }
+.d-img { margin: auto 10px 10px; overflow: hidden; background: #f4f5f7; aspect-ratio: 16 / 10; }
+.d-card:nth-child(1) .d-img { aspect-ratio: auto; flex: 1; min-height: 0; }
+.d-img img { width: 100%; height: 100%; object-fit: cover; object-position: 0 0; transition: transform .7s cubic-bezier(.19, 1, .22, 1); }
+.d-card:hover .d-img img { transform: scale(1.04); }
+.d-name { padding: 0 16px 14px; font-size: 12px; font-weight: 700; }
+@container (max-width: 600px) {
+  .d-grid { grid-template-columns: 1fr; gap: 14px; }
+  .d-card, .d-card:nth-child(n) { grid-column: auto; grid-row: auto; }
+  .d-card:nth-child(1) .d-img { aspect-ratio: 16 / 10; flex: none; }
+}
+
+/* ---------- 比較表 ---------- */
+.compare { margin-top: 72px; }
+.compare h2 { margin: 0; font-size: 18px; }
+.table-wrap { margin-top: 14px; overflow-x: auto; }
+table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+thead th { font-size: 12px; color: var(--mute); font-weight: 700; }
+tbody th { font-family: var(--serif); font-size: 20px; font-weight: 400; white-space: nowrap; }
+.rec-row { background: rgba(237, 234, 224, 0.06); }
+
+@media (max-width: 900px) {
+  .plan { grid-template-columns: minmax(0, 1fr); }
+  .plan > * { min-width: 0; }
+  .plan__side { position: static; }
+  .issues { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+}
+</style>
+
+<div class="page">
+  <p class="eyebrow">TEGG ENGINEERING / PORTFOLIO</p>
+  <h1>WORKS の見せ方<small>色の帯カルーセルと、画面が重なる区画をまとめて作り直す4案</small></h1>
+
+  <ul class="issues">
+    <li><span class="tag">いまの課題 1</span><b>同じ7件を2回続けて見せている</b><p>色の帯には画面が無く、画面の区画では色が消える。両方を見てやっと1件分の情報になる。</p></li>
+    <li><span class="tag">いまの課題 2</span><b>スクロールが長く、終わりが見えない</b><p>画面の区画は7枚ぶん（PCで約8,400px）スクロールが止まる。何枚目か・あと何枚かの表示が無い。</p></li>
+    <li><span class="tag">いまの課題 3</span><b>文字が画面を隠す</b><p>英字の題と黒い札が画面の上に重なり、VIEW MORE も競り上がるカードの上に重なる。肝心の画面が見えにくい。</p></li>
+  </ul>
+
+  <div class="tabs" role="tablist" aria-label="改善案">
+    <button class="tab" role="tab" id="tab-a" aria-controls="plan-a" data-plan="a"><span class="tab__key">A</span><span class="tab__name">説明が止まり、画面が流れる</span><span class="tab__rec">推奨</span></button>
+    <button class="tab" role="tab" id="tab-b" aria-controls="plan-b" data-plan="b"><span class="tab__key">B</span><span class="tab__name">横に流れる実績の帯</span></button>
+    <button class="tab" role="tab" id="tab-c" aria-controls="plan-c" data-plan="c"><span class="tab__key">C</span><span class="tab__name">目次と大きな画面</span></button>
+    <button class="tab" role="tab" id="tab-d" aria-controls="plan-d" data-plan="d"><span class="tab__key">D</span><span class="tab__name">一覧で並べる</span></button>
+  </div>
+
+  <!-- A -->
+  <section class="plan" id="plan-a" role="tabpanel" aria-labelledby="tab-a">
+    <div class="plan__side">
+      <div class="plan__key">A</div>
+      <h2 class="plan__name">説明が止まり、画面が流れる</h2>
+      <p class="plan__concept">左に案件の色のカード（番号・題・数値・説明）を止めておき、右の画面だけが普通にスクロールで流れる。画面が真ん中に来たら、左のカードがその案件の色と中身に切り替わる。</p>
+      <dl>
+        <dt>色の帯はどうなる</dt><dd>上の細い色の帯（7色）が目次と進み具合を兼ねる。押すとその画面へ飛ぶ。左のカードが色面タイルの役を引き継ぐ。</dd>
+        <dt>良い点</dt><dd><ul><li>画面と説明が常に隣にあり、1回見れば1件分が伝わる</li><li>スクロールを乗っ取らないので、読む速さを相手が決められる</li><li>文字が画面に重ならない</li></ul></dd>
+        <dt>気になる点</dt><dd><ul><li>カルーセルの「動いて目を引く」感じは弱くなる</li></ul></dd>
+        <dt>スクロール量（PC）</dt><dd class="scroll-cost">約 4,500px（いまの約半分）</dd>
+      </dl>
+    </div>
+    <div>
+      <div class="device" role="group" aria-label="表示幅"><button type="button" data-dev="pc" aria-pressed="true">PC</button><button type="button" data-dev="sp" aria-pressed="false">スマホ</button></div>
+      <p class="hint">枠の中をスクロールして動きを確認できます。</p>
+      <div class="stage"><div class="vp" id="vp-a"></div></div>
+    </div>
+  </section>
+
+  <!-- B -->
+  <section class="plan" id="plan-b" role="tabpanel" aria-labelledby="tab-b" hidden>
+    <div class="plan__side">
+      <div class="plan__key">B</div>
+      <h2 class="plan__name">横に流れる実績の帯</h2>
+      <p class="plan__concept">区画を画面に止め、縦のスクロールで実績が横に送られていく。1枚が「左に色の札、右に画面」の横長カードで、色の帯と画面を1枚にまとめる。</p>
+      <dl>
+        <dt>色の帯はどうなる</dt><dd>カード左の色の札がそのまま色の帯。帯と画面が別々の区画ではなくなる。</dd>
+        <dt>良い点</dt><dd><ul><li>動きの印象はいまと同じくらい強い</li><li>「03 / 07」と進み具合の線で、終わりが見える</li></ul></dd>
+        <dt>気になる点</dt><dd><ul><li>スクロールを乗っ取る作りはいまと同じ。急いで下に行きたい人には長い</li><li>スマホでは画面が小さくなる</li></ul></dd>
+        <dt>スクロール量（PC）</dt><dd class="scroll-cost">約 5,400px</dd>
+      </dl>
+    </div>
+    <div>
+      <div class="device" role="group" aria-label="表示幅"><button type="button" data-dev="pc" aria-pressed="true">PC</button><button type="button" data-dev="sp" aria-pressed="false">スマホ</button></div>
+      <p class="hint">枠の中を縦にスクロールすると、実績が横に送られます。</p>
+      <div class="stage"><div class="vp" id="vp-b"></div></div>
+    </div>
+  </section>
+
+  <!-- C -->
+  <section class="plan" id="plan-c" role="tabpanel" aria-labelledby="tab-c" hidden>
+    <div class="plan__side">
+      <div class="plan__key">C</div>
+      <h2 class="plan__name">目次と大きな画面</h2>
+      <p class="plan__concept">7件を目次のように1列に並べ、選んだ行がその案件の色に染まって、右に大きな画面が出る。雑誌の目次のような静かな見せ方。</p>
+      <dl>
+        <dt>色の帯はどうなる</dt><dd>選んだ行と画面の上の帯が案件の色になる。色は「いま見ている案件」の印として使う。</dd>
+        <dt>良い点</dt><dd><ul><li>7件全部の題と数値が一度に見える。比べやすい</li><li>スクロールが一番短い</li><li>スマホは行を押すと下に画面が開く</li></ul></dd>
+        <dt>気になる点</dt><dd><ul><li>押す（マウスを乗せる）まで画面が1枚しか見えない</li><li>演出は控えめで、華やかさは一番少ない</li></ul></dd>
+        <dt>スクロール量（PC）</dt><dd class="scroll-cost">約 900px</dd>
+      </dl>
+    </div>
+    <div>
+      <div class="device" role="group" aria-label="表示幅"><button type="button" data-dev="pc" aria-pressed="true">PC</button><button type="button" data-dev="sp" aria-pressed="false">スマホ</button></div>
+      <p class="hint">行にマウスを乗せる・押すと画面が切り替わります。</p>
+      <div class="stage"><div class="vp" id="vp-c"></div></div>
+    </div>
+  </section>
+
+  <!-- D -->
+  <section class="plan" id="plan-d" role="tabpanel" aria-labelledby="tab-d" hidden>
+    <div class="plan__side">
+      <div class="plan__key">D</div>
+      <h2 class="plan__name">一覧で並べる</h2>
+      <p class="plan__concept">色のカードの中に画面を入れて、大小をつけて並べる。1件目だけ大きく置き、残りを2〜3列で。スクロールの演出は無し、マウスを乗せると画面が少し寄るだけ。</p>
+      <dl>
+        <dt>色の帯はどうなる</dt><dd>色のカードそのものに画面を入れる。帯と画面が完全に1つになる。</dd>
+        <dt>良い点</dt><dd><ul><li>一目で7件の画面が全部見える</li><li>作りが単純で、表示も軽い</li></ul></dd>
+        <dt>気になる点</dt><dd><ul><li>画面1枚あたりが小さく、中身までは読めない</li><li>よく見る「実績一覧」に近く、サイトの個性は出にくい</li></ul></dd>
+        <dt>スクロール量（PC）</dt><dd class="scroll-cost">約 1,300px</dd>
+      </dl>
+    </div>
+    <div>
+      <div class="device" role="group" aria-label="表示幅"><button type="button" data-dev="pc" aria-pressed="true">PC</button><button type="button" data-dev="sp" aria-pressed="false">スマホ</button></div>
+      <p class="hint">枠の中をスクロールして全体を見られます。</p>
+      <div class="stage"><div class="vp" id="vp-d"></div></div>
+    </div>
+  </section>
+
+  <section class="compare">
+    <h2>4案の比べ方</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>案</th><th>画面の見やすさ</th><th>動きの印象</th><th>スクロールの短さ</th><th>色の帯との統合</th><th>向いている見せ方</th></tr></thead>
+        <tbody>
+          <tr class="rec-row"><th>A</th><td>大きい・文字が重ならない</td><td>中</td><td>中（いまの約半分）</td><td>目次の帯と左カードに統合</td><td>1件ずつ読んでほしい（推奨）</td></tr>
+          <tr><th>B</th><td>大きい</td><td>強い（いまと同程度）</td><td>長い</td><td>1枚のカードに統合</td><td>動きで印象を残したい</td></tr>
+          <tr><th>C</th><td>大きい・1枚ずつ</td><td>弱い</td><td>最短</td><td>選んだ行の色に統合</td><td>全件を見比べてほしい</td></tr>
+          <tr><th>D</th><td>小さい</td><td>なし</td><td>短い</td><td>色のカードに画面を内包</td><td>とにかく全部を一度に見せたい</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  var W = [
+    { slug: 'drawing-search', en: 'DRAWING SEARCH', cat: 'CLIENT WORK', title: '図面検索システム', lead: '17,588件の図面を、フォルダを開かずに探せるようにした', value: '17,588', unit: '件', label: '取込図面数', kind: '実際の画面（架空データで再現）' },
+    { slug: 'estimate', en: 'ESTIMATE', cat: 'CLIENT WORK', title: '見積もり作成ツール', lead: '紙で回していた見積依頼書を、そのままの並びでWeb化した', value: '5', unit: '工程', label: '1画面に収めた業務フロー', kind: '実際の画面（ダミーデータで撮影）' },
+    { slug: 'task-board', en: 'TASK BOARD', cat: 'CLIENT WORK', title: '社内タスク管理・問い合わせツール', lead: '口頭の「あれ、どうなった？」を、誰で何日止まっているかが見える一覧に置き換えた', value: '5', unit: '画面', label: '口頭連絡を受け止める範囲', kind: '実際の画面（ダミーデータで撮影）' },
+    { slug: 'ec-dashboard', en: 'EC DASHBOARD', cat: 'CLIENT WORK', title: 'EC在庫アラートダッシュボード', lead: '複数シートを見比べる発注判断を、1画面の色分けに置き換えた', value: '3.6', unit: '%', label: '翌月販売予測の誤差削減', kind: '実際の画面（架空データで再現）' },
+    { slug: 'voice-input', en: 'VOICE INPUT', cat: 'OWN PRODUCT', title: 'ローカル完結の音声入力アプリ', lead: '音声を外に出さずに、固有名詞の認識精度 F1 95.0% を出した', value: '95.0', unit: '%', label: '固有名詞 F1', kind: '実際の画面' },
+    { slug: 'quality-bot', en: 'QUALITY BOT', cat: 'CLIENT WORK', title: '品質管理サポートAIチャットボット', lead: '「たぶんこれ」で答えないRAGを作る', value: '809', unit: '件', label: '取り込んだ不適合記録', kind: '実際の画面（架空データで再現）' },
+    { slug: 'kintai-system', en: 'KINTAI SYSTEM', cat: 'PUBLIC DEMO', title: '勤怠管理システム（公開デモ）', lead: '打刻から給与ソフト用CSVまでを1本でつなぎ、数字が食い違わない作りにした', value: '0.1', unit: '秒', label: '85名分の月末集計', kind: '公開デモの画面' }
+  ];
+  var N = W.length;
+  var col = function (i) { return 'c' + ((i % 6) + 1); };
+  var no = function (i) { return (i < 9 ? '0' : '') + (i + 1); };
+  var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); };
+  var enHtml = function (en) { return en.split(' ').map(function (w) { return '<span style="display:block">' + w + '</span>'; }).join(''); };
+  var frame = function (w) {
+    return '<span class="frame"><span class="frame__bar" aria-hidden="true"><i></i><i></i><i></i><em>' + w.slug + '</em></span>' +
+      '<img src="img/' + w.slug + '.jpg" alt="' + esc(w.title) + 'の画面" loading="lazy" decoding="async"></span>';
+  };
+  var head = function () { return '<div class="whead">WORKS<small>実績 — 詳細を書いた7件 / 全28件</small></div>'; };
+  var more = '<a class="more" href="#" onclick="return false"><span>VIEW MORE</span><small>ALL 28 WORKS</small></a>';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- A ---------- */
+  var vpA = document.getElementById('vp-a');
+  vpA.innerHTML = '<div class="vp-pad">' + head() +
+    '<div class="a-chips" role="group" aria-label="実績の目次">' + W.map(function (w, i) {
+      return '<button type="button" class="a-chip ' + col(i) + '" data-i="' + i + '" aria-label="' + no(i) + ' ' + esc(w.title) + '">' + no(i) + '</button>';
+    }).join('') + '</div>' +
+    '<div class="a-grid"><div class="a-info ' + col(0) + '" aria-live="polite"></div><div class="a-shots">' +
+    W.map(function (w, i) { return '<figure class="a-shot" data-i="' + i + '" style="margin:0">' + frame(w) + '<figcaption class="kind">' + esc(w.kind) + '</figcaption></figure>'; }).join('') +
+    '</div></div>' + more + '</div>';
+  var aInfo = vpA.querySelector('.a-info');
+  var aCur = -1;
+  var aFill = function (i) {
+    var w = W[i];
+    aInfo.className = 'a-info ' + col(i);
+    aInfo.innerHTML = '<span class="num">' + no(i) + ' <span class="cat">' + w.cat + '</span></span><span class="en">' + enHtml(w.en) + '</span>' +
+      '<span class="val">' + w.value + '<small>' + w.unit + '</small></span><span class="lab">' + esc(w.label) + '</span>' +
+      '<span class="name">' + esc(w.title) + '</span><span class="lead">' + esc(w.lead) + '</span><a class="go" href="#" onclick="return false">詳細を読む</a>';
+  };
+  var aSet = function (i) {
+    if (i === aCur) return;
+    aCur = i;
+    vpA.querySelectorAll('.a-chip').forEach(function (c, k) { c.setAttribute('aria-current', k === i ? 'true' : 'false'); });
+    vpA.querySelectorAll('.a-shot').forEach(function (s, k) { s.classList.toggle('is-on', k === i); });
+    if (reduce) { aFill(i); return; }
+    aInfo.classList.add('is-swap');
+    setTimeout(function () { aFill(i); aInfo.classList.remove('is-swap'); }, 200);
+  };
+  aFill(0); aSet(0);
+  var aShots = Array.prototype.slice.call(vpA.querySelectorAll('.a-shot'));
+  vpA.addEventListener('scroll', function () {
+    var mid = vpA.getBoundingClientRect().top + vpA.clientHeight * 0.5;
+    var best = 0, bestD = Infinity;
+    aShots.forEach(function (s, k) { var r = s.getBoundingClientRect(); var d = Math.abs(r.top + r.height / 2 - mid); if (d < bestD) { bestD = d; best = k; } });
+    aSet(best);
+  }, { passive: true });
+  vpA.querySelectorAll('.a-chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      var s = aShots[+c.dataset.i];
+      vpA.scrollTo({ top: s.offsetTop - vpA.clientHeight * 0.5 + s.offsetHeight / 2, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  });
+
+  /* ---------- B ---------- */
+  var vpB = document.getElementById('vp-b');
+  vpB.innerHTML = '<div class="b-runway"><div class="b-stage"><div class="b-top">' + head() + '<div class="b-count" aria-live="polite"><b>01</b> / ' + no(N - 1) + '</div></div>' +
+    '<div class="b-track">' + W.map(function (w, i) {
+      return '<article class="b-slide ' + col(i) + '"><div class="b-panel"><span class="num">' + no(i) + ' <span class="cat">' + w.cat + '</span></span><span class="en">' + enHtml(w.en) + '</span>' +
+        '<span class="val">' + w.value + '<small>' + w.unit + '</small></span><span class="lab">' + esc(w.label) + '</span><span class="name">' + esc(w.title) + '</span></div>' +
+        '<div class="b-shot">' + frame(w) + '</div></article>';
+    }).join('') + '</div><div class="b-bar" aria-hidden="true"><i></i></div></div></div><div class="vp-pad" style="padding-top:8px">' + more + '</div>';
+  var bRun = vpB.querySelector('.b-runway'), bStage = vpB.querySelector('.b-stage'), bTrack = vpB.querySelector('.b-track');
+  var bBar = vpB.querySelector('.b-bar i'), bCount = vpB.querySelector('.b-count b');
+  var bLayout = function () {
+    var h = vpB.clientHeight;
+    if (!h) return;
+    bStage.style.height = h + 'px';
+    bRun.style.height = (h * (N * 0.9 + 0.6)) + 'px';
+    bUpdate();
+  };
+  var bUpdate = function () {
+    var span = bRun.offsetHeight - vpB.clientHeight;
+    var p = span > 0 ? Math.min(1, Math.max(0, vpB.scrollTop / span)) : 0;
+    var dist = bTrack.scrollWidth - bStage.clientWidth;
+    bTrack.style.transform = 'translateX(' + (-p * Math.max(0, dist)) + 'px)';
+    bBar.style.width = (p * 100) + '%';
+    bCount.textContent = no(Math.min(N - 1, Math.round(p * (N - 1))));
+  };
+  vpB.addEventListener('scroll', bUpdate, { passive: true });
+
+  /* ---------- C ---------- */
+  var vpC = document.getElementById('vp-c');
+  vpC.innerHTML = '<div class="vp-pad">' + head() + '<div class="c-grid"><ul class="c-list">' + W.map(function (w, i) {
+    return '<li class="c-row ' + col(i) + '" data-i="' + i + '"><button type="button" class="c-btn" aria-expanded="false"><span class="num">' + no(i) + '</span>' +
+      '<span class="t"><small>' + w.en + '</small>' + esc(w.title) + '</span><span class="val">' + w.value + '<small>' + w.unit + '</small></span></button>' +
+      '<div class="c-inline">' + frame(w) + '<p>' + esc(w.lead) + '</p></div></li>';
+  }).join('') + '</ul><div class="c-preview ' + col(0) + '"><div class="c-preview__band"><span class="en"></span><span class="num"></span></div>' +
+    '<span class="frame"><span class="frame__bar" aria-hidden="true"><i></i><i></i><i></i><em></em></span><img alt="" decoding="async"></span>' +
+    '<p class="c-lead"></p></div></div>' + more + '</div>';
+  var cPrev = vpC.querySelector('.c-preview'), cRows = Array.prototype.slice.call(vpC.querySelectorAll('.c-row'));
+  var cCur = -1;
+  var cFill = function (i) {
+    var w = W[i];
+    cPrev.className = 'c-preview ' + col(i);
+    cPrev.querySelector('.en').textContent = w.en;
+    cPrev.querySelector('.num').textContent = no(i) + ' / ' + no(N - 1);
+    cPrev.querySelector('.frame__bar em').textContent = w.slug;
+    var img = cPrev.querySelector('img'); img.src = 'img/' + w.slug + '.jpg'; img.alt = w.title + 'の画面';
+    cPrev.querySelector('.c-lead').innerHTML = esc(w.lead) + '<br><a href="#" onclick="return false">詳細を読む</a>';
+  };
+  var cSet = function (i) {
+    if (i === cCur) return;
+    cCur = i;
+    cRows.forEach(function (r, k) { r.classList.toggle('is-on', k === i); r.querySelector('.c-btn').setAttribute('aria-expanded', k === i ? 'true' : 'false'); });
+    if (reduce) { cFill(i); return; }
+    cPrev.classList.add('is-swap');
+    setTimeout(function () { cFill(i); cPrev.classList.remove('is-swap'); }, 160);
+  };
+  cFill(0); cSet(0);
+  cRows.forEach(function (r, k) {
+    var b = r.querySelector('.c-btn');
+    b.addEventListener('mouseenter', function () { cSet(k); });
+    b.addEventListener('focus', function () { cSet(k); });
+    b.addEventListener('click', function () { cSet(k); });
+  });
+
+  /* ---------- D ---------- */
+  var vpD = document.getElementById('vp-d');
+  vpD.innerHTML = '<div class="vp-pad">' + head() + '<div class="d-grid">' + W.map(function (w, i) {
+    return '<a class="d-card ' + col(i) + '" href="#" onclick="return false"><span class="d-head"><span><span class="num" style="font-size:13px">' + no(i) + '</span><span class="en" style="display:block">' + enHtml(w.en) + '</span></span>' +
+      '<span class="val">' + w.value + '<small>' + w.unit + '</small><span>' + esc(w.label) + '</span></span></span>' +
+      '<span class="d-img"><img src="img/' + w.slug + '.jpg" alt="' + esc(w.title) + 'の画面" loading="lazy" decoding="async"></span><span class="d-name">' + esc(w.title) + '</span></a>';
+  }).join('') + '</div>' + more + '</div>';
+
+  /* ---------- 案の切り替え・表示幅 ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var show = function (key) {
+    if (!/^[abcd]$/.test(key)) key = 'a';
+    tabs.forEach(function (t) {
+      var on = t.dataset.plan === key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById('plan-' + t.dataset.plan).hidden = !on;
+    });
+    if (key === 'b') requestAnimationFrame(bLayout);
+  };
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () { show(t.dataset.plan); try { history.replaceState(null, '', '#plan-' + t.dataset.plan); } catch (e) {} });
+  });
+  var fromHash = function () { var m = /^#plan-([abcd])$/.exec(location.hash); show(m ? m[1] : 'a'); };
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+
+  document.querySelectorAll('.device').forEach(function (g) {
+    g.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      var sp = b.dataset.dev === 'sp';
+      document.body.classList.toggle('is-phone', sp);
+      document.querySelectorAll('.device button').forEach(function (x) { x.setAttribute('aria-pressed', (x.dataset.dev === 'sp') === sp ? 'true' : 'false'); });
+      requestAnimationFrame(bLayout);
+    });
+  });
+  window.addEventListener('resize', function () { requestAnimationFrame(bLayout); });
+})();
+</script>
