@@ -177,9 +177,9 @@ subtle warm off-white highlights. High-end technology photography, 1:1.
 A modern laptop on a dark desk, seen from a three-quarter front angle, the screen filling
 the center of the frame. The screen clearly shows a business web application: a slim dark
 left sidebar with menu items, a top bar, and a main area with a data table of several rows,
-each row ending in a small colored status pill (teal, amber, grey), and a highlighted teal
-"approve" style button in the upper right. A side panel on the right shows a simple
-three-step progress tracker (request, approve, done) with the first two steps filled.
+each row ending in a small colored status pill (teal, amber, grey), and one highlighted teal
+primary button in the upper right. A side panel on the right shows a simple three-step
+progress tracker: three circles joined by a line, the first two filled teal, the last one empty.
 All text is rendered as soft blurred lines, not readable. A printed paper form lies beside
 the laptop, slightly out of focus, hinting that paper work moved into the system.
 Soft teal-cyan glow from the screen reflects on the desk.
