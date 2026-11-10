@@ -159,27 +159,37 @@ cinematic low-key lighting. Color palette: charcoal and deep teal background, te
 subtle warm off-white highlights. High-end technology photography, 1:1.
 
 2) AIチャットボット・社内検索 → static/images/services/ai.jpg
-Above a tablet lying on a dark desk, a glowing neural-network sphere made of fine luminous
-nodes and connecting lines hovers in the air. Around it, several small translucent document
-cards orbit and are linked to the sphere by thin light beams, as if an AI is searching and
-citing documents. A few abstract chat bubbles made of blank glowing bars float near the tablet.
-Glowing teal-cyan light, tiny particles, depth haze. No readable text or numbers.
-Subject centered, square composition, shallow depth of field, cinematic low-key lighting.
-Color palette: charcoal and deep teal background, teal-cyan glow, subtle warm off-white highlights.
-High-end technology photography, 1:1.
+（2026-11-10 改: 抽象的な球体をやめ、スマホでチャットしている場面にした）
+Close-up of a hand holding a smartphone over a dark office desk, seen from slightly above
+over the shoulder (no face visible). The phone screen clearly shows a messaging-style chat app:
+a short question bubble on the right, and a longer answer bubble on the left with a small
+attached document card under it, like an AI assistant answering with a cited source.
+All text is rendered as soft blurred lines, not readable. In the blurred background, a laptop
+on the desk shows the same chat interface. A few faint teal-cyan light lines rise from the phone
+screen toward small translucent document icons floating just above it.
+The phone is the clear main subject in the center. Square composition, 50mm lens,
+shallow depth of field, cinematic low-key lighting with the screen as the main light source.
+Color palette: charcoal and deep teal background, teal-cyan screen glow,
+subtle warm off-white highlights. High-end technology photography, 1:1.
 
 3) 業務システム開発 → static/images/services/system.jpg
-A laptop on a dark desk with a single sheet of paper next to it. The paper dissolves into a
-stream of glowing pixels that flows into the screen, and above the laptop three translucent
-holographic panels rise in a clean isometric stack, joined by arrows of light, like a
-request-approve-confirm workflow becoming a web system. Panels contain only blank glowing bars
-and simple icons. Glowing teal-cyan light, faint grid lines. No readable text or numbers.
-Subject centered, square composition, shallow depth of field, cinematic low-key lighting.
-Color palette: charcoal and deep teal background, teal-cyan glow, subtle warm off-white highlights.
-High-end technology photography, 1:1.
+（2026-11-10 改: 紙が溶けるホログラムをやめ、ノートPCの画面に業務ツールが映っている場面にした）
+A modern laptop on a dark desk, seen from a three-quarter front angle, the screen filling
+the center of the frame. The screen clearly shows a business web application: a slim dark
+left sidebar with menu items, a top bar, and a main area with a data table of several rows,
+each row ending in a small colored status pill (teal, amber, grey), and a highlighted teal
+"approve" style button in the upper right. A side panel on the right shows a simple
+three-step progress tracker (request, approve, done) with the first two steps filled.
+All text is rendered as soft blurred lines, not readable. A printed paper form lies beside
+the laptop, slightly out of focus, hinting that paper work moved into the system.
+Soft teal-cyan glow from the screen reflects on the desk.
+Square composition, 35mm lens, shallow depth of field, cinematic low-key lighting.
+Color palette: charcoal and deep teal background, teal-cyan screen glow,
+subtle warm off-white highlights. High-end technology photography, 1:1.
 ```
 
-共通のネガティブ: `people, faces, hands, robot, humanoid, readable text, letters, numbers, percentages, charts with values, brand names, logos, watermark, cartoon, flat illustration, blue and purple neon, pink, rainbow colors, cluttered sci-fi, oversaturated colors`
+共通のネガティブ: `faces, robot, humanoid, readable text, letters, numbers, percentages, charts with values, brand names, logos, watermark, cartoon, flat illustration, blue and purple neon, pink, rainbow colors, cluttered sci-fi, oversaturated colors`
+1) と 3) は人を入れないので、ネガティブに `people, hands` を足す。2) は手だけ写す（顔は入れない）。
 
 生成ツールごとの補足:
 - Midjourney は末尾に `--ar 1:1 --style raw` を付け、ネガティブは `--no` に並べる
