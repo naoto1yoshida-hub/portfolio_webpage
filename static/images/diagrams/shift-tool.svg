@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="シフト調整ツールの流れ図">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#78859a"/>
+    </marker>
+    <style>
+      .jp { font-family: 'Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,sans-serif; }
+      .mn { font-family: 'SFMono-Regular',Consolas,'Courier New',monospace; }
+      .box { fill:#fff; stroke:#0d1b2e; stroke-width:1.6; }
+      .box-a { fill:#fff; stroke:#bc3b1e; stroke-width:2.2; }
+      .lbl { font-size:20px; letter-spacing:.14em; fill:#78859a; }
+      .ttl { font-size:27px; font-weight:700; fill:#0d1b2e; }
+      .sub { font-size:20px; fill:#465468; }
+      .arw { stroke:#78859a; stroke-width:1.6; fill:none; marker-end:url(#ar); }
+    </style>
+  </defs>
+
+  <text class="mn lbl" x="50" y="80">FLOW — スマホの希望から、公開・Excelまで</text>
+  <line x1="50" y1="98" x2="1150" y2="98" stroke="#d7dde4"/>
+
+  <!-- 希望の提出 -->
+  <rect class="box" x="50" y="130" width="250" height="176" rx="3"/>
+  <text class="mn lbl" x="72" y="164" style="font-size:18px">01</text>
+  <text class="jp ttl" x="72" y="204">スマホで希望</text>
+  <text class="jp sub" x="72" y="240" style="font-size:18px">× 希望休・休・有給</text>
+  <text class="jp sub" x="72" y="268" style="font-size:18px">「10時から」も選べる</text>
+
+  <path class="arw" d="M302 218 L326 218"/>
+
+  <!-- 自動作成 -->
+  <rect class="box-a" x="330" y="130" width="270" height="176" rx="3"/>
+  <text class="mn lbl" x="352" y="164" style="font-size:18px; fill:#bc3b1e">02 PURE FUNCTION</text>
+  <text class="jp ttl" x="352" y="204">自動で作る</text>
+  <text class="jp sub" x="352" y="240" style="font-size:18px">希望・週の日数・週休2日</text>
+  <text class="jp sub" x="352" y="268" style="font-size:18px">を守って割り振る</text>
+
+  <path class="arw" d="M602 218 L636 218"/>
+
+  <!-- 判定 -->
+  <rect class="box-a" x="640" y="130" width="250" height="176" rx="3"/>
+  <text class="mn lbl" x="662" y="164" style="font-size:18px; fill:#bc3b1e">03 30分 × 役割</text>
+  <text class="jp ttl" x="662" y="204">足りなさを判定</text>
+  <text class="jp sub" x="662" y="240" style="font-size:18px">兼務者は1人で</text>
+  <text class="jp sub" x="662" y="268" style="font-size:18px">足りない役割へ回す</text>
+
+  <path class="arw" d="M892 218 L926 218"/>
+
+  <!-- 1件ずつ決める -->
+  <rect class="box" x="930" y="130" width="220" height="176" rx="3"/>
+  <text class="mn lbl" x="952" y="164" style="font-size:18px">04</text>
+  <text class="jp ttl" x="952" y="204">1件ずつ決める</text>
+  <text class="jp sub" x="952" y="240" style="font-size:18px">承認する</text>
+  <text class="jp sub" x="952" y="268" style="font-size:18px">人を足す（下書き）</text>
+
+  <!-- 出力 -->
+  <path class="arw" d="M1040 308 L1040 350"/>
+  <rect class="box" x="610" y="354" width="170" height="130" rx="3"/>
+  <text class="jp ttl" x="630" y="404" style="font-size:24px">シフト表</text>
+  <text class="jp sub" x="630" y="436" style="font-size:18px">1日の人数</text>
+  <text class="jp sub" x="630" y="462" style="font-size:18px">急な欠勤</text>
+
+  <rect class="box" x="790" y="354" width="170" height="130" rx="3"/>
+  <text class="jp ttl" x="810" y="404" style="font-size:24px">スマホ</text>
+  <text class="jp sub" x="810" y="436" style="font-size:18px">確定シフト</text>
+  <text class="jp sub" x="810" y="462" style="font-size:18px">変更あり</text>
+
+  <rect class="box" x="970" y="354" width="180" height="130" rx="3"/>
+  <text class="jp ttl" x="990" y="404" style="font-size:24px">Excel</text>
+  <text class="jp sub" x="990" y="436" style="font-size:18px">シフト表と</text>
+  <text class="jp sub" x="990" y="462" style="font-size:18px">日ごとの人数</text>
+
+  <!-- 判定はひとつ -->
+  <path class="arw" d="M606 419 L574 419"/>
+  <rect class="box-a" x="50" y="354" width="520" height="130" rx="3"/>
+  <text class="mn lbl" x="76" y="390" style="font-size:18px; fill:#bc3b1e">ONE JUDGEMENT — 判定は1か所</text>
+  <text class="jp ttl" x="76" y="434">表・人数・Excelは同じ値</text>
+  <text class="jp sub" x="76" y="466" style="font-size:18px">作った月はルールと職員を写し、後の変更で変わらない</text>
+
+  <line x1="50" y1="560" x2="1150" y2="560" stroke="#d7dde4"/>
+  <line x1="50" y1="556" x2="50" y2="565" stroke="#d7dde4"/>
+  <line x1="1150" y1="556" x2="1150" y2="565" stroke="#d7dde4"/>
+  <text class="mn lbl" x="50" y="596" style="font-size:19px">Next.js / TypeScript / PostgreSQL（Neon）/ Drizzle ORM / Vercel</text>
+  <text class="jp sub" x="50" y="628" style="font-size:19px; fill:#78859a">連絡は送らず、メール・LINEに貼る下書きだけを出す</text>
+</svg>
